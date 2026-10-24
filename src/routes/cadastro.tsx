@@ -1,3 +1,4 @@
+// Rota pública de cadastro; preserva o destino original após criar a conta.
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -20,13 +21,19 @@ export const Route = createFileRoute("/cadastro")({
   component: RegisterPage,
 });
 
+/** Apresenta o cadastro e conclui o retorno seguro à rota solicitada. */
 function RegisterPage() {
   const { redirect } = Route.useSearch();
   const router = useRouter();
   return (
-    <AuthShell title="Criar perfil de colecionador" subtitle="Leva menos de um minuto.">
+    <AuthShell
+      title="Criar perfil de colecionador"
+      subtitle="Crie seu perfil de colecionador e conecte uma carteira quando quiser."
+      activeMode="register"
+      redirect={redirect}
+    >
       <RegisterForm onDone={() => router.history.push(safeRedirect(redirect))} />
-      <p className="mt-6 text-center text-xs text-muted-foreground">
+      <p className="mt-6 text-center text-xs text-muted-foreground md:hidden">
         Já tem uma conta?{" "}
         <Link
           to="/login"

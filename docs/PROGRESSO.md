@@ -6,7 +6,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 ## Próximos passos (ordem de prioridade)
 
 1. Revisar os pins de #47–#65 com a gravação recém-fornecida; validar visualmente no navegador os
-   ajustes já feitos para #47–#63 e esclarecer o controle de cópia de #64.
+   ajustes já feitos e esclarecer o controle de cópia de #64.
 2. Comentar todo o código (`AGENTS.md`, seção 12), pasta por pasta, em commits separados.
 3. Auditar contratos e cenários dos mocks contra o enunciado; completar o painel de dev e o reset.
 4. Revisar tempo real (deduplicação, versão, reconexão, reconciliação) e o checkout
@@ -38,6 +38,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   “Diário da Cunhagem”, conforme a captura fornecida; layout adaptado para desktop e mobile.
 - A gravação adicional confirmou o frame do detalhe do NFT: galeria sem imagens de outras obras,
   miniaturas apenas no desktop e dados do Emerald Ape #042 alinhados a token, nota e avaliações.
+- Corrigida a moldura desktop de login/cadastro conforme a gravação: abas de navegação com destino
+  preservado, modal mais estreito e subtítulo escondido em mobile; teste cobre as rotas e o retorno.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra

@@ -95,6 +95,7 @@ consulta e não são tratados automaticamente como requisitos de produto.
 | FD-08 | Confirmação | Recibo confirmado apresentado em modal; estados pendente e recusado preservados. |
 | FD-09 | Início desktop e mobile | As seções “NFT em destaque”, campanhas e “Diário da Cunhagem” do frame estavam ausentes na implementação. | Incluídos um card vertical Sage Nomad #046, três cards Golden, paginação com quatro páginas, dois banners e quatro cards editoriais em `HomeEditorialSections.tsx`, com layout responsivo. |
 | FD-10 | Detalhe desktop e mobile | A galeria usava imagens de outros NFTs e a tela mobile mostrava miniaturas que não aparecem no frame; a identificação do item de referência também divergia. | Galeria limitada à arte do NFT, miniaturas ocultas no mobile e fixture Emerald Ape alinhado a #042, token #0042, 4.8/19 avaliações. |
+| FD-11 | Login/cadastro desktop e mobile | A moldura atual não tinha as abas desktop do Figma, usava modal largo e exibia subtítulo no mobile. | Abas Entrar/Criar conta com rota ativa e `redirect` preservado, modal desktop mais estreito, título no mobile e subtítulo apenas no desktop em `AuthShell.tsx` e rotas públicas. |
 
 ## Limites da comparação
 

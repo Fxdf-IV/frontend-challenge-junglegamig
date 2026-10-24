@@ -1,3 +1,4 @@
+// Rota pública de login; preserva o destino original após autenticar.
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
+/** Apresenta o formulário de login e conclui o retorno seguro à rota solicitada. */
 function LoginPage() {
   const { redirect, expired } = Route.useSearch();
   const router = useRouter();
@@ -32,9 +34,11 @@ function LoginPage() {
     <AuthShell
       title="Entrar"
       subtitle="Entre na sua conta para colecionar, favoritar e finalizar compras."
+      activeMode="login"
+      redirect={redirect}
     >
       <LoginForm expired={expired} onDone={() => router.history.push(safeRedirect(redirect))} />
-      <p className="mt-6 text-center text-xs text-muted-foreground">
+      <p className="mt-6 text-center text-xs text-muted-foreground md:hidden">
         Novo na Kurio?{" "}
         <Link
           to="/cadastro"
