@@ -30,12 +30,12 @@ const NAMES = [
   "Emerald Ape",
   "Sage Nomad",
   "Neon Vessel",
+  "Golden Beat",
   "Cosmic Bloom",
   "Violet Nomad",
   "Ivory Baron",
-  "Golden Beat",
-  "Golden Frequency",
   "Golden Signal",
+  "Golden Frequency",
   "Jade Monarch",
   "Velvet Drifter",
   "Onyx Curator",
@@ -46,16 +46,17 @@ const NAMES = [
 ];
 const COLLECTIONS = Object.keys(COLLECTION_LABELS) as Collection[];
 const NETWORKS: Network[] = ["ethereum", "polygon", "solana"];
+const FIGMA_SAMPLE_NUMBERS = ["042", "009", "083", "207", "118", "314", "088", "160"];
 const PRICES = [
   "1.19",
   "1.69",
   "1.99",
+  "0.99",
   "1.29",
   "1.39",
   "1.79",
-  "0.99",
-  "0.49",
   "0.39",
+  "0.49",
   "2.45",
   "3.10",
   "0.02",
@@ -91,7 +92,7 @@ export function buildNfts(): Nft[] {
             ? 3
             : 2;
     const art = ART[artIdx];
-    const num = i === 0 ? "042" : String((i * 37 + 9) % 600).padStart(3, "0");
+    const num = FIGMA_SAMPLE_NUMBERS[i] ?? String((i * 37 + 9) % 600).padStart(3, "0");
     const price = PRICES[i % PRICES.length];
     const id = `${name.toLowerCase().replace(/\s+/g, "-")}-${num}`;
     const kinds: EditionKind[] = ["1/1", "1/10", "1/50", "aberta"];
@@ -131,7 +132,10 @@ export function buildNfts(): Nft[] {
       creator: ["Nova Sato", "Iris Kahlo", "Theo Marin", "Luna Reyes"][i % 4],
       description: `${name} #${num} é uma obra digital finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na rede. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.`,
       attributes: art.attrs,
-      tokenId: i === 0 ? "#0042" : `#${String(i + 1).padStart(4, "0")}`,
+      tokenId:
+        i < FIGMA_SAMPLE_NUMBERS.length
+          ? `#0${num}`
+          : `#${String(i + 1).padStart(4, "0")}`,
       contract: `0x${(0x7a42 + i * 113).toString(16).toUpperCase()}...${(0x19e8 + i * 7).toString(16).toUpperCase()}`,
       rating: i === 0 ? 4.8 : 4 + Math.round(r() * 10) / 10,
       reviews: i === 0 ? 19 : 3 + Math.floor(r() * 40),
