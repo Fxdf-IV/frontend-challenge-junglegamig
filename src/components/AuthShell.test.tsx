@@ -49,4 +49,18 @@ describe("AuthShell", () => {
       "page",
     );
   });
+
+  it("keeps the mobile auth dialog as a centered, compact card", () => {
+    render(
+      <AuthShell title="Entrar" subtitle="Acesse sua conta." activeMode="login">
+        <p>Login</p>
+      </AuthShell>,
+    );
+
+    expect(screen.getByRole("dialog")).toHaveClass(
+      "max-md:w-[min(278px,calc(100vw-2rem))]",
+      "max-md:h-[600px]",
+      "max-md:rounded-[28px]",
+    );
+  });
 });
