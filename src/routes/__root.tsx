@@ -24,8 +24,13 @@ function NotFoundComponent() {
       <div>
         <p className="text-7xl font-bold text-primary">404</p>
         <h1 className="mt-4 text-xl font-semibold">Página não encontrada</h1>
-        <p className="mt-2 text-sm text-muted-foreground">O endereço que você acessou não existe ou foi movido.</p>
-        <Link to="/" className="mt-6 inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-bold text-primary-foreground">
+        <p className="mt-2 text-sm text-muted-foreground">
+          O endereço que você acessou não existe ou foi movido.
+        </p>
+        <Link
+          to="/"
+          className="mt-6 inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-bold text-primary-foreground"
+        >
           Voltar ao início
         </Link>
       </div>
@@ -60,13 +65,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Kurio — Marketplace de NFTs" },
-      { name: "description", content: "Colecione arte digital rara de criadores emergentes e consagrados." },
+      {
+        name: "description",
+        content: "Colecione arte digital rara de criadores emergentes e consagrados.",
+      },
       { name: "theme-color", content: "#140d0a" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap",
+      },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
     ],
@@ -84,7 +95,10 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <a href="#conteudo" className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground">
+        <a
+          href="#conteudo"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
+        >
           Pular para o conteúdo
         </a>
         {children}

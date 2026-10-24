@@ -8,7 +8,14 @@ import { toApiError, type ApiError } from "@/api/client";
 import type { Network, Quote } from "@/api/types";
 import { qk } from "@/api/queries";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Field, FormError, inputClass } from "@/components/Field";
 import { useSession } from "@/lib/session";
 import { useCart } from "@/lib/cart";
@@ -21,7 +28,10 @@ export const Route = createFileRoute("/_authenticated/checkout")({
   head: () => ({
     meta: [
       { title: "Pagamento — Kurio" },
-      { name: "description", content: "Dados do colecionador, carteira, rede e revisão do pedido." },
+      {
+        name: "description",
+        content: "Dados do colecionador, carteira, rede e revisão do pedido.",
+      },
       { property: "og:title", content: "Pagamento — Kurio" },
       { property: "og:description", content: "Finalize sua compra de NFTs." },
       { property: "og:type", content: "website" },
@@ -40,8 +50,18 @@ function Checkout() {
   const qc = useQueryClient();
   const navigate = useNavigate();
   const cart = useCart();
-  const wallets = useQuery({ queryKey: qk.wallets(uid), queryFn: api.wallets, select: (d) => d.items });
-  const [draft, setDraft] = useState({ name: user!.displayName, email: user!.email, note: "", walletId: "", network: "ethereum" as Network });
+  const wallets = useQuery({
+    queryKey: qk.wallets(uid),
+    queryFn: api.wallets,
+    select: (d) => d.items,
+  });
+  const [draft, setDraft] = useState({
+    name: user!.displayName,
+    email: user!.email,
+    note: "",
+    walletId: "",
+    network: "ethereum" as Network,
+  });
   const [coupon, setCoupon] = useState<string | undefined>();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [conn, setConn] = useState<Conn>("idle");
@@ -69,7 +89,13 @@ function Checkout() {
   }, [wallets.data, draft.walletId]);
 
   const quoteKey = ["quote", uid, coupon ?? "", draft.network, cart.data?.version] as const;
-  const quote = useQuery({ queryKey: quoteKey, queryFn: () => api.quote({ coupon, network: draft.network }), enabled: !!cart.data?.items.length, retry: false, placeholderData: (p) => p });
+  const quote = useQuery({
+    queryKey: quoteKey,
+    queryFn: () => api.quote({ coupon, network: draft.network }),
+    enabled: !!cart.data?.items.length,
+    retry: false,
+    placeholderData: (p) => p,
+  });
   const q = quote.data;
   const wallet = wallets.data?.find((w) => w.id === draft.walletId);
 
@@ -77,7 +103,9 @@ function Checkout() {
   const lastQuoteId = useRef<string | undefined>(undefined);
   useEffect(() => {
     if (lastQuoteId.current && q && q.id !== lastQuoteId.current && review) {
-      setChanged("Preço, disponibilidade ou taxas mudaram. Revise os novos valores antes de confirmar.");
+      setChanged(
+        "Preço, disponibilidade ou taxas mudaram. Revise os novos valores antes de confirmar.",
+      );
     }
     lastQuoteId.current = q?.id;
   }, [q, review]);
@@ -121,7 +149,11 @@ function Checkout() {
         walletId: draft.walletId,
         network: draft.network,
         coupon,
-        collector: { name: draft.name.trim(), email: draft.email.trim(), note: draft.note.trim() || undefined },
+        collector: {
+          name: draft.name.trim(),
+          email: draft.email.trim(),
+          note: draft.note.trim() || undefined,
+        },
       });
       localStorage.setItem(PENDING_ORDER_KEY, order.id);
       qc.setQueryData(qk.order(uid, order.id), order);
@@ -149,54 +181,125 @@ function Checkout() {
     return (
       <div className="container-page py-16 text-center">
         <p className="font-semibold">Seu carrinho está vazio.</p>
-        <Button variant="brand" className="mt-4" asChild><Link to="/mercado">Explorar NFTs</Link></Button>
+        <Button variant="brand" className="mt-4" asChild>
+          <Link to="/mercado">Explorar NFTs</Link>
+        </Button>
       </div>
     );
 
   return (
     <div className="container-page py-8">
       <nav aria-label="Trilha" className="mb-4 text-sm font-semibold">
-        <Link to="/">Início</Link> / <Link to="/carrinho">Carrinho</Link> / <span aria-current="page">Pagamento</span>
+        <Link to="/">Início</Link> / <Link to="/carrinho">Carrinho</Link> /{" "}
+        <span aria-current="page">Pagamento</span>
       </nav>
       {pending && (
         <p role="status" className="mb-4 rounded-md bg-panel px-4 py-3 text-sm">
-          Você tem um pedido em processamento. <Link to="/pedido/$id" params={{ id: pending }} className="font-semibold text-primary underline">Acompanhar pedido</Link>
+          Você tem um pedido em processamento.{" "}
+          <Link
+            to="/pedido/$id"
+            params={{ id: pending }}
+            className="font-semibold text-primary underline"
+          >
+            Acompanhar pedido
+          </Link>
         </p>
       )}
       <form onSubmit={openReview} noValidate className="grid gap-8 lg:grid-cols-[1fr_22rem]">
         <section aria-labelledby="collector-title" className="space-y-6">
           <div className="rounded-lg bg-card p-5">
-            <h1 id="collector-title" className="mb-4 font-bold">Perfil do colecionador</h1>
+            <h1 id="collector-title" className="mb-4 font-bold">
+              Perfil do colecionador
+            </h1>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Nome de exibição *" value={draft.name} onChange={(e) => setDraft({ ...draft, name: e.target.value })} error={errors.name} autoComplete="name" />
-              <Field label="E-mail *" type="email" value={draft.email} onChange={(e) => setDraft({ ...draft, email: e.target.value })} error={errors.email} autoComplete="email" />
+              <Field
+                label="Nome de exibição *"
+                value={draft.name}
+                onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                error={errors.name}
+                autoComplete="name"
+              />
+              <Field
+                label="E-mail *"
+                type="email"
+                value={draft.email}
+                onChange={(e) => setDraft({ ...draft, email: e.target.value })}
+                error={errors.email}
+                autoComplete="email"
+              />
               <div className="sm:col-span-2">
-                <label htmlFor="note" className="mb-1.5 block text-xs font-semibold">Observação do colecionador (opcional)</label>
-                <textarea id="note" rows={3} value={draft.note} onChange={(e) => setDraft({ ...draft, note: e.target.value })} aria-invalid={!!errors.note} aria-describedby={errors.note ? "note-err" : undefined} className={cn(inputClass, "h-auto py-2")} />
-                {errors.note && <p id="note-err" className="mt-1 text-[11px] text-destructive">{errors.note}</p>}
+                <label htmlFor="note" className="mb-1.5 block text-xs font-semibold">
+                  Observação do colecionador (opcional)
+                </label>
+                <textarea
+                  id="note"
+                  rows={3}
+                  value={draft.note}
+                  onChange={(e) => setDraft({ ...draft, note: e.target.value })}
+                  aria-invalid={!!errors.note}
+                  aria-describedby={errors.note ? "note-err" : undefined}
+                  className={cn(inputClass, "h-auto py-2")}
+                />
+                {errors.note && (
+                  <p id="note-err" className="mt-1 text-[11px] text-destructive">
+                    {errors.note}
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
-          <fieldset className="rounded-lg bg-card p-5" aria-describedby={errors.walletId ? "wallet-err" : undefined}>
+          <fieldset
+            className="rounded-lg bg-card p-5"
+            aria-describedby={errors.walletId ? "wallet-err" : undefined}
+          >
             <legend className="sr-only">Carteira e rede</legend>
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-bold">Carteira conectada</h2>
-              <Link to="/carteiras" className="text-xs text-primary underline-offset-4 hover:underline">Gerenciar carteiras</Link>
+              <Link
+                to="/carteiras"
+                className="text-xs text-primary underline-offset-4 hover:underline"
+              >
+                Gerenciar carteiras
+              </Link>
             </div>
             {wallets.isLoading ? (
               <div className="shimmer h-16 rounded" />
             ) : !wallets.data?.length ? (
-              <p className="text-sm">Nenhuma carteira cadastrada. <Link to="/carteiras" className="font-semibold text-primary underline">Cadastrar carteira</Link></p>
+              <p className="text-sm">
+                Nenhuma carteira cadastrada.{" "}
+                <Link to="/carteiras" className="font-semibold text-primary underline">
+                  Cadastrar carteira
+                </Link>
+              </p>
             ) : (
               <ul className="space-y-2">
                 {wallets.data.map((w) => (
                   <li key={w.id}>
-                    <label className={cn("flex cursor-pointer items-center gap-3 rounded-md border p-3", draft.walletId === w.id ? "border-primary" : "border-border")}>
-                      <input type="radio" name="wallet" className="accent-primary" checked={draft.walletId === w.id} onChange={() => { setDraft({ ...draft, walletId: w.id, network: w.network }); setConn("idle"); }} />
+                    <label
+                      className={cn(
+                        "flex cursor-pointer items-center gap-3 rounded-md border p-3",
+                        draft.walletId === w.id ? "border-primary" : "border-border",
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name="wallet"
+                        className="accent-primary"
+                        checked={draft.walletId === w.id}
+                        onChange={() => {
+                          setDraft({ ...draft, walletId: w.id, network: w.network });
+                          setConn("idle");
+                        }}
+                      />
                       <span className="flex-1 text-sm">
-                        <span className="font-semibold">{w.label}</span> <span className="text-xs text-muted-foreground">({w.role === "primary" ? "principal" : "secundária"})</span>
-                        <span className="block text-xs text-muted-foreground">{PROVIDER_LABELS[w.provider]} · {shortAddr(w.address)}</span>
+                        <span className="font-semibold">{w.label}</span>{" "}
+                        <span className="text-xs text-muted-foreground">
+                          ({w.role === "primary" ? "principal" : "secundária"})
+                        </span>
+                        <span className="block text-xs text-muted-foreground">
+                          {PROVIDER_LABELS[w.provider]} · {shortAddr(w.address)}
+                        </span>
                       </span>
                     </label>
                   </li>
@@ -205,51 +308,147 @@ function Checkout() {
             )}
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="network" className="mb-1.5 block text-xs font-semibold">Rede</label>
-                <select id="network" value={draft.network} onChange={(e) => setDraft({ ...draft, network: e.target.value as Network })} className={inputClass}>
-                  {(Object.keys(NETWORK_LABELS) as Network[]).map((n) => <option key={n} value={n}>{NETWORK_LABELS[n]}</option>)}
+                <label htmlFor="network" className="mb-1.5 block text-xs font-semibold">
+                  Rede
+                </label>
+                <select
+                  id="network"
+                  value={draft.network}
+                  onChange={(e) => setDraft({ ...draft, network: e.target.value as Network })}
+                  className={inputClass}
+                >
+                  {(Object.keys(NETWORK_LABELS) as Network[]).map((n) => (
+                    <option key={n} value={n}>
+                      {NETWORK_LABELS[n]}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className="flex items-end gap-2">
                 {conn === "connected" ? (
                   <>
-                    <p className="flex h-10 flex-1 items-center gap-2 text-sm text-success" role="status"><Check className="h-4 w-4" /> Conectada</p>
-                    <Button type="button" variant="line" onClick={() => { setConn("idle"); toast.info("Carteira desconectada"); }}><Unplug /> Desconectar</Button>
+                    <p
+                      className="flex h-10 flex-1 items-center gap-2 text-sm text-success"
+                      role="status"
+                    >
+                      <Check className="h-4 w-4" /> Conectada
+                    </p>
+                    <Button
+                      type="button"
+                      variant="line"
+                      onClick={() => {
+                        setConn("idle");
+                        toast.info("Carteira desconectada");
+                      }}
+                    >
+                      <Unplug /> Desconectar
+                    </Button>
                   </>
                 ) : (
-                  <Button type="button" variant="line" className="w-full" disabled={!wallet || conn === "connecting"} onClick={() => { setConn("connecting"); setPrompt(true); }}>
+                  <Button
+                    type="button"
+                    variant="line"
+                    className="w-full"
+                    disabled={!wallet || conn === "connecting"}
+                    onClick={() => {
+                      setConn("connecting");
+                      setPrompt(true);
+                    }}
+                  >
                     <Plug /> {conn === "connecting" ? "Aguardando carteira…" : "Conectar carteira"}
                   </Button>
                 )}
               </div>
             </div>
-            {conn === "refused" && <p role="alert" className="mt-2 text-xs text-destructive">A conexão foi recusada na carteira. Tente novamente.</p>}
-            {errors.walletId && <p id="wallet-err" role="alert" className="mt-2 text-xs text-destructive">{errors.walletId}</p>}
+            {conn === "refused" && (
+              <p role="alert" className="mt-2 text-xs text-destructive">
+                A conexão foi recusada na carteira. Tente novamente.
+              </p>
+            )}
+            {errors.walletId && (
+              <p id="wallet-err" role="alert" className="mt-2 text-xs text-destructive">
+                {errors.walletId}
+              </p>
+            )}
           </fieldset>
         </section>
 
         <aside aria-labelledby="order-summary" className="h-fit rounded-lg bg-card p-5">
-          <h2 id="order-summary" className="mb-4 font-bold">Seus NFTs</h2>
+          <h2 id="order-summary" className="mb-4 font-bold">
+            Seus NFTs
+          </h2>
           {!q ? (
-            <div className="space-y-2">{Array.from({ length: 4 }, (_, i) => <div key={i} className="shimmer h-10 rounded" />)}</div>
+            <div className="space-y-2">
+              {Array.from({ length: 4 }, (_, i) => (
+                <div key={i} className="shimmer h-10 rounded" />
+              ))}
+            </div>
           ) : (
             <Summary q={q} />
           )}
-          {quote.error && <p role="alert" className="mt-2 text-xs text-destructive">{(quote.error as Error).message}</p>}
-          {q?.issues.map((i) => <p key={i.nftId + i.edition} role="alert" className="mt-2 text-xs text-destructive">{i.message} — <Link to="/carrinho" className="underline">ajustar carrinho</Link></p>)}
-          <Button variant="brand" className="mt-5 w-full" disabled={!q || !!q.issues.length || quote.isFetching}>Revisar pedido</Button>
+          {quote.error && (
+            <p role="alert" className="mt-2 text-xs text-destructive">
+              {(quote.error as Error).message}
+            </p>
+          )}
+          {q?.issues.map((i) => (
+            <p key={i.nftId + i.edition} role="alert" className="mt-2 text-xs text-destructive">
+              {i.message} —{" "}
+              <Link to="/carrinho" className="underline">
+                ajustar carrinho
+              </Link>
+            </p>
+          ))}
+          <Button
+            variant="brand"
+            className="mt-5 w-full"
+            disabled={!q || !!q.issues.length || quote.isFetching}
+          >
+            Revisar pedido
+          </Button>
         </aside>
       </form>
 
-      <Dialog open={prompt} onOpenChange={(o) => { if (!o) { setPrompt(false); if (conn === "connecting") setConn("idle"); } }}>
+      <Dialog
+        open={prompt}
+        onOpenChange={(o) => {
+          if (!o) {
+            setPrompt(false);
+            if (conn === "connecting") setConn("idle");
+          }
+        }}
+      >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{wallet ? PROVIDER_LABELS[wallet.provider] : "Carteira"} (simulação)</DialogTitle>
-            <DialogDescription>Kurio solicita acesso à conta {wallet && shortAddr(wallet.address)} na rede {NETWORK_LABELS[draft.network]}.</DialogDescription>
+            <DialogTitle>
+              {wallet ? PROVIDER_LABELS[wallet.provider] : "Carteira"} (simulação)
+            </DialogTitle>
+            <DialogDescription>
+              Kurio solicita acesso à conta {wallet && shortAddr(wallet.address)} na rede{" "}
+              {NETWORK_LABELS[draft.network]}.
+            </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="line" onClick={() => { setConn("refused"); setPrompt(false); }}>Recusar</Button>
-            <Button variant="brand" onClick={() => { setConn("connected"); setPrompt(false); setErrors((e) => ({ ...e, walletId: "" })); toast.success("Carteira conectada"); }}>Aprovar conexão</Button>
+            <Button
+              variant="line"
+              onClick={() => {
+                setConn("refused");
+                setPrompt(false);
+              }}
+            >
+              Recusar
+            </Button>
+            <Button
+              variant="brand"
+              onClick={() => {
+                setConn("connected");
+                setPrompt(false);
+                setErrors((e) => ({ ...e, walletId: "" }));
+                toast.success("Carteira conectada");
+              }}
+            >
+              Aprovar conexão
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -258,25 +457,63 @@ function Checkout() {
         <DialogContent className="max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Revise seu pedido</DialogTitle>
-            <DialogDescription>Os valores abaixo são a cotação atual. A compra só é concluída após a confirmação da rede.</DialogDescription>
+            <DialogDescription>
+              Os valores abaixo são a cotação atual. A compra só é concluída após a confirmação da
+              rede.
+            </DialogDescription>
           </DialogHeader>
           {changed && (
-            <p role="alert" className="flex gap-2 rounded-md border border-primary/60 bg-primary/10 p-3 text-xs">
+            <p
+              role="alert"
+              className="flex gap-2 rounded-md border border-primary/60 bg-primary/10 p-3 text-xs"
+            >
               <AlertTriangle className="h-4 w-4 shrink-0 text-primary" /> {changed}
             </p>
           )}
           {q && <Summary q={q} />}
           <dl className="space-y-1 text-xs text-muted-foreground">
-            <div><dt className="inline">Colecionador: </dt><dd className="inline">{draft.name} · {draft.email}</dd></div>
-            <div><dt className="inline">Carteira: </dt><dd className="inline">{wallet?.label} · {wallet && shortAddr(wallet.address)} · {NETWORK_LABELS[draft.network]}</dd></div>
+            <div>
+              <dt className="inline">Colecionador: </dt>
+              <dd className="inline">
+                {draft.name} · {draft.email}
+              </dd>
+            </div>
+            <div>
+              <dt className="inline">Carteira: </dt>
+              <dd className="inline">
+                {wallet?.label} · {wallet && shortAddr(wallet.address)} ·{" "}
+                {NETWORK_LABELS[draft.network]}
+              </dd>
+            </div>
           </dl>
           {submitErr && (
-            <FormError message={submitErr.code === "TIMEOUT" || submitErr.code === "NETWORK" ? "Não recebemos resposta do servidor. Tentar novamente não criará outro pedido." : submitErr.message} />
+            <FormError
+              message={
+                submitErr.code === "TIMEOUT" || submitErr.code === "NETWORK"
+                  ? "Não recebemos resposta do servidor. Tentar novamente não criará outro pedido."
+                  : submitErr.message
+              }
+            />
           )}
           <DialogFooter>
-            <Button variant="line" disabled={submitting} onClick={() => setReview(false)}>Voltar</Button>
-            <Button variant="brand" disabled={submitting || !q || !!q.issues.length} onClick={() => { setChanged(null); confirm(); }}>
-              {submitting ? "Enviando…" : changed ? "Confirmar novos valores" : submitErr ? "Tentar novamente" : "Confirmar compra"}
+            <Button variant="line" disabled={submitting} onClick={() => setReview(false)}>
+              Voltar
+            </Button>
+            <Button
+              variant="brand"
+              disabled={submitting || !q || !!q.issues.length}
+              onClick={() => {
+                setChanged(null);
+                confirm();
+              }}
+            >
+              {submitting
+                ? "Enviando…"
+                : changed
+                  ? "Confirmar novos valores"
+                  : submitErr
+                    ? "Tentar novamente"
+                    : "Confirmar compra"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -291,20 +528,40 @@ function Summary({ q }: { q: Quote }) {
       <ul className="space-y-3">
         {q.lines.map((l) => (
           <li key={l.nftId + l.edition} className="flex items-center gap-3 text-xs">
-            <img src={l.image} alt="" width={40} height={40} className="h-10 w-10 rounded object-cover" />
+            <img
+              src={l.image}
+              alt=""
+              width={40}
+              height={40}
+              className="h-10 w-10 rounded object-cover"
+            />
             <span className="min-w-0 flex-1">
               <span className="block truncate font-semibold">{l.name}</span>
-              <span className="text-muted-foreground">{l.edition} · {l.quantity} × {formatEthSmart(l.unitPrice)}</span>
+              <span className="text-muted-foreground">
+                {l.edition} · {l.quantity} × {formatEthSmart(l.unitPrice)}
+              </span>
             </span>
             <span className="font-bold text-primary">{formatEthSmart(l.lineTotal)}</span>
           </li>
         ))}
       </ul>
       <dl className="mt-4 space-y-1.5 border-t border-border pt-3 text-sm" aria-live="polite">
-        <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatEthSmart(q.subtotal)}</dd></div>
-        <div className="flex justify-between"><dt>Desconto{q.coupon ? ` (${q.coupon.code})` : ""}</dt><dd>- {formatEthSmart(q.discount)}</dd></div>
-        <div className="flex justify-between"><dt>Taxa de rede</dt><dd>{formatEthSmart(q.networkFee)}</dd></div>
-        <div className="flex justify-between font-bold"><dt>Total</dt><dd className="text-primary">{formatEthSmart(q.total)}</dd></div>
+        <div className="flex justify-between">
+          <dt>Subtotal</dt>
+          <dd>{formatEthSmart(q.subtotal)}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt>Desconto{q.coupon ? ` (${q.coupon.code})` : ""}</dt>
+          <dd>- {formatEthSmart(q.discount)}</dd>
+        </div>
+        <div className="flex justify-between">
+          <dt>Taxa de rede</dt>
+          <dd>{formatEthSmart(q.networkFee)}</dd>
+        </div>
+        <div className="flex justify-between font-bold">
+          <dt>Total</dt>
+          <dd className="text-primary">{formatEthSmart(q.total)}</dd>
+        </div>
       </dl>
     </div>
   );

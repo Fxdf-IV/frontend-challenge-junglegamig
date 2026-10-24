@@ -9,7 +9,11 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Kurio — Seja dono do futuro da arte digital" },
-      { name: "description", content: "Descubra NFTs selecionados de criadores emergentes e consagrados no marketplace Kurio." },
+      {
+        name: "description",
+        content:
+          "Descubra NFTs selecionados de criadores emergentes e consagrados no marketplace Kurio.",
+      },
       { property: "og:title", content: "Kurio — Marketplace de NFTs" },
       { property: "og:description", content: "Colecione arte digital rara e apoie artistas." },
       { property: "og:type", content: "website" },
@@ -30,13 +34,23 @@ function Home() {
             Seja dono do futuro da arte digital
           </h1>
           <p className="mt-4 max-w-xl text-xs leading-relaxed text-muted-foreground md:text-sm">
-            Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital rara, apoie artistas e tenha uma parte da cultura da internet.
+            Descubra NFTs selecionados de criadores emergentes e consagrados. Colecione arte digital
+            rara, apoie artistas e tenha uma parte da cultura da internet.
           </p>
           <Button variant="brand" className="mt-6" asChild>
-            <Link to="/" hash="catalogo">Explorar</Link>
+            <Link to="/" hash="catalogo">
+              Explorar
+            </Link>
           </Button>
         </div>
-        <img src="/nft/emerald.webp" alt="Emerald Ape #042, macaco ilustrado de óculos e jaqueta verde" width={480} height={480} fetchPriority="high" className="aspect-square w-full rounded-2xl object-cover" />
+        <img
+          src="/nft/emerald.webp"
+          alt="Emerald Ape #042, macaco ilustrado de óculos e jaqueta verde"
+          width={480}
+          height={480}
+          fetchPriority="high"
+          className="aspect-square w-full rounded-2xl object-cover"
+        />
       </section>
       <Catalog search={search} from="/" />
     </>

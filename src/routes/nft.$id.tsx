@@ -33,7 +33,12 @@ export const Route = createFileRoute("/nft/$id")({
   component: NftDetail,
 });
 
-const EDITION_LABEL: Record<EditionKind, string> = { "1/1": "1/1", "1/10": "1/10", "1/50": "1/50", aberta: "ABERTA" };
+const EDITION_LABEL: Record<EditionKind, string> = {
+  "1/1": "1/1",
+  "1/10": "1/10",
+  "1/50": "1/50",
+  aberta: "ABERTA",
+};
 
 function NftDetail() {
   const { id } = Route.useParams();
@@ -54,8 +59,12 @@ function NftDetail() {
       <section className="container-page grid min-h-[50vh] place-items-center text-center">
         <div>
           <h1 className="text-2xl font-bold">NFT não encontrado</h1>
-          <p className="mt-2 text-sm text-muted-foreground">Este item não existe ou foi removido do mercado.</p>
-          <Button variant="brand" className="mt-6" asChild><Link to="/mercado">Ver mercado</Link></Button>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Este item não existe ou foi removido do mercado.
+          </p>
+          <Button variant="brand" className="mt-6" asChild>
+            <Link to="/mercado">Ver mercado</Link>
+          </Button>
         </div>
       </section>
     );
@@ -63,13 +72,19 @@ function NftDetail() {
     return (
       <section role="alert" className="container-page py-16 text-center">
         <p className="font-semibold">Não foi possível carregar este NFT.</p>
-        <Button variant="brand" className="mt-4" onClick={() => q.refetch()}>Tentar novamente</Button>
+        <Button variant="brand" className="mt-4" onClick={() => q.refetch()}>
+          Tentar novamente
+        </Button>
       </section>
     );
   if (!nft) return <DetailSkeleton />;
 
   const requested = nft.editions.find((e) => e.kind === search.edition);
-  const edition = requested ?? nft.editions.find((e) => e.kind === "1/50" && e.available > 0) ?? nft.editions.find((e) => e.available > 0) ?? nft.editions[0];
+  const edition =
+    requested ??
+    nft.editions.find((e) => e.kind === "1/50" && e.available > 0) ??
+    nft.editions.find((e) => e.available > 0) ??
+    nft.editions[0];
   const limit = Math.min(edition.available, edition.maxPerOrder);
   const quantity = Math.min(Math.max(1, qty), Math.max(1, limit));
   const isFav = !!favs.data?.includes(nft.id);
@@ -83,100 +98,253 @@ function NftDetail() {
     toggleFav.mutate({ id: nft.id, on: !isFav });
   };
   const onBuy = () =>
-    add.mutate({ nftId: nft.id, edition: edition.kind, quantity }, { onSuccess: () => navigate({ to: "/carrinho" }) });
+    add.mutate(
+      { nftId: nft.id, edition: edition.kind, quantity },
+      { onSuccess: () => navigate({ to: "/carrinho" }) },
+    );
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/nft/${nft.id}` : "";
 
   return (
     <>
       <div className="container-page py-6">
         <nav aria-label="Trilha" className="mb-4 text-sm font-semibold">
-          <Link to="/" className="hover:text-primary">Início</Link> / <Link to="/mercado" className="hover:text-primary">Mercado</Link>
+          <Link to="/" className="hover:text-primary">
+            Início
+          </Link>{" "}
+          /{" "}
+          <Link to="/mercado" className="hover:text-primary">
+            Mercado
+          </Link>
         </nav>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           <div className="flex flex-col-reverse gap-4 sm:flex-row">
             <ul className="flex gap-3 sm:flex-col" aria-label="Galeria">
               {nft.gallery.map((g, i) => (
                 <li key={g}>
-                  <button onClick={() => setImg(i)} aria-label={`Ver imagem ${i + 1}`} aria-pressed={img === i} className={cn("block h-16 w-16 overflow-hidden rounded-md border-2 sm:h-20 sm:w-20", img === i ? "border-primary" : "border-transparent")}>
-                    <img src={g} alt="" width={80} height={80} className="h-full w-full object-cover" />
+                  <button
+                    onClick={() => setImg(i)}
+                    aria-label={`Ver imagem ${i + 1}`}
+                    aria-pressed={img === i}
+                    className={cn(
+                      "block h-16 w-16 overflow-hidden rounded-md border-2 sm:h-20 sm:w-20",
+                      img === i ? "border-primary" : "border-transparent",
+                    )}
+                  >
+                    <img
+                      src={g}
+                      alt=""
+                      width={80}
+                      height={80}
+                      className="h-full w-full object-cover"
+                    />
                   </button>
                 </li>
               ))}
             </ul>
             <div className="flex-1 rounded-lg bg-card p-4">
-              <img src={nft.gallery[img]} alt={`Arte do NFT ${nft.name}`} width={480} height={480} fetchPriority="high" className="aspect-square w-full rounded-lg object-cover" />
+              <img
+                src={nft.gallery[img]}
+                alt={`Arte do NFT ${nft.name}`}
+                width={480}
+                height={480}
+                fetchPriority="high"
+                className="aspect-square w-full rounded-lg object-cover"
+              />
             </div>
           </div>
 
           <div>
             <h1 className="text-2xl font-bold">{nft.name}</h1>
             <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
-              <p className="text-xl font-bold text-primary" aria-live="polite">{formatEth(edition.price)}</p>
+              <p className="text-xl font-bold text-primary" aria-live="polite">
+                {formatEth(edition.price)}
+              </p>
               <p className="flex items-center gap-1 text-xs">
-                <span className="flex text-primary" aria-hidden>{Array.from({ length: 5 }, (_, i) => <Star key={i} className="h-3.5 w-3.5 fill-current" />)}</span>
-                <span>{nft.rating.toFixed(1)} · {nft.reviews} avaliações de colecionadores</span>
+                <span className="flex text-primary" aria-hidden>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <Star key={i} className="h-3.5 w-3.5 fill-current" />
+                  ))}
+                </span>
+                <span>
+                  {nft.rating.toFixed(1)} · {nft.reviews} avaliações de colecionadores
+                </span>
               </p>
             </div>
             <h2 className="mt-4 text-sm font-bold">Sobre este NFT:</h2>
             <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              Um colecionável digital finalizado à mão da coleção {nft.collectionName}, verificado na {NETWORK_LABELS[nft.network]}, com arte desbloqueável e acesso para colecionadores.
+              Um colecionável digital finalizado à mão da coleção {nft.collectionName}, verificado
+              na {NETWORK_LABELS[nft.network]}, com arte desbloqueável e acesso para colecionadores.
             </p>
             <fieldset className="mt-4">
               <legend className="text-sm font-bold">Edição:</legend>
               <div className="mt-2 flex flex-wrap gap-2">
                 {nft.editions.map((e) => (
-                  <label key={e.kind} className={cn("cursor-pointer rounded-full border px-3 py-1 text-xs has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring", e.kind === edition.kind ? "border-primary text-primary" : "border-border", e.available === 0 && "line-through opacity-60")}>
-                    <input type="radio" name="edition" className="sr-only" checked={e.kind === edition.kind} onChange={() => { setQty(1); navigate({ search: { edition: e.kind }, replace: true, resetScroll: false }); }} />
+                  <label
+                    key={e.kind}
+                    className={cn(
+                      "cursor-pointer rounded-full border px-3 py-1 text-xs has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ring",
+                      e.kind === edition.kind ? "border-primary text-primary" : "border-border",
+                      e.available === 0 && "line-through opacity-60",
+                    )}
+                  >
+                    <input
+                      type="radio"
+                      name="edition"
+                      className="sr-only"
+                      checked={e.kind === edition.kind}
+                      onChange={() => {
+                        setQty(1);
+                        navigate({
+                          search: { edition: e.kind },
+                          replace: true,
+                          resetScroll: false,
+                        });
+                      }}
+                    />
                     {EDITION_LABEL[e.kind]}
-                    <span className="sr-only">{e.available === 0 ? " (esgotada)" : ` (${e.available} disponíveis)`}</span>
+                    <span className="sr-only">
+                      {e.available === 0 ? " (esgotada)" : ` (${e.available} disponíveis)`}
+                    </span>
                   </label>
                 ))}
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                {unavailable ? "Edição esgotada — escolha outra edição." : `${edition.available} disponível(is) · máximo ${edition.maxPerOrder} por pedido`}
+                {unavailable
+                  ? "Edição esgotada — escolha outra edição."
+                  : `${edition.available} disponível(is) · máximo ${edition.maxPerOrder} por pedido`}
               </p>
-              {requested === undefined && search.edition && <p role="alert" className="mt-1 text-xs text-destructive">A edição “{search.edition}” não existe para este NFT.</p>}
+              {requested === undefined && search.edition && (
+                <p role="alert" className="mt-1 text-xs text-destructive">
+                  A edição “{search.edition}” não existe para este NFT.
+                </p>
+              )}
             </fieldset>
             <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3" role="group" aria-label="Quantidade">
-                <Button variant="round" size="icon" aria-label="Diminuir quantidade" disabled={quantity <= 1 || unavailable} onClick={() => setQty(quantity - 1)}><Minus /></Button>
-                <output aria-live="polite" className="w-6 text-center">{quantity}</output>
-                <Button variant="round" size="icon" aria-label="Aumentar quantidade" disabled={quantity >= limit || unavailable} onClick={() => setQty(quantity + 1)}><Plus /></Button>
+                <Button
+                  variant="round"
+                  size="icon"
+                  aria-label="Diminuir quantidade"
+                  disabled={quantity <= 1 || unavailable}
+                  onClick={() => setQty(quantity - 1)}
+                >
+                  <Minus />
+                </Button>
+                <output aria-live="polite" className="w-6 text-center">
+                  {quantity}
+                </output>
+                <Button
+                  variant="round"
+                  size="icon"
+                  aria-label="Aumentar quantidade"
+                  disabled={quantity >= limit || unavailable}
+                  onClick={() => setQty(quantity + 1)}
+                >
+                  <Plus />
+                </Button>
               </div>
               <div className="flex gap-2">
-                <Button variant="brand" disabled={unavailable || add.isPending} onClick={onBuy}>{add.isPending ? "Adicionando…" : "Comprar"}</Button>
-                <Button variant="line" onClick={onFav} aria-pressed={isFav} disabled={toggleFav.isPending}>
-                  <Heart className={cn(isFav && "fill-primary text-primary")} /> {isFav ? "Favoritado" : "Favoritar"}
+                <Button variant="brand" disabled={unavailable || add.isPending} onClick={onBuy}>
+                  {add.isPending ? "Adicionando…" : "Comprar"}
+                </Button>
+                <Button
+                  variant="line"
+                  onClick={onFav}
+                  aria-pressed={isFav}
+                  disabled={toggleFav.isPending}
+                >
+                  <Heart className={cn(isFav && "fill-primary text-primary")} />{" "}
+                  {isFav ? "Favoritado" : "Favoritar"}
                 </Button>
               </div>
             </div>
             <dl className="mt-5 space-y-2 text-xs text-muted-foreground">
-              <div><dt className="inline">ID do token: </dt><dd className="inline">{nft.tokenId}</dd></div>
-              <div><dt className="inline">Coleção: </dt><dd className="inline">{nft.collectionName}</dd></div>
-              <div><dt className="inline">Atributos: </dt><dd className="inline">{nft.attributes.join(", ")}</dd></div>
+              <div>
+                <dt className="inline">ID do token: </dt>
+                <dd className="inline">{nft.tokenId}</dd>
+              </div>
+              <div>
+                <dt className="inline">Coleção: </dt>
+                <dd className="inline">{nft.collectionName}</dd>
+              </div>
+              <div>
+                <dt className="inline">Atributos: </dt>
+                <dd className="inline">{nft.attributes.join(", ")}</dd>
+              </div>
             </dl>
             <div className="mt-3 flex items-center gap-3 text-sm font-semibold">
               Compartilhar este NFT:
-              <Button variant="ghost" size="icon" aria-label="Copiar link" onClick={() => navigator.clipboard.writeText(shareUrl).then(() => toast.success("Link copiado"), () => toast.error("Não foi possível copiar"))}><Link2 /></Button>
-              <a aria-label="Compartilhar por e-mail" href={`mailto:?subject=${encodeURIComponent(nft.name)}&body=${encodeURIComponent(shareUrl)}`}><Mail className="h-4 w-4" /></a>
-              <a aria-label="Compartilhar no X (abre em nova aba)" target="_blank" rel="noreferrer noopener" href={`https://x.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}><Twitter className="h-4 w-4" /></a>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Copiar link"
+                onClick={() =>
+                  navigator.clipboard.writeText(shareUrl).then(
+                    () => toast.success("Link copiado"),
+                    () => toast.error("Não foi possível copiar"),
+                  )
+                }
+              >
+                <Link2 />
+              </Button>
+              <a
+                aria-label="Compartilhar por e-mail"
+                href={`mailto:?subject=${encodeURIComponent(nft.name)}&body=${encodeURIComponent(shareUrl)}`}
+              >
+                <Mail className="h-4 w-4" />
+              </a>
+              <a
+                aria-label="Compartilhar no X (abre em nova aba)"
+                target="_blank"
+                rel="noreferrer noopener"
+                href={`https://x.com/intent/tweet?url=${encodeURIComponent(shareUrl)}`}
+              >
+                <Twitter className="h-4 w-4" />
+              </a>
             </div>
           </div>
         </div>
 
         <Tabs defaultValue="details" className="mt-12">
           <TabsList className="h-auto w-full justify-start gap-6 rounded-none border-b border-border bg-transparent p-0">
-            <TabsTrigger value="details" className="rounded-none border-b-2 border-transparent px-0 pb-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">Detalhes do NFT</TabsTrigger>
-            <TabsTrigger value="reviews" className="rounded-none border-b-2 border-transparent px-0 pb-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary">Avaliações ({nft.reviews})</TabsTrigger>
+            <TabsTrigger
+              value="details"
+              className="rounded-none border-b-2 border-transparent px-0 pb-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary"
+            >
+              Detalhes do NFT
+            </TabsTrigger>
+            <TabsTrigger
+              value="reviews"
+              className="rounded-none border-b-2 border-transparent px-0 pb-2 data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary"
+            >
+              Avaliações ({nft.reviews})
+            </TabsTrigger>
           </TabsList>
-          <TabsContent value="details" className="space-y-4 pt-4 text-xs leading-relaxed text-muted-foreground">
+          <TabsContent
+            value="details"
+            className="space-y-4 pt-4 text-xs leading-relaxed text-muted-foreground"
+          >
             <p>{nft.description}</p>
-            <p>A propriedade inclui a arte em alta resolução, lançamentos exclusivos para colecionadores e um registro permanente de procedência. {nft.creator} recebe 5% de direitos autorais nas vendas secundárias.</p>
-            <p><strong className="text-foreground">Rede:</strong><br />Cunhado na {NETWORK_LABELS[nft.network]} com procedência imutável e metadados armazenados no IPFS.</p>
-            <p><strong className="text-foreground">Contrato:</strong><br />{nft.contract} · Contrato inteligente ERC-721 verificado.</p>
+            <p>
+              A propriedade inclui a arte em alta resolução, lançamentos exclusivos para
+              colecionadores e um registro permanente de procedência. {nft.creator} recebe 5% de
+              direitos autorais nas vendas secundárias.
+            </p>
+            <p>
+              <strong className="text-foreground">Rede:</strong>
+              <br />
+              Cunhado na {NETWORK_LABELS[nft.network]} com procedência imutável e metadados
+              armazenados no IPFS.
+            </p>
+            <p>
+              <strong className="text-foreground">Contrato:</strong>
+              <br />
+              {nft.contract} · Contrato inteligente ERC-721 verificado.
+            </p>
           </TabsContent>
           <TabsContent value="reviews" className="pt-4 text-xs text-muted-foreground">
-            Média de {nft.rating.toFixed(1)} em {nft.reviews} avaliações. A listagem detalhada de avaliações não faz parte desta versão.
+            Média de {nft.rating.toFixed(1)} em {nft.reviews} avaliações. A listagem detalhada de
+            avaliações não faz parte desta versão.
           </TabsContent>
         </Tabs>
       </div>
@@ -190,9 +358,17 @@ function MoreFromCollection({ collection, exclude }: { collection: string; exclu
   const items = q.data?.items.filter((n) => n.id !== exclude).slice(0, 5);
   return (
     <section className="container-page mt-12" aria-labelledby="more-title">
-      <h2 id="more-title" className="border-b border-border pb-2 text-sm font-bold text-primary">Mais desta coleção</h2>
+      <h2 id="more-title" className="border-b border-border pb-2 text-sm font-bold text-primary">
+        Mais desta coleção
+      </h2>
       <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {!items ? Array.from({ length: 5 }, (_, i) => <NftCardSkeleton key={i} />) : items.length ? items.map((n) => <NftCard key={n.id} nft={n} />) : <p className="text-sm text-muted-foreground">Nenhum outro item nesta coleção.</p>}
+        {!items ? (
+          Array.from({ length: 5 }, (_, i) => <NftCardSkeleton key={i} />)
+        ) : items.length ? (
+          items.map((n) => <NftCard key={n.id} nft={n} />)
+        ) : (
+          <p className="text-sm text-muted-foreground">Nenhum outro item nesta coleção.</p>
+        )}
       </div>
     </section>
   );

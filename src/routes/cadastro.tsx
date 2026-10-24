@@ -28,7 +28,13 @@ function RegisterPage() {
       <RegisterForm onDone={() => router.history.push(safeRedirect(redirect))} />
       <p className="mt-6 text-center text-xs text-muted-foreground">
         Já tem uma conta?{" "}
-        <Link to="/login" search={{ redirect }} className="font-semibold text-primary underline-offset-4 hover:underline">Entrar</Link>
+        <Link
+          to="/login"
+          search={{ redirect }}
+          className="font-semibold text-primary underline-offset-4 hover:underline"
+        >
+          Entrar
+        </Link>
       </p>
     </AuthShell>
   );
