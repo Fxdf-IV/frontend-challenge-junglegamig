@@ -27,20 +27,21 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 
 ## 3. Telas e fluxos
 
-| Item                                                    | Status       | Onde / prova                                                  |
-| ------------------------------------------------------- | ------------ | ------------------------------------------------------------- |
-| Início: destaques, catálogo, busca, filtros, ordenação  | Implementado | `routes/index.tsx`, `components/nft/Catalog.tsx`              |
-| Detalhe: galeria, edição, quantidade, favoritos, compra | Implementado | `routes/nft.$id.tsx`                                          |
-| Carrinho: quantidades, remoção, cupom, resumo           | Implementado | `routes/carrinho.tsx`                                         |
-| Pagamento: dados, carteira e rede, revisão, envio       | Implementado | `routes/_authenticated.checkout.tsx`                          |
-| Confirmação de pedido                                   | Implementado | `routes/_authenticated.pedido.$id.tsx`                        |
-| Login com retorno ao fluxo anterior                     | Implementado | `routes/login.tsx`, `lib/redirect.ts`                         |
-| Cadastro com conflito                                   | Implementado | `routes/cadastro.tsx`                                         |
-| Perfil: dados, avatar, senha                            | Implementado | `routes/_authenticated.perfil.tsx`                            |
-| Carteiras principal e secundária                        | Implementado | `routes/_authenticated.carteiras.tsx`                         |
-| Desktop e mobile fiéis ao Figma                         | Em andamento | Notas #47–#64 em aplicação (`docs/FIGMA-DEVIATIONS.md`)       |
-| Perfil, carteiras e confirmação em mobile               | Em andamento | Sem frame no Figma; revisar em 390 px                         |
-| Ações fora do escopo não aparentam sucesso              | Em andamento | `components/ComingSoon.tsx`; revisar links do header e footer |
+| Item                                                    | Status       | Onde / prova                                                      |
+| ------------------------------------------------------- | ------------ | ----------------------------------------------------------------- |
+| Início: destaques, catálogo, busca, filtros, ordenação  | Implementado | `routes/index.tsx`, `components/nft/Catalog.tsx`                  |
+| Favoritos: navegação mobile, visitante, lista e vazio   | Implementado | `routes/favoritos.tsx`, `Header.tsx`                              |
+| Detalhe: galeria, edição, quantidade, favoritos, compra | Implementado | `routes/nft.$id.tsx`                                              |
+| Carrinho: quantidades, remoção, cupom, resumo           | Implementado | `routes/carrinho.tsx`                                             |
+| Pagamento: dados, carteira e rede, revisão, envio       | Implementado | `routes/_authenticated.checkout.tsx`                              |
+| Confirmação de pedido                                   | Implementado | `routes/_authenticated.pedido.$id.tsx`                            |
+| Login com retorno ao fluxo anterior                     | Implementado | `routes/login.tsx`, `lib/redirect.ts`                             |
+| Cadastro com conflito                                   | Implementado | `routes/cadastro.tsx`                                             |
+| Perfil: dados, avatar, senha                            | Implementado | `routes/_authenticated.perfil.tsx`                                |
+| Carteiras principal e secundária                        | Implementado | `routes/_authenticated.carteiras.tsx`                             |
+| Desktop e mobile fiéis ao Figma                         | Em andamento | `docs/FIGMA-DEVIATIONS.md`; falta acesso aos pins/frame por frame |
+| Perfil, carteiras e confirmação em mobile               | Em andamento | Sem frame no Figma; revisar em 390 px                             |
+| Ações fora do escopo não aparentam sucesso              | Em andamento | `components/ComingSoon.tsx`; revisar links do header e footer     |
 
 ## Catálogo e detalhe
 
