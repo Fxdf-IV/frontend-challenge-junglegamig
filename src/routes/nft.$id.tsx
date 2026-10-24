@@ -1,9 +1,20 @@
+// Rota de detalhe do NFT: apresenta edição, atributos, favoritos e compra.
 import { createFileRoute, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Heart, Link2, Mail, Minus, Plus, Star, Twitter } from "lucide-react";
+import {
+  ArrowLeft,
+  Heart,
+  Link2,
+  Mail,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Star,
+  Twitter,
+} from "lucide-react";
 import { toast } from "sonner";
 import { nftListQuery, nftQuery } from "@/api/queries";
 import type { ApiError } from "@/api/client";
@@ -18,6 +29,7 @@ import { useSession } from "@/lib/session";
 import { NETWORK_LABELS } from "@/lib/labels";
 import { cn } from "@/lib/utils";
 
+/** Metadados e validação da edição selecionada na URL. */
 export const Route = createFileRoute("/nft/$id")({
   validateSearch: zodValidator(z.object({ edition: z.string().optional().catch(undefined) })),
   head: ({ params }) => ({
@@ -40,6 +52,7 @@ const EDITION_LABEL: Record<EditionKind, string> = {
   aberta: "ABERTA",
 };
 
+/** Apresenta o NFT e suas ações com uma barra fixa no mobile. */
 function NftDetail() {
   const { id } = Route.useParams();
   const search = Route.useSearch();
@@ -106,8 +119,26 @@ function NftDetail() {
 
   return (
     <>
-      <div className="container-page py-6">
-        <nav aria-label="Trilha" className="mb-4 text-sm font-semibold">
+      <div className="container-page pb-40 pt-4 md:py-6">
+        <div className="mb-4 flex items-center justify-between md:hidden">
+          <Link
+            to="/mercado"
+            aria-label="Voltar ao mercado"
+            className="inline-flex h-10 items-center gap-2 rounded-full bg-card px-3 text-sm"
+          >
+            <ArrowLeft aria-hidden /> Voltar
+          </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={isFav ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+            aria-pressed={isFav}
+            onClick={onFav}
+          >
+            <Heart className={cn(isFav && "fill-primary text-primary")} />
+          </Button>
+        </div>
+        <nav aria-label="Trilha" className="mb-4 hidden text-sm font-semibold md:block">
           <Link to="/" className="hover:text-primary">
             Início
           </Link>{" "}
@@ -219,7 +250,7 @@ function NftDetail() {
                 </p>
               )}
             </fieldset>
-            <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="mt-4 hidden flex-wrap items-center justify-between gap-4 md:flex">
               <div className="flex items-center gap-3" role="group" aria-label="Quantidade">
                 <Button
                   variant="round"
@@ -348,11 +379,59 @@ function NftDetail() {
           </TabsContent>
         </Tabs>
       </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur md:hidden">
+        <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
+          <div className="flex items-center gap-2" role="group" aria-label="Quantidade">
+            <Button
+              variant="round"
+              size="icon"
+              className="h-8 w-8"
+              aria-label="Diminuir quantidade"
+              disabled={quantity <= 1 || unavailable}
+              onClick={() => setQty(quantity - 1)}
+            >
+              <Minus />
+            </Button>
+            <output aria-live="polite" className="w-5 text-center">
+              {quantity}
+            </output>
+            <Button
+              variant="round"
+              size="icon"
+              className="h-8 w-8"
+              aria-label="Aumentar quantidade"
+              disabled={quantity >= limit || unavailable}
+              onClick={() => setQty(quantity + 1)}
+            >
+              <Plus />
+            </Button>
+          </div>
+          <strong className="whitespace-nowrap text-sm text-primary">
+            {formatEth(edition.price)}
+          </strong>
+        </div>
+        <div className="mx-auto mt-2 flex max-w-lg gap-2">
+          <Button
+            variant="brand"
+            className="flex-1"
+            disabled={unavailable || add.isPending}
+            onClick={onBuy}
+          >
+            {add.isPending ? "Adicionando…" : "Comprar NFT"}
+          </Button>
+          <Button variant="line" size="icon" aria-label="Abrir carrinho" asChild>
+            <Link to="/carrinho">
+              <ShoppingCart />
+            </Link>
+          </Button>
+        </div>
+      </div>
       <MoreFromCollection collection={nft.collection} exclude={nft.id} />
     </>
   );
 }
 
+/** Sugere outros NFTs da coleção atual sem repetir o item aberto. */
 function MoreFromCollection({ collection, exclude }: { collection: string; exclude: string }) {
   const q = useQuery(nftListQuery({ collections: [collection], pageSize: 6 }));
   const items = q.data?.items.filter((n) => n.id !== exclude).slice(0, 5);
@@ -374,6 +453,7 @@ function MoreFromCollection({ collection, exclude }: { collection: string; exclu
   );
 }
 
+/** Reserva dimensões próximas ao conteúdo do detalhe durante o carregamento. */
 function DetailSkeleton() {
   return (
     <div className="container-page py-6" aria-busy="true" aria-label="Carregando NFT">
