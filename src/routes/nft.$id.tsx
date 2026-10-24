@@ -76,7 +76,10 @@ function NftDetail() {
   const unavailable = edition.available === 0;
 
   const onFav = () => {
-    if (!user) return navigate({ to: "/login", search: { redirect: href } });
+    if (!user) {
+      navigate({ to: "/login", search: { redirect: href } });
+      return;
+    }
     toggleFav.mutate({ id: nft.id, on: !isFav });
   };
   const onBuy = () =>

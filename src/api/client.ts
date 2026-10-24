@@ -26,7 +26,9 @@ type ExpiredListener = () => void;
 const expiredListeners = new Set<ExpiredListener>();
 export const onSessionExpired = (fn: ExpiredListener) => {
   expiredListeners.add(fn);
-  return () => expiredListeners.delete(fn);
+  return () => {
+    expiredListeners.delete(fn);
+  };
 };
 
 http.interceptors.request.use((config) => {
