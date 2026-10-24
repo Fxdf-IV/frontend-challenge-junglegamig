@@ -19,6 +19,7 @@ import { RealtimeProvider } from "@/lib/realtime";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MockPanel } from "@/components/MockPanel";
+import { AuthBackdrop } from "@/components/layout/AuthBackdrop";
 import { cn } from "@/lib/utils";
 
 /** Apresenta uma saída simples quando a URL não corresponde a uma rota. */
@@ -146,6 +147,7 @@ function RootComponent() {
     pathname === "/checkout" ||
     pathname.startsWith("/nft/") ||
     pathname.startsWith("/pedido/");
+  const isAuthRoute = pathname === "/login" || pathname === "/cadastro";
   return (
     <QueryClientProvider client={queryClient}>
       <MocksGate>
@@ -153,6 +155,7 @@ function RootComponent() {
           <RealtimeProvider>
             <Header />
             <main id="conteudo">
+              {isAuthRoute && <AuthBackdrop />}
               <Outlet />
             </main>
             <div className={cn(hideFooterOnMobile && "max-md:hidden")}>
