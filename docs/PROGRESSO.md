@@ -40,6 +40,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   miniaturas apenas no desktop e dados do Emerald Ape #042 alinhados a token, nota e avaliações.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
+- Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra
+  consistentes e preços sem repetição de “ETH”.
 - Nesta atualização: `typecheck`, `test` (8 casos), `build` e `lint` passaram; lint mantém 9 avisos
   preexistentes e o build reporta o bundle principal acima de 500 kB.
 - `REQUISITOS.md` fica fora do repositório, no material do desafio. A matriz atualizada espelha seus

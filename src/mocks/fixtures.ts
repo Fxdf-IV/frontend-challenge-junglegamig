@@ -46,7 +46,18 @@ const NAMES = [
 ];
 const COLLECTIONS = Object.keys(COLLECTION_LABELS) as Collection[];
 const NETWORKS: Network[] = ["ethereum", "polygon", "solana"];
-const FIGMA_SAMPLE_NUMBERS = ["042", "009", "083", "207", "118", "314", "088", "160"];
+/** Números visíveis nos cards e no detalhe da seleção de referência do Figma. */
+const FIGMA_SAMPLE_NUMBERS: Record<number, string> = {
+  0: "042",
+  1: "009",
+  2: "083",
+  3: "207",
+  4: "118",
+  5: "314",
+  6: "088",
+  7: "160",
+  17: "046",
+};
 const PRICES = [
   "1.19",
   "1.69",
@@ -132,10 +143,7 @@ export function buildNfts(): Nft[] {
       creator: ["Nova Sato", "Iris Kahlo", "Theo Marin", "Luna Reyes"][i % 4],
       description: `${name} #${num} é uma obra digital finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na rede. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.`,
       attributes: art.attrs,
-      tokenId:
-        i < FIGMA_SAMPLE_NUMBERS.length
-          ? `#0${num}`
-          : `#${String(i + 1).padStart(4, "0")}`,
+      tokenId: FIGMA_SAMPLE_NUMBERS[i] ? `#0${num}` : `#${String(i + 1).padStart(4, "0")}`,
       contract: `0x${(0x7a42 + i * 113).toString(16).toUpperCase()}...${(0x19e8 + i * 7).toString(16).toUpperCase()}`,
       rating: i === 0 ? 4.8 : 4 + Math.round(r() * 10) / 10,
       reviews: i === 0 ? 19 : 3 + Math.floor(r() * 40),
