@@ -29,9 +29,9 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Diário
 
-| Data | Commit | O que mudou | Por quê |
-| --- | --- | --- | --- |
-| 24/10/2026 | `2bdc7c4` | Commit inicial com a base do projeto limpa | Ponto de partida do repositório |
-| 24/10/2026 | `281a72f` | `.gitattributes` com fim de linha LF | O checkout no Windows gerava CRLF e o lint acusava milhares de erros falsos |
-| 24/10/2026 | `4e37686` | `AGENTS.md` com as regras de trabalho | Padronizar prioridades, stack, estado, testes e commits |
+| Data       | Commit    | O que mudou                                      | Por quê                                                                                                                                 |
+| ---------- | --------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 24/10/2026 | `2bdc7c4` | Commit inicial com a base do projeto limpa       | Ponto de partida do repositório                                                                                                         |
+| 24/10/2026 | `281a72f` | `.gitattributes` com fim de linha LF             | O checkout no Windows gerava CRLF e o lint acusava milhares de erros falsos                                                             |
+| 24/10/2026 | `4e37686` | `AGENTS.md` com as regras de trabalho            | Padronizar prioridades, stack, estado, testes e commits                                                                                 |
 | 24/10/2026 | `de58a37` | Correção de 3 erros de tipo e script `typecheck` | `onUnhandledRequest` virou `onUnhandledFrame` no MSW 3; unsubscribe devia retornar `void`; handler de favoritos sem retorno consistente |

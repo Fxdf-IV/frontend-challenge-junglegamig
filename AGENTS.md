@@ -90,13 +90,13 @@ O Figma define identidade visual e composição. Estados não desenhados seguem 
 Figma e como foi corrigido neste projeto. Cada correção feita por causa do design entra no mesmo
 commit que a alterou. Formato de cada entrada:
 
-| Campo | Conteúdo |
-| --- | --- |
-| ID | `FD-NN` sequencial (e nº do comentário do Figma, se houver) |
-| Tela / frame | Onde ocorre (desktop, mobile ou ambos) |
-| Problema | O que estava errado ou impreciso no Figma (medida, copy, estado ausente, inconsistência) |
-| Correção | O que foi implementado e onde (arquivo ou componente) |
-| Motivo | Acessibilidade, responsividade, consistência, requisito do enunciado etc. |
+| Campo        | Conteúdo                                                                                 |
+| ------------ | ---------------------------------------------------------------------------------------- |
+| ID           | `FD-NN` sequencial (e nº do comentário do Figma, se houver)                              |
+| Tela / frame | Onde ocorre (desktop, mobile ou ambos)                                                   |
+| Problema     | O que estava errado ou impreciso no Figma (medida, copy, estado ausente, inconsistência) |
+| Correção     | O que foi implementado e onde (arquivo ou componente)                                    |
+| Motivo       | Acessibilidade, responsividade, consistência, requisito do enunciado etc.                |
 
 Incluir também: substituições de assets, ajustes de acessibilidade, estados criados sem frame
 (erro, vazio, carregamento, mobile de perfil/carteiras/confirmação) e qualquer valor que divergiu do
@@ -174,11 +174,11 @@ simples, direta e pragmática. O comentário responde "o que isso faz e por quê
 O objetivo é atender 100% de `REQUISITOS.md` e poder provar isso. Três documentos são mantidos em
 `docs/` e atualizados a cada commit relevante:
 
-| Documento | Função |
-| --- | --- |
+| Documento                      | Função                                                                             |
+| ------------------------------ | ---------------------------------------------------------------------------------- |
 | `docs/REQUISITOS-COBERTURA.md` | Matriz item a item do enunciado: status, onde está implementado e qual teste prova |
-| `docs/PROGRESSO.md` | Diário do que foi feito (data, commit, motivo) e a lista de próximos passos |
-| `docs/FIGMA-DEVIATIONS.md` | Tudo que estava errado ou impreciso no Figma e como foi corrigido (seção 7) |
+| `docs/PROGRESSO.md`            | Diário do que foi feito (data, commit, motivo) e a lista de próximos passos        |
+| `docs/FIGMA-DEVIATIONS.md`     | Tudo que estava errado ou impreciso no Figma e como foi corrigido (seção 7)        |
 
 Regras:
 
