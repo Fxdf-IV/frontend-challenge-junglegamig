@@ -129,6 +129,9 @@ design. Resumir os pontos de maior impacto em `ARCHITECTURE.md` (seção "Desvio
 - Um assunto por commit, pequeno e coeso, que compile e passe nos testes. Mensagens em inglês no formato
   `tipo: resumo no imperativo` (`feat`, `fix`, `refactor`, `style`, `test`, `docs`, `chore`).
 - Intervalos reais entre commits; não alterar datas nem reescrever histórico já publicado.
+- Commits pequenos de verdade: uma pasta ou um assunto por commit, em regra no máximo ~6 arquivos.
+  Mudanças em massa (formatação, comentários, renomeações) são divididas por pasta ou por grupo de
+  arquivos, nunca num commit único com dezenas de arquivos.
 - Antes de cada commit: `bun run typecheck`, `bun run lint`, `bun run test`. Antes de entrega: `bun run build`
   e a suíte E2E.
 - Não versionar segredos, `.env` local, `dist`, relatórios temporários nem `node_modules`.
