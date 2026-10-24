@@ -1,3 +1,4 @@
+// Testes de roteamento: verificam destinos publicados sem depender de rede.
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter, rootRouteId } from "@tanstack/react-router";
 import { describe, expect, it } from "vitest";
@@ -11,6 +12,14 @@ describe("App routing", () => {
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
 
     const matches = router.matchRoutes("/");
+
+    expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
+  });
+
+  it("matches the favorites destination used by the mobile navigation", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/favoritos");
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
