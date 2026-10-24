@@ -135,6 +135,8 @@ design. Resumir os pontos de maior impacto em `ARCHITECTURE.md` (seção "Desvio
 - Não incluir referências a ferramentas de geração de código ou a plataformas externas em código,
   comentários, docs, metadados de pacote ou mensagens de commit.
 - Preservar comentários e docstrings existentes que não tenham relação com a alteração.
+- Cada commit atualiza `docs/PROGRESSO.md` (o que mudou e por quê) e, quando muda o status de algum
+  requisito, `docs/REQUISITOS-COBERTURA.md`.
 
 ## 11. Documentação e entrega
 
@@ -146,3 +148,46 @@ design. Resumir os pontos de maior impacto em `ARCHITECTURE.md` (seção "Desvio
 - Deploy público obrigatório (Vercel, Netlify ou Cloudflare Pages) com mocks e tempo real ativos, acesso
   direto e refresh funcionando em qualquer rota (fallback de SPA/SSR configurado).
 - A entrega roda a partir de um checkout limpo, sem serviços privados.
+
+## 12. Código comentado
+
+Todo arquivo de código do projeto (`src/`, `tests/`, configs e scripts) deve ser comentado, de forma
+simples, direta e pragmática. O comentário responde "o que isso faz e por quê", sem repetir o óbvio.
+
+- Todo arquivo começa com um comentário de topo (1 a 3 linhas): responsabilidade do arquivo e onde ele
+  se encaixa no fluxo (ex.: "Rota do carrinho: lista itens, aplica cupom e leva ao checkout").
+- Toda função, hook, componente e tipo exportado tem comentário curto (`/** ... */`) com propósito,
+  entradas relevantes e efeitos colaterais.
+- Blocos não triviais ganham comentário de intenção: regras de negócio, cache e chaves de query,
+  eventos de tempo real (dedupe, versão), idempotência, tratamento de erro e decisões de acessibilidade.
+- Comentar o motivo de qualquer escolha que pareça estranha (ex.: por que o ETH é string, por que o
+  evento é ignorado, por que o foco volta ao gatilho).
+- Linguagem: português do Brasil, frases curtas, sem jargão desnecessário e sem comentários decorativos.
+- Código gerado por CLI do shadcn/ui em `src/components/ui/` leva ao menos o comentário de topo e a
+  indicação dos ajustes feitos para os tokens do Figma.
+- Comentário desatualizado é bug: ao alterar o código, atualize o comentário no mesmo commit.
+- Ao tocar em um arquivo ainda sem comentários, deixe-o completamente comentado antes de commitar.
+- Nunca remover comentários existentes que não tenham relação com a alteração.
+
+## 13. Documentação viva e rastreabilidade dos requisitos (100%)
+
+O objetivo é atender 100% de `REQUISITOS.md` e poder provar isso. Três documentos são mantidos em
+`docs/` e atualizados a cada commit relevante:
+
+| Documento | Função |
+| --- | --- |
+| `docs/REQUISITOS-COBERTURA.md` | Matriz item a item do enunciado: status, onde está implementado e qual teste prova |
+| `docs/PROGRESSO.md` | Diário do que foi feito (data, commit, motivo) e a lista de próximos passos |
+| `docs/FIGMA-DEVIATIONS.md` | Tudo que estava errado ou impreciso no Figma e como foi corrigido (seção 7) |
+
+Regras:
+
+- Status permitidos na matriz: `Pendente`, `Em andamento`, `Implementado`, `Verificado`.
+  Só vira `Verificado` com teste automatizado (Playwright, Vitest) ou medição (Lighthouse) citado na linha.
+- Nenhum requisito pode ficar sem linha na matriz. Item novo do enunciado entra como `Pendente`.
+- `docs/PROGRESSO.md` mantém no topo a seção "Próximos passos" em ordem de prioridade, com o que está
+  em andamento, o que está bloqueado (e por quê) e o que depende de decisão do usuário.
+- Antes da entrega, nenhuma linha da matriz pode estar abaixo de `Verificado`. Exceções precisam de
+  justificativa escrita e aprovação do usuário.
+- Nada é considerado pronto se não estiver documentado: funcionalidade, cenário de mock, evento,
+  variável de ambiente e comando novos entram no `README.md` ou no `ARCHITECTURE.md` no mesmo commit.
