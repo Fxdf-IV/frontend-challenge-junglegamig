@@ -1,7 +1,8 @@
+// Checkout: valida colecionador, carteira e cotação antes de criar o pedido.
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { AlertTriangle, Check, Plug, Unplug } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Check, Plug, Unplug } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/endpoints";
 import { toApiError, type ApiError } from "@/api/client";
@@ -24,6 +25,7 @@ import { NETWORK_LABELS, PROVIDER_LABELS, shortAddr } from "@/lib/labels";
 import { COUPON_KEY, DRAFT_KEY, idemKey, PENDING_ORDER_KEY } from "@/lib/checkout-storage";
 import { cn } from "@/lib/utils";
 
+/** Metadados e montagem da rota privada de pagamento. */
 export const Route = createFileRoute("/_authenticated/checkout")({
   head: () => ({
     meta: [
@@ -44,6 +46,7 @@ export const Route = createFileRoute("/_authenticated/checkout")({
 
 type Conn = "idle" | "connecting" | "connected" | "refused";
 
+/** Conduz o pedido e mantém a ação de revisão acessível no mobile. */
 function Checkout() {
   const { user } = useSession();
   const uid = user!.id;
@@ -188,8 +191,16 @@ function Checkout() {
     );
 
   return (
-    <div className="container-page py-8">
-      <nav aria-label="Trilha" className="mb-4 text-sm font-semibold">
+    <div className="container-page pb-28 pt-4 md:py-8">
+      <div className="mb-4 flex items-center gap-3 md:hidden">
+        <Button variant="ghost" size="icon" aria-label="Voltar ao carrinho" asChild>
+          <Link to="/carrinho">
+            <ArrowLeft />
+          </Link>
+        </Button>
+        <h1 className="text-lg font-bold">Pagamento</h1>
+      </div>
+      <nav aria-label="Trilha" className="mb-4 hidden text-sm font-semibold md:block">
         <Link to="/">Início</Link> / <Link to="/carrinho">Carrinho</Link> /{" "}
         <span aria-current="page">Pagamento</span>
       </nav>
@@ -401,7 +412,7 @@ function Checkout() {
           ))}
           <Button
             variant="brand"
-            className="mt-5 w-full"
+            className="mt-5 w-full max-md:fixed max-md:inset-x-4 max-md:bottom-4 max-md:z-40 max-md:mt-0 max-md:w-[calc(100%-2rem)]"
             disabled={!q || !!q.issues.length || quote.isFetching}
           >
             Revisar pedido
@@ -522,6 +533,7 @@ function Checkout() {
   );
 }
 
+/** Resume itens, desconto, taxa e total da cotação atual. */
 function Summary({ q }: { q: Quote }) {
   return (
     <div>
