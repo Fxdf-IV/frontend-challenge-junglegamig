@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FlaskConical } from "lucide-react";
 import { toast } from "sonner";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { api } from "@/api/endpoints";
 import type { ScenarioId } from "@/api/types";
@@ -33,7 +40,10 @@ export function MockPanel() {
   const { status } = useRealtime();
   const [scenario, setScenario] = useState<string>("default");
   useEffect(() => {
-    api.mock.scenario().then((r) => setScenario(r.scenario)).catch(() => {});
+    api.mock
+      .scenario()
+      .then((r) => setScenario(r.scenario))
+      .catch(() => {});
   }, []);
 
   const change = async (s: string) => {
@@ -47,15 +57,30 @@ export function MockPanel() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="secondary" size="sm" className="fixed bottom-16 left-3 z-40 md:bottom-4" aria-label="Abrir painel de cenários de simulação">
+        <Button
+          variant="secondary"
+          size="sm"
+          className="fixed bottom-16 left-3 z-40 md:bottom-4"
+          aria-label="Abrir painel de cenários de simulação"
+        >
           <FlaskConical /> Cenários
-          <span className={status === "connected" ? "h-2 w-2 rounded-full bg-success" : "h-2 w-2 rounded-full bg-destructive"} aria-label={`tempo real ${status}`} />
+          <span
+            className={
+              status === "connected"
+                ? "h-2 w-2 rounded-full bg-success"
+                : "h-2 w-2 rounded-full bg-destructive"
+            }
+            aria-label={`tempo real ${status}`}
+          />
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="overflow-y-auto">
         <SheetHeader>
           <SheetTitle>Simulação (MSW)</SheetTitle>
-          <SheetDescription>Cenários de rede, falhas e eventos em tempo real. Credenciais: ana@kurio.dev / bruno@kurio.dev — senha Kurio@123.</SheetDescription>
+          <SheetDescription>
+            Cenários de rede, falhas e eventos em tempo real. Credenciais: ana@kurio.dev /
+            bruno@kurio.dev — senha Kurio@123.
+          </SheetDescription>
         </SheetHeader>
         <div className="mt-4 space-y-5 px-4 pb-6 text-sm">
           <fieldset>
@@ -63,7 +88,13 @@ export function MockPanel() {
             <div className="space-y-1">
               {SCENARIOS.map(([id, label]) => (
                 <label key={id} className="flex cursor-pointer items-center gap-2">
-                  <input type="radio" name="scenario" checked={scenario === id} onChange={() => change(id)} className="accent-primary" />
+                  <input
+                    type="radio"
+                    name="scenario"
+                    checked={scenario === id}
+                    onChange={() => change(id)}
+                    className="accent-primary"
+                  />
                   {label}
                 </label>
               ))}
@@ -71,15 +102,58 @@ export function MockPanel() {
           </fieldset>
           <div className="space-y-2">
             <p className="font-semibold">Eventos Socket.IO ({status})</p>
-            <Button size="sm" variant="line" className="w-full" disabled={!first} onClick={() => first && api.mock.nftUpdate({ nftId: first.nftId, edition: first.edition, price: ethAdd(first.unitPrice, "0.05") })}>
+            <Button
+              size="sm"
+              variant="line"
+              className="w-full"
+              disabled={!first}
+              onClick={() =>
+                first &&
+                api.mock.nftUpdate({
+                  nftId: first.nftId,
+                  edition: first.edition,
+                  price: ethAdd(first.unitPrice, "0.05"),
+                })
+              }
+            >
               +0,05 ETH no 1º item do carrinho
             </Button>
-            <Button size="sm" variant="line" className="w-full" disabled={!first} onClick={() => first && api.mock.nftUpdate({ nftId: first.nftId, edition: first.edition, available: 0 })}>
+            <Button
+              size="sm"
+              variant="line"
+              className="w-full"
+              disabled={!first}
+              onClick={() =>
+                first &&
+                api.mock.nftUpdate({ nftId: first.nftId, edition: first.edition, available: 0 })
+              }
+            >
               Esgotar 1º item do carrinho
             </Button>
-            <Button size="sm" variant="line" className="w-full" onClick={() => api.mock.socket("duplicate")}>Reenviar último evento (duplicado)</Button>
-            <Button size="sm" variant="line" className="w-full" onClick={() => api.mock.socket("stale")}>Enviar evento antigo</Button>
-            <Button size="sm" variant="line" className="w-full" onClick={() => api.mock.socket("drop")}>Derrubar conexão (3 s)</Button>
+            <Button
+              size="sm"
+              variant="line"
+              className="w-full"
+              onClick={() => api.mock.socket("duplicate")}
+            >
+              Reenviar último evento (duplicado)
+            </Button>
+            <Button
+              size="sm"
+              variant="line"
+              className="w-full"
+              onClick={() => api.mock.socket("stale")}
+            >
+              Enviar evento antigo
+            </Button>
+            <Button
+              size="sm"
+              variant="line"
+              className="w-full"
+              onClick={() => api.mock.socket("drop")}
+            >
+              Derrubar conexão (3 s)
+            </Button>
           </div>
           <Button
             variant="destructive"

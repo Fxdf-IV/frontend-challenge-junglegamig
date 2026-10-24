@@ -1,4 +1,12 @@
-export function AuthShell({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
+export function AuthShell({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) {
   // centered container, title and fields share alignment (design review #48/#50)
   return (
     <section className="container-page flex justify-center py-12">

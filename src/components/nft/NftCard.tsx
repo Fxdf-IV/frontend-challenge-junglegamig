@@ -6,7 +6,11 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   const soldOut = nft.editions.every((e) => e.available === 0);
   return (
     <article className="group">
-      <Link to="/nft/$id" params={{ id: nft.id }} className="block rounded-lg focus-visible:outline-offset-4">
+      <Link
+        to="/nft/$id"
+        params={{ id: nft.id }}
+        className="block rounded-lg focus-visible:outline-offset-4"
+      >
         <div className="aspect-square overflow-hidden rounded-lg bg-card p-2">
           <img
             src={nft.image}
@@ -22,8 +26,19 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
         <h3 className="mt-3 truncate text-sm">{nft.name}</h3>
         <p className="mt-1 text-sm">
           <span className="font-bold text-primary">{formatEth(nft.price)}</span>
-          {nft.compareAt && <s className="ml-2 text-muted-foreground" aria-label={`preço anterior ${formatEth(nft.compareAt)}`}>{formatEth(nft.compareAt)}</s>}
-          {soldOut && <span className="ml-2 rounded bg-panel px-1.5 py-0.5 text-[10px] uppercase">Esgotado</span>}
+          {nft.compareAt && (
+            <s
+              className="ml-2 text-muted-foreground"
+              aria-label={`preço anterior ${formatEth(nft.compareAt)}`}
+            >
+              {formatEth(nft.compareAt)}
+            </s>
+          )}
+          {soldOut && (
+            <span className="ml-2 rounded bg-panel px-1.5 py-0.5 text-[10px] uppercase">
+              Esgotado
+            </span>
+          )}
         </p>
       </Link>
     </article>
