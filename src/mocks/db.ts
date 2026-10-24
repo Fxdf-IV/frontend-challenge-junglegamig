@@ -14,7 +14,10 @@ export interface DbState {
   /** carts keyed by cart id; user carts keyed by `user:<id>` */
   carts: Record<string, Cart>;
   wallets: Record<string, Wallet[]>;
-  orders: Record<string, Order & { userId: string; resolveAt: number; outcome: "confirmed" | "declined" }>;
+  orders: Record<
+    string,
+    Order & { userId: string; resolveAt: number; outcome: "confirmed" | "declined" }
+  >;
   idempotency: Record<string, { userId: string; hash: string; orderId: string }>;
   scenario: ScenarioId;
   counters: { requests: number };
@@ -97,9 +100,17 @@ export function refreshCart(cart: Cart): Cart {
     const ed = nft?.editions.find((e) => e.kind === it.edition);
     if (!nft || !ed) return { ...it, available: 0, notice: "Item indisponível" };
     let notice = it.notice;
-    if (ed.price !== it.unitPrice) notice = `Preço atualizado de ${it.unitPrice} para ${ed.price} ETH`;
-    if (ed.available < it.quantity) notice = ed.available === 0 ? "Edição esgotada" : `Apenas ${ed.available} disponível(is)`;
-    return { ...it, unitPrice: ed.price, available: ed.available, maxPerOrder: ed.maxPerOrder, notice };
+    if (ed.price !== it.unitPrice)
+      notice = `Preço atualizado de ${it.unitPrice} para ${ed.price} ETH`;
+    if (ed.available < it.quantity)
+      notice = ed.available === 0 ? "Edição esgotada" : `Apenas ${ed.available} disponível(is)`;
+    return {
+      ...it,
+      unitPrice: ed.price,
+      available: ed.available,
+      maxPerOrder: ed.maxPerOrder,
+      notice,
+    };
   });
   return cart;
 }

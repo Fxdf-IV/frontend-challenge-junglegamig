@@ -71,10 +71,12 @@ export function replay(kind: "duplicate" | "stale") {
   const last = sent[sent.length - 1];
   if (!last) return false;
   if (kind === "duplicate") {
-    for (const c of connections) if (!last.userId || c.userId === last.userId) c.io.client.emit(last.type, last);
+    for (const c of connections)
+      if (!last.userId || c.userId === last.userId) c.io.client.emit(last.type, last);
   } else {
     const stale = { ...last, eventId: crypto.randomUUID(), version: Math.max(0, last.version - 1) };
-    for (const c of connections) if (!last.userId || c.userId === last.userId) c.io.client.emit(stale.type, stale);
+    for (const c of connections)
+      if (!last.userId || c.userId === last.userId) c.io.client.emit(stale.type, stale);
   }
   return true;
 }

@@ -24,13 +24,43 @@ const ART = [
   { img: "/nft/golden.webp", base: "Golden Beat", attrs: ["Fones", "Dourado", "Lendário"] },
 ];
 const NAMES = [
-  "Emerald Ape", "Sage Nomad", "Neon Vessel", "Cosmic Bloom", "Violet Nomad", "Ivory Baron",
-  "Golden Beat", "Golden Frequency", "Golden Signal", "Jade Monarch", "Velvet Drifter", "Onyx Curator",
-  "Amber Pulse", "Moss Wanderer", "Ash Regent", "Copper Rhythm",
+  "Emerald Ape",
+  "Sage Nomad",
+  "Neon Vessel",
+  "Cosmic Bloom",
+  "Violet Nomad",
+  "Ivory Baron",
+  "Golden Beat",
+  "Golden Frequency",
+  "Golden Signal",
+  "Jade Monarch",
+  "Velvet Drifter",
+  "Onyx Curator",
+  "Amber Pulse",
+  "Moss Wanderer",
+  "Ash Regent",
+  "Copper Rhythm",
 ];
 const COLLECTIONS = Object.keys(COLLECTION_LABELS) as Collection[];
 const NETWORKS: Network[] = ["ethereum", "polygon", "solana"];
-const PRICES = ["1.19", "1.69", "1.99", "1.29", "1.39", "1.79", "0.99", "0.49", "0.39", "2.45", "3.10", "0.02", "5.75", "12.30", "0.85", "0.15"];
+const PRICES = [
+  "1.19",
+  "1.69",
+  "1.99",
+  "1.29",
+  "1.39",
+  "1.79",
+  "0.99",
+  "0.49",
+  "0.39",
+  "2.45",
+  "3.10",
+  "0.02",
+  "5.75",
+  "12.30",
+  "0.85",
+  "0.15",
+];
 
 /** deterministic PRNG so fixtures are stable across resets and tests */
 function rng(seed: number) {
@@ -45,13 +75,17 @@ export function buildNfts(): Nft[] {
   const list: Nft[] = [];
   for (let i = 0; i < 40; i++) {
     const name = NAMES[i % NAMES.length];
-    const artIdx = name.startsWith("Emerald") || name.startsWith("Jade") || name.startsWith("Amber")
-      ? 0
-      : name.includes("Nomad") || name.includes("Bloom") || name.includes("Moss") || name.includes("Drifter")
-        ? 1
-        : name.includes("Golden") || name.includes("Copper")
-          ? 3
-          : 2;
+    const artIdx =
+      name.startsWith("Emerald") || name.startsWith("Jade") || name.startsWith("Amber")
+        ? 0
+        : name.includes("Nomad") ||
+            name.includes("Bloom") ||
+            name.includes("Moss") ||
+            name.includes("Drifter")
+          ? 1
+          : name.includes("Golden") || name.includes("Copper")
+            ? 3
+            : 2;
     const art = ART[artIdx];
     const num = String((i * 37 + 9) % 600).padStart(3, "0");
     const price = PRICES[i % PRICES.length];
@@ -63,18 +97,35 @@ export function buildNfts(): Nft[] {
       return {
         kind,
         price: (wei / 100).toFixed(2),
-        available: kind === "1/1" ? (i % 3 === 0 ? 0 : 1) : kind === "1/10" ? 3 + (i % 5) : kind === "1/50" ? 12 + (i % 20) : 99,
+        available:
+          kind === "1/1"
+            ? i % 3 === 0
+              ? 0
+              : 1
+            : kind === "1/10"
+              ? 3 + (i % 5)
+              : kind === "1/50"
+                ? 12 + (i % 20)
+                : 99,
         maxPerOrder: kind === "1/1" ? 1 : kind === "1/10" ? 3 : 5,
       };
     });
     // edition "1/50" is the default listing price shown in the catalog
     editions[2].price = price;
-    const minPrice = editions.reduce((m, e) => (Number(e.price) < Number(m) ? e.price : m), editions[0].price);
+    const minPrice = editions.reduce(
+      (m, e) => (Number(e.price) < Number(m) ? e.price : m),
+      editions[0].price,
+    );
     list.push({
       id,
       name: `${name} #${num}`,
       image: art.img,
-      gallery: [art.img, ...ART.filter((a) => a !== art).slice(0, 3).map((a) => a.img)],
+      gallery: [
+        art.img,
+        ...ART.filter((a) => a !== art)
+          .slice(0, 3)
+          .map((a) => a.img),
+      ],
       collection: COLLECTIONS[i % COLLECTIONS.length],
       collectionName: `Kurio ${name.split(" ")[1]}s`,
       network: NETWORKS[Math.floor(r() * 3)],
@@ -110,14 +161,41 @@ export interface UserRecord {
 }
 
 export const SEED_USERS: Array<Omit<UserRecord, "passwordHash" | "salt"> & { password: string }> = [
-  { id: "u_ana", email: "ana@kurio.dev", displayName: "Ana Sato", username: "anasato", password: "Kurio@123", bio: "Colecionadora de arte generativa." },
-  { id: "u_bruno", email: "bruno@kurio.dev", displayName: "Bruno Lima", username: "brunolima", password: "Kurio@123" },
+  {
+    id: "u_ana",
+    email: "ana@kurio.dev",
+    displayName: "Ana Sato",
+    username: "anasato",
+    password: "Kurio@123",
+    bio: "Colecionadora de arte generativa.",
+  },
+  {
+    id: "u_bruno",
+    email: "bruno@kurio.dev",
+    displayName: "Bruno Lima",
+    username: "brunolima",
+    password: "Kurio@123",
+  },
 ];
 
 export const SEED_WALLETS: Record<string, Wallet[]> = {
   u_ana: [
-    { id: "w_ana_1", role: "primary", label: "Reserva", address: "0xA11CE0000000000000000000000000000000BEEF", provider: "metamask", network: "ethereum" },
-    { id: "w_ana_2", role: "secondary", label: "Principal", address: "0xA11CE00000000000000000000000000000C0FFEE", provider: "walletconnect", network: "polygon" },
+    {
+      id: "w_ana_1",
+      role: "primary",
+      label: "Reserva",
+      address: "0xA11CE0000000000000000000000000000000BEEF",
+      provider: "metamask",
+      network: "ethereum",
+    },
+    {
+      id: "w_ana_2",
+      role: "secondary",
+      label: "Principal",
+      address: "0xA11CE00000000000000000000000000000C0FFEE",
+      provider: "walletconnect",
+      network: "polygon",
+    },
   ],
   u_bruno: [],
 };

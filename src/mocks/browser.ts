@@ -14,7 +14,11 @@ export async function startMocks() {
     save();
   }
   const worker = setupWorker(...handlers, socketHandler);
-  await worker.start({ onUnhandledFrame: "bypass", quiet: true, serviceWorker: { url: "/mockServiceWorker.js" } });
+  await worker.start({
+    onUnhandledFrame: "bypass",
+    quiet: true,
+    serviceWorker: { url: "/mockServiceWorker.js" },
+  });
   schedulePendingOrders();
   return worker;
 }
