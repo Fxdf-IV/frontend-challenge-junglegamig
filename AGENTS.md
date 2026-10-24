@@ -126,6 +126,9 @@ design. Resumir os pontos de maior impacto em `ARCHITECTURE.md` (seção "Desvio
 
 ## 10. Fluxo de trabalho e commits
 
+- Trabalhar em lotes pequenos e revisáveis. Cada lote deve tratar um assunto coeso, ser verificado e
+  virar um commit próprio antes de iniciar o próximo; nunca acumular várias frentes em um único
+  commit grande. Se a tarefa abranger vários assuntos, dividir em commits separados e organizados.
 - Um assunto por commit, pequeno e coeso, que compile e passe nos testes. Mensagens em inglês no formato
   `tipo: resumo no imperativo` (`feat`, `fix`, `refactor`, `style`, `test`, `docs`, `chore`).
 - Intervalos reais entre commits; não alterar datas nem reescrever histórico já publicado.

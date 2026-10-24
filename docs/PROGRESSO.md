@@ -29,6 +29,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24/10/2026)
 
+- Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
 - Usado o PNG composto do ZIP, o arquivo local de comentários e a gravação com pins para corrigir a composição mobile da
   home, detalhe, carrinho e checkout; ajustar autenticação e recibo para modal; criar destino de
   favoritos para o ícone da navegação; mapear comentários #47–#65 e registrar limites da comparação
@@ -37,6 +38,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   “Diário da Cunhagem”, conforme a captura fornecida; layout adaptado para desktop e mobile.
 - A gravação adicional confirmou o frame do detalhe do NFT: galeria sem imagens de outras obras,
   miniaturas apenas no desktop e dados do Emerald Ape #042 alinhados a token, nota e avaliações.
+- O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
+  três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Nesta atualização: `typecheck`, `test` (8 casos), `build` e `lint` passaram; lint mantém 9 avisos
   preexistentes e o build reporta o bundle principal acima de 500 kB.
 - `REQUISITOS.md` fica fora do repositório, no material do desafio. A matriz atualizada espelha seus
