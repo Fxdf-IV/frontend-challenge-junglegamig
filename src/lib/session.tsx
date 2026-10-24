@@ -1,4 +1,13 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -50,7 +59,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         setUserState(null);
         toast.error("Sua sessão expirou. Entre novamente para continuar.");
         const l = locRef.current;
-        if (!l.pathname.startsWith("/login")) navigate({ to: "/login", search: { redirect: l.href, expired: true } });
+        if (!l.pathname.startsWith("/login"))
+          navigate({ to: "/login", search: { redirect: l.href, expired: true } });
       }),
     [clearPrivate, navigate],
   );
@@ -84,7 +94,10 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     toast.success("Você saiu da sua conta");
   }, [clearPrivate]);
 
-  const value = useMemo(() => ({ user, status, signIn, signOut, setUser: setUserState }), [user, status, signIn, signOut]);
+  const value = useMemo(
+    () => ({ user, status, signIn, signOut, setUser: setUserState }),
+    [user, status, signIn, signOut],
+  );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

@@ -2,12 +2,22 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { io, type Socket } from "socket.io-client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { Cart, Nft, NftListResponse, NftUpdatedEvent, Order, OrderUpdatedEvent } from "@/api/types";
+import type {
+  Cart,
+  Nft,
+  NftListResponse,
+  NftUpdatedEvent,
+  Order,
+  OrderUpdatedEvent,
+} from "@/api/types";
 import { tokenStore } from "@/api/client";
 import { useSession } from "./session";
 
 type Status = "connecting" | "connected" | "disconnected";
-const Ctx = createContext<{ status: Status; announce: string }>({ status: "connecting", announce: "" });
+const Ctx = createContext<{ status: Status; announce: string }>({
+  status: "connecting",
+  announce: "",
+});
 
 /**
  * One socket.io-client connection per browser tab. Events carry eventId +
@@ -35,7 +45,12 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
       return true;
     };
 
-    const s = io({ path: "/socket.io/", transports: ["websocket"], reconnectionDelay: 800, reconnectionDelayMax: 3000 });
+    const s = io({
+      path: "/socket.io/",
+      transports: ["websocket"],
+      reconnectionDelay: 800,
+      reconnectionDelayMax: 3000,
+    });
     socketRef.current = s;
     let connectedOnce = false;
     s.on("connect", () => {
@@ -54,9 +69,12 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
 
     s.on("nft.updated", (e: NftUpdatedEvent) => {
       if (!fresh(e)) return;
-      const patch = (n: Nft): Nft => (n.id === e.resourceId && n.version < e.version ? { ...n, ...e.data } : n);
+      const patch = (n: Nft): Nft =>
+        n.id === e.resourceId && n.version < e.version ? { ...n, ...e.data } : n;
       qc.setQueryData<Nft>(["nfts", "detail", e.resourceId], (old) => (old ? patch(old) : old));
-      qc.setQueriesData<NftListResponse>({ queryKey: ["nfts", "list"] }, (old) => (old ? { ...old, items: old.items.map(patch) } : old));
+      qc.setQueriesData<NftListResponse>({ queryKey: ["nfts", "list"] }, (old) =>
+        old ? { ...old, items: old.items.map(patch) } : old,
+      );
       const carts = qc.getQueriesData<Cart>({ queryKey: ["cart"] });
       const inCart = carts.some(([, c]) => c?.items.some((i) => i.nftId === e.resourceId));
       if (inCart) {
@@ -71,9 +89,17 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
     s.on("order.updated", (e: OrderUpdatedEvent) => {
       if (!userRef.current || e.userId !== userRef.current) return; // never apply another user's event
       if (!fresh(e)) return;
-      qc.setQueryData<Order>(["u", userRef.current, "order", e.resourceId], (old) => (!old || old.version < e.version ? e.data : old));
+      qc.setQueryData<Order>(["u", userRef.current, "order", e.resourceId], (old) =>
+        !old || old.version < e.version ? e.data : old,
+      );
       if (e.data.status === "confirmed") qc.invalidateQueries({ queryKey: ["cart"] });
-      setAnnounce(e.data.status === "confirmed" ? "Pedido confirmado" : e.data.status === "declined" ? "Pedido recusado" : "Pedido atualizado");
+      setAnnounce(
+        e.data.status === "confirmed"
+          ? "Pedido confirmado"
+          : e.data.status === "declined"
+            ? "Pedido recusado"
+            : "Pedido atualizado",
+      );
     });
 
     return () => {
