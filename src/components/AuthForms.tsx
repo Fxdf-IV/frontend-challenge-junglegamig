@@ -1,5 +1,7 @@
+// Formulários de autenticação: validam campos e chamam as operações da API.
 import { useState, type FormEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 import { api } from "@/api/endpoints";
 import { toApiError } from "@/api/client";
 import { Button } from "@/components/ui/button";
@@ -8,6 +10,7 @@ import { useSession } from "@/lib/session";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/** Alterna a visibilidade da senha sem mover o foco do formulário. */
 function PasswordToggle({ shown, toggle }: { shown: boolean; toggle: () => void }) {
   return (
     <button
@@ -21,6 +24,7 @@ function PasswordToggle({ shown, toggle }: { shown: boolean; toggle: () => void 
   );
 }
 
+/** Valida credenciais e abre a sessão retornada pela API. */
 export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: boolean }) {
   const { signIn } = useSession();
   const [v, setV] = useState({ email: "", password: "" });
@@ -76,13 +80,24 @@ export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: b
       >
         <PasswordToggle shown={show} toggle={() => setShow(!show)} />
       </Field>
+      <div className="-mt-2 flex justify-end">
+        <button
+          type="button"
+          className="text-xs text-primary underline-offset-4 hover:underline"
+          onClick={() => toast.info("A recuperação de senha ainda não está disponível.")}
+        >
+          Esqueceu a senha?
+        </button>
+      </div>
       <Button variant="brand" className="w-full" disabled={busy}>
         {busy ? "Entrando…" : "Entrar"}
       </Button>
+      <SocialSignIn />
     </form>
   );
 }
 
+/** Valida dados de cadastro e inicia sessão após resposta bem-sucedida. */
 export function RegisterForm({ onDone }: { onDone: () => void }) {
   const { signIn } = useSession();
   const [v, setV] = useState({
@@ -156,6 +171,35 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
       <Button variant="brand" className="w-full" disabled={busy}>
         {busy ? "Criando…" : "Criar conta"}
       </Button>
+      <SocialSignIn />
     </form>
+  );
+}
+
+/** Mostra provedores do design e informa que as integrações não estão disponíveis. */
+function SocialSignIn() {
+  return (
+    <div className="space-y-3 pt-1">
+      <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
+        <span className="h-px flex-1 bg-border" />
+        <span>ou continue com</span>
+        <span className="h-px flex-1 bg-border" />
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {(["Google", "Facebook"] as const).map((provider) => (
+          <Button
+            key={provider}
+            type="button"
+            variant="line"
+            onClick={() => toast.info(`A entrada com ${provider} ainda não está disponível.`)}
+          >
+            <span aria-hidden className="font-bold">
+              {provider === "Google" ? "G" : "f"}
+            </span>
+            {provider}
+          </Button>
+        ))}
+      </div>
+    </div>
   );
 }
