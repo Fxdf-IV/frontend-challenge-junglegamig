@@ -1,3 +1,4 @@
+// Catálogo: sincroniza busca, filtros, ordenação e paginação com a URL.
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +18,7 @@ const TABS = [
   ["trending", "Em alta"],
 ] as const;
 
+/** Renderiza filtros e resultados para a home ou para a rota de mercado. */
 export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "/mercado" }) {
   const navigate = useNavigate({ from });
   const params = {
@@ -44,7 +46,13 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
     });
 
   const [q, setQ] = useState(search.q ?? "");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   useEffect(() => setQ(search.q ?? ""), [search.q]);
+  useEffect(() => {
+    const openFilters = () => setFiltersOpen(true);
+    window.addEventListener("kurio:open-catalog-filters", openFilters);
+    return () => window.removeEventListener("kurio:open-catalog-filters", openFilters);
+  }, []);
   useEffect(() => {
     const t = setTimeout(() => {
       if ((q.trim() || undefined) !== search.q) set({ q: q.trim() || undefined });
@@ -97,7 +105,12 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
               ))}
             </div>
             <div className="flex flex-wrap items-center gap-3">
-              <label className="relative min-w-0 flex-1 lg:w-56 lg:flex-none">
+              <label
+                className={cn(
+                  "relative min-w-0 flex-1 lg:w-56 lg:flex-none",
+                  from === "/" && "hidden",
+                )}
+              >
                 <span className="sr-only">Buscar no catálogo</span>
                 <input
                   type="search"
@@ -107,7 +120,9 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
                   className="h-9 w-full rounded-md border border-input bg-card px-3 text-sm placeholder:text-muted-foreground"
                 />
               </label>
-              <label className="flex items-center gap-2 text-sm">
+              <label
+                className={cn("flex items-center gap-2 text-sm", from === "/" && "max-md:hidden")}
+              >
                 <span className="whitespace-nowrap">Ordenar por:</span>
                 <select
                   value={params.sort}
@@ -123,9 +138,14 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
                   ))}
                 </select>
               </label>
-              <Sheet>
+              <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="line" size="sm" className="md:hidden">
+                  <Button
+                    id="catalog-filters-trigger"
+                    variant="line"
+                    size="sm"
+                    className={cn("md:hidden", from === "/" && "hidden")}
+                  >
                     <SlidersHorizontal /> Filtros {activeCount > 0 && `(${activeCount})`}
                   </Button>
                 </SheetTrigger>
@@ -203,11 +223,17 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
   );
 }
 
+/** Mantém os intervalos de linha amplos o bastante para separar os cartões. */
 function Grid({ children }: { children: React.ReactNode }) {
-  // equal row and column gaps (design review #61)
-  return <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">{children}</div>;
+  // O espaçamento vertical atende à observação #61 sem aumentar o intervalo horizontal.
+  return (
+    <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3">
+      {children}
+    </div>
+  );
 }
 
+/** Aplica filtros da coleção, rede e faixa de preço. */
 function Filters({
   data,
   search,
@@ -303,6 +329,7 @@ function Filters({
   );
 }
 
+/** Expõe cada faceta como um botão acessível sem caixa visual. */
 function FacetRow({
   label,
   count,
@@ -316,22 +343,23 @@ function FacetRow({
 }) {
   return (
     <li>
-      <label
+      <button
+        type="button"
+        aria-pressed={checked}
+        onClick={onChange}
         className={cn(
-          "flex cursor-pointer items-center justify-between rounded px-2 py-1 text-xs hover:bg-panel",
+          "flex w-full cursor-pointer items-center justify-between rounded px-2 py-1 text-left text-xs hover:bg-panel",
           checked && "text-primary",
         )}
       >
-        <span className="flex items-center gap-2">
-          <input type="checkbox" checked={checked} onChange={onChange} className="accent-primary" />
-          {label}
-        </span>
+        <span>{label}</span>
         <span>({count})</span>
-      </label>
+      </button>
     </li>
   );
 }
 
+/** Controla a navegação entre páginas do catálogo. */
 function Pagination({
   page,
   totalPages,
