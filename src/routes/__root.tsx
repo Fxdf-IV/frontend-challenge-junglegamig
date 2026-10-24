@@ -109,6 +109,8 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 const MOCKS = import.meta.env.VITE_ENABLE_MOCKS !== "false";
+// O painel de cenários só aparece quando solicitado para não cobrir o design.
+const SHOW_MOCK_PANEL = import.meta.env.VITE_SHOW_MOCK_PANEL === "true";
 
 /** The API lives in MSW (browser), so the app renders once the worker is active. */
 function MocksGate({ children }: { children: ReactNode }) {
@@ -138,7 +140,7 @@ function RootComponent() {
               <Outlet />
             </main>
             <Footer />
-            {MOCKS && <MockPanel />}
+            {MOCKS && SHOW_MOCK_PANEL && <MockPanel />}
             <Toaster position="top-center" richColors closeButton />
           </RealtimeProvider>
         </SessionProvider>
