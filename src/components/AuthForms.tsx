@@ -53,7 +53,7 @@ export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: b
     }
   };
   return (
-    <form onSubmit={submit} noValidate className="space-y-4">
+    <form onSubmit={submit} noValidate className="space-y-3 [&_label]:sr-only">
       {expired && (
         <p role="status" className="rounded-md bg-panel px-3 py-2 text-xs">
           Sua sessão expirou. Entre novamente para continuar de onde parou.
@@ -76,6 +76,7 @@ export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: b
         value={v.password}
         onChange={(e) => setV({ ...v, password: e.target.value })}
         error={errors.password}
+        placeholder="Senha"
         className="[&_input]:pr-10"
       >
         <PasswordToggle shown={show} toggle={() => setShow(!show)} />
@@ -101,7 +102,6 @@ export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: b
 export function RegisterForm({ onDone }: { onDone: () => void }) {
   const { signIn } = useSession();
   const [v, setV] = useState({
-    displayName: "",
     username: "",
     email: "",
     password: "",
@@ -114,7 +114,6 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     const errs: Record<string, string> = {};
-    if (v.displayName.trim().length < 2) errs.displayName = "Informe seu nome";
     if (!/^[a-z0-9_.]{3,20}$/.test(v.username))
       errs.username = "Use 3–20 letras minúsculas, números, _ ou .";
     if (!EMAIL.test(v.email)) errs.email = "Informe um e-mail válido";
@@ -126,7 +125,8 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
     if (Object.keys(errs).length) return;
     setBusy(true);
     try {
-      const { confirm: _c, ...body } = v;
+      const { confirm: _confirm, ...credentials } = v;
+      const body = { ...credentials, displayName: v.username };
       await signIn(await api.register(body));
       onDone();
     } catch (err) {
@@ -147,16 +147,26 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
     error: errors[k],
   });
   return (
-    <form onSubmit={submit} noValidate className="space-y-4">
+    <form onSubmit={submit} noValidate className="space-y-3 [&_label]:sr-only">
       <FormError message={formErr} />
-      <Field label="Nome de exibição" autoComplete="name" {...bind("displayName")} />
-      <Field label="Nome de usuário" autoComplete="username" {...bind("username")} />
-      <Field label="E-mail" type="email" autoComplete="email" {...bind("email")} />
+      <Field
+        label="Nome de usuário"
+        autoComplete="username"
+        placeholder="Nome de usuário"
+        {...bind("username")}
+      />
+      <Field
+        label="E-mail"
+        type="email"
+        autoComplete="email"
+        placeholder="Digite seu e-mail"
+        {...bind("email")}
+      />
       <Field
         label="Senha"
         type={show ? "text" : "password"}
         autoComplete="new-password"
-        hint="Mínimo 8 caracteres com letras e números"
+        placeholder="Senha"
         {...bind("password")}
         className="[&_input]:pr-10"
       >
@@ -166,6 +176,7 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
         label="Confirmar senha"
         type={show ? "text" : "password"}
         autoComplete="new-password"
+        placeholder="Confirmar senha"
         {...bind("confirm")}
       />
       <Button variant="brand" className="w-full" disabled={busy}>
@@ -185,7 +196,7 @@ function SocialSignIn() {
         <span>ou continue com</span>
         <span className="h-px flex-1 bg-border" />
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3">
         {(["Google", "Facebook"] as const).map((provider) => (
           <Button
             key={provider}

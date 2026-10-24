@@ -40,6 +40,9 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   miniaturas apenas no desktop e dados do Emerald Ape #042 alinhados a token, nota e avaliações.
 - Corrigida a moldura desktop de login/cadastro conforme a gravação: abas de navegação com destino
   preservado, modal mais estreito e subtítulo escondido em mobile; teste cobre as rotas e o retorno.
+- Alinhados os formulários de login/cadastro aos frames: placeholders em vez de rótulos visíveis,
+  quatro campos de cadastro e provedores sociais empilhados; o contrato REST continua recebendo
+  `displayName`, derivado do nome de usuário. Teste valida a quantidade de campos e o payload.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra
