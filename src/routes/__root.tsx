@@ -1,9 +1,11 @@
+// Casca da aplicação: configura providers, navegação compartilhada e estados globais.
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -17,7 +19,9 @@ import { RealtimeProvider } from "@/lib/realtime";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { MockPanel } from "@/components/MockPanel";
+import { cn } from "@/lib/utils";
 
+/** Apresenta uma saída simples quando a URL não corresponde a uma rota. */
 function NotFoundComponent() {
   return (
     <div className="container-page grid min-h-[60vh] place-items-center text-center">
@@ -38,6 +42,7 @@ function NotFoundComponent() {
   );
 }
 
+/** Recupera erros de rota sem encerrar a sessão atual. */
 function ErrorComponent({ reset }: ErrorComponentProps) {
   const router = useRouter();
   return (
@@ -59,6 +64,7 @@ function ErrorComponent({ reset }: ErrorComponentProps) {
   );
 }
 
+/** Rota raiz e metadados compartilhados da aplicação. */
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
@@ -88,6 +94,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   errorComponent: ErrorComponent,
 });
 
+/** Monta o documento HTML e o ponto de conteúdo acessível. */
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
@@ -112,7 +119,7 @@ const MOCKS = import.meta.env.VITE_ENABLE_MOCKS !== "false";
 // O painel de cenários só aparece quando solicitado para não cobrir o design.
 const SHOW_MOCK_PANEL = import.meta.env.VITE_SHOW_MOCK_PANEL === "true";
 
-/** The API lives in MSW (browser), so the app renders once the worker is active. */
+/** Aguarda o worker de mocks antes de exibir telas que dependem da API. */
 function MocksGate({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(!MOCKS);
   useEffect(() => {
@@ -128,8 +135,17 @@ function MocksGate({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+/** Fornece cache, sessão, tempo real e layout global às rotas. */
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const hideFooterOnMobile =
+    pathname === "/login" ||
+    pathname === "/cadastro" ||
+    pathname === "/carrinho" ||
+    pathname === "/checkout" ||
+    pathname.startsWith("/nft/") ||
+    pathname.startsWith("/pedido/");
   return (
     <QueryClientProvider client={queryClient}>
       <MocksGate>
@@ -139,7 +155,9 @@ function RootComponent() {
             <main id="conteudo">
               <Outlet />
             </main>
-            <Footer />
+            <div className={cn(hideFooterOnMobile && "max-md:hidden")}>
+              <Footer />
+            </div>
             {MOCKS && SHOW_MOCK_PANEL && <MockPanel />}
             <Toaster position="top-center" richColors closeButton />
           </RealtimeProvider>

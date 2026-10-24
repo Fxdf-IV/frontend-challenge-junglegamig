@@ -1,3 +1,4 @@
+// Cabeçalho e navegação: expõe caminhos principais e ações globais da conta.
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   LogIn,
@@ -7,7 +8,6 @@ import {
   Wallet,
   LogOut,
   Home,
-  Store,
   Heart,
 } from "lucide-react";
 import { useState, type FormEvent } from "react";
@@ -30,12 +30,20 @@ const NAV = [
   { to: "/aprenda", label: "Aprenda" },
 ] as const;
 
+/** Renderiza navegação desktop e os controles móveis previstos por tela. */
 export function Header() {
   const { user, signOut } = useSession();
   const cart = useCart();
   const count = cart.data?.items.reduce((a, i) => a + i.quantity, 0) ?? 0;
   const href = useRouterState({ select: (s) => s.location.href });
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isStandaloneMobile =
+    pathname === "/" ||
+    pathname === "/carrinho" ||
+    pathname === "/checkout" ||
+    pathname === "/login" ||
+    pathname === "/cadastro" ||
+    pathname.startsWith("/nft/");
   const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const [q, setQ] = useState("");
@@ -48,7 +56,12 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
+      <header
+        className={cn(
+          "sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur",
+          isStandaloneMobile && "max-md:hidden",
+        )}
+      >
         <div className="container-page grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-4">
           <Link
             to="/"
@@ -161,21 +174,22 @@ export function Header() {
           </form>
         )}
       </header>
-      <MobileTabBar count={count} signedIn={!!user} />
+      {pathname === "/" ? (
+        <MobileTabBar count={count} signedIn={!!user} />
+      ) : (
+        !isStandaloneMobile && <MobileTabBar count={count} signedIn={!!user} />
+      )}
     </>
   );
 }
 
+/** Renderiza os quatro destinos compactos da navegação inferior mobile. */
 function MobileTabBar({ count, signedIn }: { count: number; signedIn: boolean }) {
   const items = [
     { to: "/", label: "Início", icon: Home },
-    { to: "/mercado", label: "Mercado", icon: Store },
+    { to: signedIn ? "/favoritos" : "/login", label: "Favoritos", icon: Heart },
     { to: "/carrinho", label: `Carrinho (${count})`, icon: ShoppingCart },
-    {
-      to: signedIn ? "/perfil" : "/login",
-      label: signedIn ? "Perfil" : "Entrar",
-      icon: signedIn ? UserIcon : Heart,
-    },
+    { to: signedIn ? "/perfil" : "/login", label: signedIn ? "Perfil" : "Entrar", icon: UserIcon },
   ] as const;
   return (
     <nav
@@ -184,15 +198,15 @@ function MobileTabBar({ count, signedIn }: { count: number; signedIn: boolean })
     >
       <ul className="grid grid-cols-4">
         {items.map((it) => (
-          <li key={it.to}>
+          <li key={it.label}>
             <Link
               to={it.to}
-              className="flex h-14 flex-col items-center justify-center gap-1 text-[11px] text-muted-foreground"
+              className="flex h-14 items-center justify-center text-[11px] text-muted-foreground"
               activeProps={{ className: "text-primary" }}
               activeOptions={{ exact: it.to === "/" }}
             >
               <it.icon className="h-5 w-5" aria-hidden />
-              {it.label}
+              <span className="sr-only">{it.label}</span>
             </Link>
           </li>
         ))}
