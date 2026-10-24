@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+// Rota de pedido: acompanha o pagamento e apresenta o recibo confirmado em modal.
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Copy, ExternalLink, Loader2, XCircle } from "lucide-react";
@@ -7,11 +8,13 @@ import { api } from "@/api/endpoints";
 import type { ApiError } from "@/api/client";
 import { qk } from "@/api/queries";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useSession } from "@/lib/session";
 import { formatEthSmart } from "@/lib/eth";
 import { NETWORK_LABELS, shortAddr } from "@/lib/labels";
 import { PENDING_ORDER_KEY } from "@/lib/checkout-storage";
 
+/** Metadados e carregamento da rota de pedido autenticada. */
 export const Route = createFileRoute("/_authenticated/pedido/$id")({
   head: () => ({
     meta: [
@@ -27,8 +30,10 @@ export const Route = createFileRoute("/_authenticated/pedido/$id")({
   component: OrderPage,
 });
 
+/** Atualiza pedidos pendentes e congela os dados do recibo confirmado. */
 function OrderPage() {
   const { id } = Route.useParams();
+  const navigate = useNavigate();
   const { user } = useSession();
   // socket order.updated patches this cache; polling is the fallback while pending
   const q = useQuery({
@@ -104,8 +109,11 @@ function OrderPage() {
 
   // receipt renders the order snapshot only; later catalog changes never alter it
   return (
-    <section className="container-page py-10" aria-labelledby="receipt-title">
-      <div className="mx-auto max-w-xl rounded-lg border-b-4 border-primary bg-card p-6">
+    <Dialog open onOpenChange={(open) => !open && navigate({ to: "/" })}>
+      <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto border-b-4 border-primary bg-card">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Pedido confirmado</DialogTitle>
+        </DialogHeader>
         <img src="/nft/message.svg" alt="" width={40} height={40} className="mx-auto" />
         <h1 id="receipt-title" className="mt-3 text-center text-sm font-bold">
           Seus NFTs agora estão na sua carteira
@@ -204,11 +212,12 @@ function OrderPage() {
             </Button>
           )}
         </div>
-      </div>
-    </section>
+      </DialogContent>
+    </Dialog>
   );
 }
 
+/** Exibe um metadado curto do pedido confirmado. */
 function Meta({ label, value }: { label: string; value: string }) {
   return (
     <div>
