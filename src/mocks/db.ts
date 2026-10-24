@@ -24,7 +24,7 @@ export interface DbState {
 }
 
 const KEY = "kurio.mockdb.v1";
-const SEED_VERSION = 3;
+const SEED_VERSION = 4;
 let state: DbState | null = null;
 
 export async function sha256(text: string) {
@@ -44,7 +44,7 @@ async function seed(scenario: ScenarioId = "default"): Promise<DbState> {
     nfts: buildNfts(),
     users,
     sessions: {},
-    favorites: { u_ana: ["emerald-ape-009"], u_bruno: [] },
+    favorites: { u_ana: ["emerald-ape-042"], u_bruno: [] },
     carts: {},
     wallets: structuredClone(SEED_WALLETS),
     orders: {},

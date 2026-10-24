@@ -157,7 +157,10 @@ export function HomeEditorialSections() {
                   to="/aprenda"
                   className="mt-2 inline-flex text-[9px] font-bold text-primary hover:underline md:text-xs"
                 >
-                  Ler mais <span className="ml-1" aria-hidden>→</span>
+                  Ler mais{" "}
+                  <span className="ml-1" aria-hidden>
+                    →
+                  </span>
                 </Link>
               </div>
             </article>
@@ -184,7 +187,13 @@ function Campaign({
 }) {
   return (
     <article className="grid grid-cols-[5.5rem_1fr] items-center gap-3 rounded-lg bg-card p-3 sm:grid-cols-[8rem_1fr] sm:gap-5 sm:p-4 md:grid-cols-[minmax(8rem,0.9fr)_1.1fr]">
-      <img src={image} alt={alt} width={320} height={320} className="aspect-square w-full rounded-md object-cover" />
+      <img
+        src={image}
+        alt={alt}
+        width={320}
+        height={320}
+        className="aspect-square w-full rounded-md object-cover"
+      />
       <div className="text-center">
         <h3 className="text-[10px] font-bold leading-snug sm:text-xs md:text-sm">{title}</h3>
         <p className="mt-2 text-[8px] leading-relaxed text-muted-foreground sm:text-[10px] md:text-xs">
@@ -192,7 +201,9 @@ function Campaign({
         </p>
         <Button variant="brand" size="sm" className="mt-2 h-7 px-3 text-[9px]" asChild>
           {search ? (
-            <Link to="/mercado" search={search}>Explorar</Link>
+            <Link to="/mercado" search={search}>
+              Explorar
+            </Link>
           ) : (
             <Link to="/mercado">Explorar</Link>
           )}

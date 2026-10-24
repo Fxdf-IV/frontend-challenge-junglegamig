@@ -1,8 +1,8 @@
 # Registro de comparação com o Figma
 
-Fontes consultadas: export `Frontend Challenge.png`, `Comentários-Figma.txt` e gravação de tela
-`Gravação de Tela 2026-10-24 200402.mp4`. A gravação mostra o canvas e os pins em modo somente
-visualização. Os alvos abaixo foram identificados pela tela/camada e posição do pin. Opiniões e
+Fontes consultadas: export `Frontend Challenge.png`, `Comentários-Figma.txt` e gravações de tela
+`Gravação de Tela 2026-10-24 200402.mp4` e `Gravando 2026-10-24 202119.mp4`. As gravações mostram
+o canvas e os frames em modo somente visualização. Os alvos abaixo foram identificados pela tela/camada e posição do pin. Opiniões e
 perguntas dos comentários foram tratadas como observações para revisão, não como requisitos novos.
 
 ## Comentários com posição identificada na gravação
@@ -58,10 +58,10 @@ consulta e não são tratados automaticamente como requisitos de produto.
 | #27 | Área de conteúdo | Falta margem. | Não especifica lado/valor. |
 | #26 | Início desktop, banner “NFT em destaque” | Texto sem alinhamento. | Alvo visível no banner. |
 | #25 | Botão | Não está centralizado. | O alvo específico não fica legível no quadro capturado. |
-| #24 | Detalhe do NFT, seletor de miniaturas | Miniaturas muito próximas da imagem; deslocar para baixo para não serem cobertas pelo seletor. | Ajuste de espaçamento/posição. |
-| #23 | Detalhe do NFT, galeria | Pergunta se as miniaturas são edições ou variações. | Pergunta de conteúdo, não correção confirmada. |
+| #24 | Detalhe do NFT, seletor de miniaturas | Miniaturas muito próximas da imagem; deslocar para baixo para não serem cobertas pelo seletor. | No desktop, miniaturas seguem em coluna independente à esquerda da mídia. A nova gravação mostra quatro miniaturas do mesmo NFT; imagens de outras obras foram removidas da galeria. |
+| #23 | Detalhe do NFT, galeria | Pergunta se as miniaturas são edições ou variações. | A nova gravação mostra o mesmo NFT nas quatro miniaturas; a implementação não associa miniaturas a NFTs diferentes. A intenção de edição/variação permanece sem especificação. |
 | #22 | Não legível nos quadros extraídos | Texto não foi recuperado com confiança. | Pendente de imagem mais nítida. |
-| #21 | Carrinho/pagamento, ID de token | IDs exibidos parecem divergentes e pede confirmação do valor. | Consistência dos dados precisa de comparação com fixture/API. |
+| #21 | Carrinho/pagamento, ID de token | IDs exibidos parecem divergentes e pede confirmação do valor. | A gravação confirma o Emerald Ape #042 com token #0042; o fixture do item de referência foi alinhado a esses IDs. |
 | #20 | Pagamento mobile | Questiona por que o formulário “Perfil do colecionador” de 10 campos aparece no desktop, mas no mobile só aparece escolha de carteira. | Diferença entre frames/fluxos; verificar requisitos antes de mudar. |
 | #19 | Confirmação | Questiona estados pendente/confirmado/recusado e observa que só o confirmado está desenhado. | O front-end já trata os três estados; o comentário não pede remover os estados. |
 | #18 | Pagamento, rede | Pergunta se ENS é só Ethereum e se precisa de dropdown. | Pergunta de fluxo; manter como questão de produto. |
@@ -93,12 +93,15 @@ consulta e não são tratados automaticamente como requisitos de produto.
 | FD-06 | Login/cadastro | Modal com backdrop, foco gerenciado e conteúdo de fundo inerte. |
 | FD-07 | Login/cadastro | Recuperação de senha e controles sociais visíveis; integrações indisponíveis informadas sem simular sucesso. |
 | FD-08 | Confirmação | Recibo confirmado apresentado em modal; estados pendente e recusado preservados. |
+| FD-09 | Início desktop e mobile | As seções “NFT em destaque”, campanhas e “Diário da Cunhagem” do frame estavam ausentes na implementação. | Incluídos quatro cards de NFTs em destaque, dois banners de campanha e quatro cards editoriais em `HomeEditorialSections.tsx`, com layout responsivo. |
+| FD-10 | Detalhe desktop e mobile | A galeria usava imagens de outros NFTs e a tela mobile mostrava miniaturas que não aparecem no frame; a identificação do item de referência também divergia. | Galeria limitada à arte do NFT, miniaturas ocultas no mobile e fixture Emerald Ape alinhado a #042, token #0042, 4.8/19 avaliações. |
 
 ## Limites da comparação
 
 - A conta Figma conectada continua em modo de visualização e a API do Figma rejeitou leitura do
   arquivo; portanto comentários não puderam ser exportados por API.
-- A gravação fornecida permitiu associar pins e frames para #47–#65 e mostrar comentários mais antigos.
+- As gravações fornecidas permitiram associar pins e frames para #47–#65, confirmar detalhes de
+  produto e mostrar comentários mais antigos.
   Algumas frases ainda não especificam o ajuste desejado ou não revelam o resultado da interação.
 - `REQUISITOS.md` fica fora do repositório, no material do desafio. A matriz
   `docs/REQUISITOS-COBERTURA.md` espelha seus itens; não foram inventados itens ausentes.

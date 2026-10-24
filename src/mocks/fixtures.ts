@@ -1,5 +1,7 @@
+// Fixtures determinísticas da API simulada: catálogo, perfis, carteiras e valores do marketplace.
 import type { Collection, Edition, EditionKind, Network, Nft, Wallet } from "@/api/types";
 
+/** Nomes legíveis das categorias usadas em filtros e detalhes de NFT. */
 export const COLLECTION_LABELS: Record<Collection, string> = {
   "arte-digital": "Arte digital",
   fotografia: "Fotografia",
@@ -11,6 +13,7 @@ export const COLLECTION_LABELS: Record<Collection, string> = {
   assinaturas: "Assinaturas",
   utilidade: "Utilidade",
 };
+/** Nomes das redes exibidos em carteiras, compra e metadados. */
 export const NETWORK_LABELS: Record<Network, string> = {
   ethereum: "Ethereum",
   polygon: "Polygon",
@@ -70,6 +73,7 @@ function rng(seed: number) {
   };
 }
 
+/** Gera o catálogo local de forma estável para cenários e capturas reproduzíveis. */
 export function buildNfts(): Nft[] {
   const r = rng(42);
   const list: Nft[] = [];
@@ -87,7 +91,7 @@ export function buildNfts(): Nft[] {
             ? 3
             : 2;
     const art = ART[artIdx];
-    const num = String((i * 37 + 9) % 600).padStart(3, "0");
+    const num = i === 0 ? "042" : String((i * 37 + 9) % 600).padStart(3, "0");
     const price = PRICES[i % PRICES.length];
     const id = `${name.toLowerCase().replace(/\s+/g, "-")}-${num}`;
     const kinds: EditionKind[] = ["1/1", "1/10", "1/50", "aberta"];
@@ -120,22 +124,17 @@ export function buildNfts(): Nft[] {
       id,
       name: `${name} #${num}`,
       image: art.img,
-      gallery: [
-        art.img,
-        ...ART.filter((a) => a !== art)
-          .slice(0, 3)
-          .map((a) => a.img),
-      ],
+      gallery: Array(4).fill(art.img),
       collection: COLLECTIONS[i % COLLECTIONS.length],
       collectionName: `Kurio ${name.split(" ")[1]}s`,
       network: NETWORKS[Math.floor(r() * 3)],
       creator: ["Nova Sato", "Iris Kahlo", "Theo Marin", "Luna Reyes"][i % 4],
       description: `${name} #${num} é uma obra digital finalizada à mão da coleção Kurio Editions. Cada atributo fica armazenado nos metadados do token e verificado na rede. A obra explora identidade, movimento e luz em um mundo digital sem fronteiras.`,
       attributes: art.attrs,
-      tokenId: `#${String(i + 1).padStart(4, "0")}`,
+      tokenId: i === 0 ? "#0042" : `#${String(i + 1).padStart(4, "0")}`,
       contract: `0x${(0x7a42 + i * 113).toString(16).toUpperCase()}...${(0x19e8 + i * 7).toString(16).toUpperCase()}`,
-      rating: 4 + Math.round(r() * 10) / 10,
-      reviews: 3 + Math.floor(r() * 40),
+      rating: i === 0 ? 4.8 : 4 + Math.round(r() * 10) / 10,
+      reviews: i === 0 ? 19 : 3 + Math.floor(r() * 40),
       listedAt: new Date(Date.UTC(2026, 9, 20) - i * 3600_000 * 7).toISOString(),
       trending: Math.floor(r() * 1000),
       isNew: i % 4 === 1 || i < 3,
@@ -148,6 +147,7 @@ export function buildNfts(): Nft[] {
   return list;
 }
 
+/** Perfil persistido pelo mock, incluindo apenas o hash da senha. */
 export interface UserRecord {
   id: string;
   email: string;
@@ -160,6 +160,7 @@ export interface UserRecord {
   salt: string;
 }
 
+/** Contas fictícias usadas somente para inicializar o serviço mock. */
 export const SEED_USERS: Array<Omit<UserRecord, "passwordHash" | "salt"> & { password: string }> = [
   {
     id: "u_ana",
@@ -178,6 +179,7 @@ export const SEED_USERS: Array<Omit<UserRecord, "passwordHash" | "salt"> & { pas
   },
 ];
 
+/** Carteiras iniciais associadas às contas fictícias. */
 export const SEED_WALLETS: Record<string, Wallet[]> = {
   u_ana: [
     {
@@ -200,12 +202,14 @@ export const SEED_WALLETS: Record<string, Wallet[]> = {
   u_bruno: [],
 };
 
+/** Cupons válidos e expirados para exercitar o cálculo do pedido. */
 export const COUPONS: Record<string, { bps: number; label: string; expired?: boolean }> = {
   KURIO10: { bps: 1000, label: "10% de desconto de lançamento" },
   WELCOME5: { bps: 500, label: "5% de boas-vindas" },
   VERAO25: { bps: 2500, label: "Cupom de verão", expired: true },
 };
 
+/** Taxas fictícias por rede, armazenadas como decimais de ETH. */
 export const NETWORK_FEES: Record<Network, string> = {
   ethereum: "0.0042",
   polygon: "0.0008",

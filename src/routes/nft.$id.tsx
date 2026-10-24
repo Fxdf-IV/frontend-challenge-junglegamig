@@ -124,9 +124,10 @@ function NftDetail() {
           <Link
             to="/mercado"
             aria-label="Voltar ao mercado"
-            className="inline-flex h-10 items-center gap-2 rounded-full bg-card px-3 text-sm"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-card"
           >
-            <ArrowLeft aria-hidden /> Voltar
+            <ArrowLeft aria-hidden />
+            <span className="sr-only">Voltar</span>
           </Link>
           <Button
             variant="ghost"
@@ -147,9 +148,9 @@ function NftDetail() {
             Mercado
           </Link>
         </nav>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-8">
           <div className="flex flex-col-reverse gap-4 sm:flex-row">
-            <ul className="flex gap-3 sm:flex-col" aria-label="Galeria">
+            <ul className="hidden gap-3 sm:flex sm:flex-col" aria-label="Galeria">
               {nft.gallery.map((g, i) => (
                 <li key={g}>
                   <button
@@ -185,8 +186,17 @@ function NftDetail() {
           </div>
 
           <div>
-            <h1 className="text-2xl font-bold">{nft.name}</h1>
-            <div className="mt-2 flex flex-wrap items-center justify-between gap-2 border-b border-border pb-3">
+            <div className="flex items-center justify-between gap-2">
+              <h1 className="text-xl font-bold md:text-2xl">{nft.name}</h1>
+              <p
+                className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2 py-1 text-[10px] md:hidden"
+                aria-label={`${nft.rating.toFixed(1)} de 5, ${nft.reviews} avaliações`}
+              >
+                <Star className="h-3 w-3 fill-primary text-primary" aria-hidden />
+                {nft.rating.toFixed(1)} ({nft.reviews})
+              </p>
+            </div>
+            <div className="mt-2 hidden flex-wrap items-center justify-between gap-2 border-b border-border pb-3 md:flex">
               <p className="text-xl font-bold text-primary" aria-live="polite">
                 {formatEth(edition.price)}
               </p>
@@ -201,10 +211,11 @@ function NftDetail() {
                 </span>
               </p>
             </div>
-            <h2 className="mt-4 text-sm font-bold">Sobre este NFT:</h2>
+            <h2 className="mt-4 hidden text-sm font-bold md:block">Sobre este NFT:</h2>
             <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-              Um colecionável digital finalizado à mão da coleção {nft.collectionName}, verificado
-              na {NETWORK_LABELS[nft.network]}, com arte desbloqueável e acesso para colecionadores.
+              Um colecionável digital {EDITION_LABEL[edition.kind]} finalizado à mão da coleção
+              Kurio Editions, verificado na {NETWORK_LABELS[nft.network]}, com arte desbloqueável e
+              acesso para colecionadores.
             </p>
             <fieldset className="mt-4">
               <legend className="text-sm font-bold">Edição:</legend>
