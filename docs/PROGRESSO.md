@@ -43,6 +43,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 - Alinhados os formulários de login/cadastro aos frames: placeholders em vez de rótulos visíveis,
   quatro campos de cadastro e provedores sociais empilhados; o contrato REST continua recebendo
   `displayName`, derivado do nome de usuário. Teste valida a quantidade de campos e o payload.
+- Ajustado o diálogo mobile de autenticação para o cartão centralizado e arredondado mostrado no
+  Figma, depois de confirmar o preenchimento indevido da tela numa captura em 390 px.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra
