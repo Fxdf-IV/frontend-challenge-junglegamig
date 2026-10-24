@@ -17,6 +17,16 @@ export const qk = {
 };
 
 export const nftListQuery = (p: NftListParams) =>
-  queryOptions({ queryKey: qk.nfts(p), queryFn: ({ signal }) => api.listNfts(p, signal), placeholderData: (prev) => prev, staleTime: 30_000 });
+  queryOptions({
+    queryKey: qk.nfts(p),
+    queryFn: ({ signal }) => api.listNfts(p, signal),
+    placeholderData: (prev) => prev,
+    staleTime: 30_000,
+  });
 export const nftQuery = (id: string) =>
-  queryOptions({ queryKey: qk.nft(id), queryFn: ({ signal }) => api.getNft(id, signal), staleTime: 30_000, retry: (n, e) => (e as { status?: number }).status !== 404 && n < 2 });
+  queryOptions({
+    queryKey: qk.nft(id),
+    queryFn: ({ signal }) => api.getNft(id, signal),
+    staleTime: 30_000,
+    retry: (n, e) => (e as { status?: number }).status !== 404 && n < 2,
+  });

@@ -9,7 +9,8 @@ const CART_KEY = "kurio.guestCart";
 
 export const tokenStore = {
   get: () => (typeof window === "undefined" ? null : localStorage.getItem(TOKEN_KEY)),
-  set: (t: string | null) => (t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY)),
+  set: (t: string | null) =>
+    t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY),
 };
 
 export function guestCartId() {
@@ -39,7 +40,11 @@ http.interceptors.request.use((config) => {
 });
 
 http.interceptors.response.use(undefined, (error: AxiosError<ApiErrorBody>) => {
-  if (error.response?.status === 401 && error.response.data?.error?.code === "SESSION_EXPIRED" && tokenStore.get()) {
+  if (
+    error.response?.status === 401 &&
+    error.response.data?.error?.code === "SESSION_EXPIRED" &&
+    tokenStore.get()
+  ) {
     expiredListeners.forEach((fn) => fn());
   }
   return Promise.reject(error);
@@ -60,7 +65,8 @@ export class ApiError extends Error {
 export function toApiError(e: unknown): ApiError {
   if (e instanceof ApiError) return e;
   const ax = e as AxiosError<ApiErrorBody>;
-  if (ax?.code === "ECONNABORTED" || ax?.code === "ETIMEDOUT") return new ApiError(0, "TIMEOUT", "A requisição demorou demais");
+  if (ax?.code === "ECONNABORTED" || ax?.code === "ETIMEDOUT")
+    return new ApiError(0, "TIMEOUT", "A requisição demorou demais");
   const body = ax?.response?.data?.error;
   if (body) return new ApiError(ax.response!.status, body.code, body.message, body.fields, body);
   return new ApiError(0, "NETWORK", "Sem conexão com o servidor");
