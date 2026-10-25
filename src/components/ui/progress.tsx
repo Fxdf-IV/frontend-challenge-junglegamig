@@ -1,3 +1,4 @@
+// Barra de progresso Progress (shadcn/ui baseada em Radix UI) adaptada com cor primária laranja do Figma.
 "use client";
 
 import * as React from "react";

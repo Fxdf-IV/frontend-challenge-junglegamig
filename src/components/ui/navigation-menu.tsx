@@ -1,3 +1,4 @@
+// Menu de navegação NavigationMenu (shadcn/ui baseado em Radix UI) adaptado para links e animações do Figma.
 import * as React from "react";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import { cva } from "class-variance-authority";

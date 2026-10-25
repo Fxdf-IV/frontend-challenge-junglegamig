@@ -1,3 +1,4 @@
+// Popover flutuante (shadcn/ui baseado em Radix UI) adaptado para os tokens de elevação e padding do Figma.
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 

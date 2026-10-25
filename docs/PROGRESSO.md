@@ -19,6 +19,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote 5 de componentes UI shadcn/ui):**
+  - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `navigation-menu.tsx`, `pagination.tsx`, `popover.tsx`, `progress.tsx`, `radio-group.tsx` e `resizable.tsx`.
 - **Documentação e Código Comentado (Lote 4 de componentes UI shadcn/ui):**
   - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `form.tsx`, `hover-card.tsx`, `input-otp.tsx`, `input.tsx`, `label.tsx` e `menubar.tsx`.
 - **Documentação e Código Comentado (Lote 3 de componentes UI shadcn/ui):**
