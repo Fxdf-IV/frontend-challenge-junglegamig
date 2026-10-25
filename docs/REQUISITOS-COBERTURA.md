@@ -8,7 +8,7 @@ Legenda de leitura: "Implementado" significa que o código existe, mas o requisi
 automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1 e 2 estão verificados;
 o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 12 · Implementado 61 · Em andamento 8 · Pendente 28 (109 itens)
+**Resumo atual:** Verificado 14 · Implementado 59 · Em andamento 8 · Pendente 28 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -35,7 +35,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Detalhe: galeria, edição, quantidade, favoritos, compra | Implementado | `routes/nft.$id.tsx`                                              |
 | Carrinho: quantidades, remoção, cupom, resumo           | Verificado   | `tests/e2e/cart.spec.ts` (desktop/mobile)                          |
 | Pagamento: dados, carteira e rede, revisão, envio       | Implementado | `routes/_authenticated.checkout.tsx`                              |
-| Confirmação de pedido                                   | Implementado | `routes/_authenticated.pedido.$id.tsx`                            |
+| Confirmação de pedido                                   | Verificado   | `tests/e2e/checkout-success.spec.ts` (pedido confirmado e recibo após refresh) |
 | Login com retorno ao fluxo anterior                     | Verificado   | `tests/e2e/account.spec.ts` (login privado e refresh, desktop/mobile) |
 | Cadastro com conflito                                   | Verificado   | `tests/e2e/account.spec.ts` (conflito duplicado, desktop/mobile)   |
 | Perfil: dados, avatar, senha                            | Implementado | `routes/_authenticated.perfil.tsx`                                |
@@ -160,7 +160,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 3. Cadastro, login, expiração, logout, troca de usuário                 | Em andamento (`tests/e2e/account.spec.ts`; 11 passaram, logout/troca desktop; 1 skip mobile) |
 | 4. Favoritos com falha e recuperação                                    | Verificado (`tests/e2e/favorites.spec.ts`; 8/8, desktop/mobile) |
 | 5. Carrinho, quantidades, remoção, cupom, persistência                  | Verificado (`tests/e2e/cart.spec.ts`; 6/6, desktop/mobile) |
-| 6. Compra completa até o recibo                                         | Pendente |
+| 6. Compra completa até o recibo                                         | Verificado (`tests/e2e/checkout-success.spec.ts`; 2/2, desktop/mobile) |
 | 7. Falha de pagamento, clique repetido, timeout e idempotência          | Pendente |
 | 8. Perfil, avatar, senha e carteiras com erros                          | Pendente |
 | 9. Preço/disponibilidade via Socket.IO no checkout                      | Pendente |

@@ -14,7 +14,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
    (revalidação, duplo clique, timeout com idempotência).
 5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
 6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: grupos 1, 2, 4 e 5 verificados; grupo 3 parcial; faltam grupos 6–12 e regressão visual.
+7. Playwright: grupos 1, 2, 4, 5 e 6 verificados; grupo 3 parcial; faltam grupos 7–12 e regressão visual.
 8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
 9. `README.md` e `ARCHITECTURE.md` completos.
 10. Formatar o código com Prettier para zerar o lint.
@@ -74,8 +74,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 - Grupo 5 (carrinho) passou em `tests/e2e/cart.spec.ts`: 6/6 em desktop/mobile. Cobre estado vazio,
   adicionar/atualizar/remover item, total ETH após quantidade, aplicar/remover cupom válido, cupons
   expirado/inválido e migração de itens de visitante para a conta no login.
-- O grupo 5 está isolado de favoritos. O próximo lote será checkout confirmado (grupo 6); seguem
-  pendentes a cobertura parcial do grupo 3, grupos 6–12 e regressão visual.
+- O grupo 5 está isolado de favoritos e tem commit próprio. A cobertura parcial do grupo 3, os grupos
+  7–12 e a regressão visual continuam pendentes.
+- Grupo 6 passou em `tests/e2e/checkout-success.spec.ts`: 2/2. O fluxo autenticado conecta uma carteira
+  simulada, revisa a cotação, cria o pedido, aguarda confirmação e verifica o recibo após refresh em
+  desktop e mobile. Próximo lote é o grupo 7 (falhas de pagamento, timeout e idempotência).
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.

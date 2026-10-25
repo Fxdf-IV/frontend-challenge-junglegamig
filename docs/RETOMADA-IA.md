@@ -201,3 +201,19 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 - Matriz atual: Verificado 12, Implementado 61, Em andamento 8, Pendente 28 (109 itens).
 - Próximo grupo a implementar: 6, checkout confirmado e recibo; grupos 3 e 6–12 ainda têm trabalho,
   assim como regressão visual, Lighthouse, documentação de arquitetura/README e validação final.
+
+## Continuação — grupo 6 Checkout confirmado
+
+- Criado `tests/e2e/checkout-success.spec.ts`; focused E2E passou **2/2** com um worker em Chromium
+  desktop/mobile. Cobre login, inclusão no carrinho, acesso ao checkout, dados preenchidos do perfil,
+  aprovação da carteira simulada, revisão de cotação, POST de pedido 201, confirmação final e recibo
+  restaurado após refresh (Golden Beat #207, total 0.9942 ETH).
+- O grupo está funcionalmente coberto e não houve alteração de produção. Arquivos sem commit:
+  `tests/e2e/checkout-success.spec.ts`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`,
+  `docs/superpowers/plans/2026-10-25-playwright-e2e.md` e este handoff.
+- Antes do commit `test: cover successful checkout flow`, executar typecheck, lint e Vitest; depois
+  registrar o hash. Matriz atual prevista: Verificado 14, Implementado 59, Em andamento 8,
+  Pendente 28 (109 itens).
+- Próximo lote: grupo 7, falhas de pagamento, estoque/preço/cupom obsoletos, timeout e idempotência.
+  Grupos 3 e 7–12 seguem pendentes/parciais, além da regressão visual, Lighthouse, arquitetura/README,
+  auditoria completa, build final e deploy.
