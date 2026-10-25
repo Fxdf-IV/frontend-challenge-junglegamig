@@ -5,7 +5,7 @@ import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import {
-  ArrowLeft,
+  ChevronLeft,
   Heart,
   Link2,
   Mail,
@@ -22,7 +22,7 @@ import type { EditionKind } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NftCard, NftCardSkeleton } from "@/components/nft/NftCard";
-import { formatEth } from "@/lib/eth";
+import { ethMul, formatEth } from "@/lib/eth";
 import { useCartMutations } from "@/lib/cart";
 import { useFavorites, useToggleFavorite } from "@/lib/favorites";
 import { useSession } from "@/lib/session";
@@ -126,22 +126,26 @@ function NftDetail() {
     <>
       <div className="container-page pb-40 pt-4 md:py-6">
         <div className="mb-4 flex items-center justify-between md:hidden">
-          <Link
-            to="/mercado"
-            aria-label="Voltar ao mercado"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-card"
-          >
-            <ArrowLeft aria-hidden />
-            <span className="sr-only">Voltar</span>
-          </Link>
           <Button
-            variant="ghost"
+            type="button"
+            variant="outline"
+            size="icon"
+            aria-label="Voltar"
+            className="rounded-full border-primary/60 bg-transparent text-primary hover:bg-primary/10"
+            onClick={() => window.history.back()}
+          >
+            <ChevronLeft className="size-5" />
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
             size="icon"
             aria-label={isFav ? "Remover dos favoritos" : "Adicionar aos favoritos"}
             aria-pressed={isFav}
+            className="rounded-full border-primary/60 bg-transparent text-primary hover:bg-primary/10"
             onClick={onFav}
           >
-            <Heart className={cn(isFav && "fill-primary text-primary")} />
+            <Heart className={cn("size-5", isFav && "fill-primary text-primary")} />
           </Button>
         </div>
         <nav aria-label="Trilha" className="mb-4 hidden text-sm font-semibold md:block">
@@ -397,50 +401,65 @@ function NftDetail() {
           </TabsContent>
         </Tabs>
       </div>
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 rounded-t-[1.5rem] border-t border-border/40 bg-card/95 px-6 pt-5 pb-6 shadow-[0_-0.5rem_1.5rem_rgb(0_0_0/0.45)] backdrop-blur md:hidden">
         <div className="mx-auto flex max-w-lg items-center justify-between gap-3">
-          <div className="flex items-center gap-2" role="group" aria-label="Quantidade">
+          <div className="flex items-center gap-2 text-sm" role="group" aria-label="Quantidade">
+            <span className="text-xs font-semibold">Qtd.</span>
             <Button
-              variant="round"
+              type="button"
+              variant="outline"
               size="icon"
-              className="h-8 w-8"
+              className="size-7 rounded-full border-primary/40 bg-primary/10 text-primary hover:bg-primary/20"
               aria-label="Diminuir quantidade"
               disabled={quantity <= 1 || unavailable}
               onClick={() => setQty(quantity - 1)}
             >
-              <Minus />
+              <Minus className="size-3.5" />
             </Button>
-            <output aria-live="polite" className="w-5 text-center">
+            <output aria-live="polite" className="w-5 text-center font-bold">
               {quantity}
             </output>
             <Button
-              variant="round"
+              type="button"
+              variant="outline"
               size="icon"
-              className="h-8 w-8"
+              className="size-7 rounded-full border-primary/40 bg-primary/10 text-primary hover:bg-primary/20"
               aria-label="Aumentar quantidade"
               disabled={quantity >= limit || unavailable}
               onClick={() => setQty(quantity + 1)}
             >
-              <Plus />
+              <Plus className="size-3.5" />
             </Button>
           </div>
-          <strong className="whitespace-nowrap text-sm text-primary">
-            {formatEth(edition.price)}
+          <strong className="whitespace-nowrap text-lg font-bold text-primary">
+            {formatEth(ethMul(edition.price, quantity))}
           </strong>
         </div>
-        <div className="mx-auto mt-2 flex max-w-lg gap-2">
+        <div className="mx-auto mt-4 flex max-w-lg items-center gap-3">
           <Button
-            variant="brand"
-            className="flex-1"
+            className="h-14 flex-1 rounded-full bg-linear-to-br from-primary to-[color-mix(in_oklab,var(--primary),black_30%)] text-base font-bold text-primary-foreground uppercase shadow-md active:scale-[0.98] transition-transform"
             disabled={unavailable || add.isPending}
             onClick={onBuy}
           >
-            {add.isPending ? "Adicionando…" : "Comprar NFT"}
+            {unavailable ? "Esgotado" : add.isPending ? "Adicionando…" : "Comprar NFT"}
           </Button>
-          <Button variant="line" size="icon" aria-label="Abrir carrinho" asChild>
-            <Link to="/carrinho">
-              <ShoppingCart />
-            </Link>
+          <Button
+            type="button"
+            variant="outline"
+            className="size-14 rounded-full border-border bg-[#2f1d15] text-primary hover:bg-[#2f1d15]/80 flex items-center justify-center shrink-0 shadow-md"
+            aria-label="Adicionar ao carrinho"
+            disabled={unavailable || add.isPending}
+            onClick={() => {
+              add.mutate(
+                { nftId: nft.id, edition: edition.kind, quantity },
+                {
+                  onSuccess: () => toast.success("Adicionado ao carrinho"),
+                  onError: (err) => toast.error(err.message),
+                },
+              );
+            }}
+          >
+            <ShoppingCart className="size-5" />
           </Button>
         </div>
       </div>
