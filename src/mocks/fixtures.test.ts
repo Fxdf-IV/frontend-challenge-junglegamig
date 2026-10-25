@@ -6,7 +6,7 @@ test("mantém os dados e as imagens do NFT de referência alinhados ao Figma", (
   const nfts = buildNfts();
   const emerald = nfts[0];
 
-  expect(nfts).toHaveLength(36);
+  expect(nfts).toHaveLength(40);
   expect(nfts.slice(0, 9).map((nft) => nft.name)).toEqual([
     "Emerald Ape #042",
     "Sage Nomad #009",

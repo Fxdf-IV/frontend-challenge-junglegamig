@@ -14,6 +14,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Alinhamento do carrinho desktop com o Figma sem alterar o mobile (`carrinho.tsx`, FD-27):**
+  - Removido o título duplicado "Carrinho de NFTs" no desktop, alinhado o cabeçalho da grade de itens com o cabeçalho do "Resumo da carteira" através de linha divisória compartilhada (`border-[#3d2c20]`).
+  - Cada item na versão desktop passa a ser um cartão horizontal independente (`bg-[#19110a]` com thumbnail integrado nivelado à esquerda, nome completo do NFT, `ID do token: #0042`, preço em coluna própria, stepper com botões circulares primários, total e botão de exclusão alinhado à direita).
+  - Painel de resumo no desktop integrado sobre o canvas sem caixa de cartão fechada; campo de cupom retangular com botão "Aplicar" anexo e botão de checkout retangular (`rounded-md`) com tipografia mono em caixa normal ("Conectar e finalizar" / "Concluir e finalizar").
+  - Versão mobile 100% preservada com seus cards compactos, botões em pílula e folha fixa inferior.
+
 - **Seção "Colecionadores também viram" no carrinho de compras (`carrinho.tsx`, FD-26):**
   - Implementada seção com título e sublinhado primário em laranja, grade de 5 cards com recomendações do catálogo (filtrando itens já presentes no carrinho) e indicadores de carrossel de 3 pontos (`○ ● ○`).
 - **Adicionado botão 'Adicionar ao carrinho' na tela de detalhe do NFT (`nft.$id.tsx`) no padrão visual do site (FD-25):**

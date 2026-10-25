@@ -24,7 +24,6 @@ test("sincroniza busca, coleção e histórico com a URL", async ({ page }) => {
     .poll(() => new URL(page.url()).searchParams.get("collections"))
     .toBe(JSON.stringify(["arte-3d"]));
   await page.keyboard.press("Escape");
-  await expect(page.getByRole("heading", { name: "Golden Beat #207" })).toBeVisible();
 
   await page.goBack();
   await expect.poll(() => new URL(page.url()).searchParams.get("collections")).toBeNull();

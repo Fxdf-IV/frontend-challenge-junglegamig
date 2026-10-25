@@ -42,9 +42,7 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
           )}
           <button
             type="button"
-            aria-label={
-              isFav ? `Remover dos favoritos: ${nft.name}` : `Adicionar aos favoritos: ${nft.name}`
-            }
+            aria-label={isFav ? `Remover dos salvos: ${nft.name}` : `Salvar ${nft.name} nos salvos`}
             aria-pressed={isFav}
             onClick={(e) => {
               e.preventDefault();

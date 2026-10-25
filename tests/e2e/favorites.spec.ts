@@ -17,6 +17,12 @@ async function favoriteRequest(page: Page, id: string, method: "PUT" | "DELETE")
   );
 }
 
+function detailFavorite(page: Page) {
+  return page.getByRole("button", {
+    name: /^(Adicionar aos|Remover dos) favoritos$|^Favorita(r|do)$/i,
+  });
+}
+
 test("visitante recebe convite para entrar e volta aos favoritos", async ({ page }) => {
   await page.goto("/favoritos?scenario=default");
 
@@ -33,15 +39,12 @@ test("adiciona e remove um NFT e mantém a lista após atualizar", async ({ page
   await page.goto("/login?redirect=%2Fnft%2Fgolden-beat-207&scenario=default");
   await loginAs(page);
 
-  const favorite = page.getByRole("button", { name: /favorit/i });
+  const favorite = detailFavorite(page);
   await expect(favorite).toHaveAttribute("aria-pressed", "false");
   const addResponse = favoriteRequest(page, "golden-beat-207", "PUT");
   await favorite.click();
   expect((await addResponse).status()).toBe(200);
-  await expect(page.getByRole("button", { name: /favorit/i })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(detailFavorite(page)).toHaveAttribute("aria-pressed", "true");
 
   await page.goto("/favoritos");
   await expect(page.getByRole("link", { name: /Golden Beat #207/ })).toBeVisible();
@@ -51,20 +54,17 @@ test("adiciona e remove um NFT e mantém a lista após atualizar", async ({ page
 
 test("rollback de falha restaura o favorito e permite tentar novamente", async ({ page }) => {
   await page.goto("/nft/emerald-ape-042?scenario=favorite-fail");
-  await page.getByRole("button", { name: /favorit/i }).click();
+  await detailFavorite(page).click();
   await expect(page).toHaveURL(/\/login\?/);
   await loginAs(page);
   await expect(page).toHaveURL(/\/nft\/emerald-ape-042\?scenario=favorite-fail/);
 
-  const remove = page.getByRole("button", { name: /favorit/i });
+  const remove = detailFavorite(page);
   await expect(remove).toHaveAttribute("aria-pressed", "true");
   const failedResponse = favoriteRequest(page, "emerald-ape-042", "DELETE");
   await remove.click();
   expect((await failedResponse).status()).toBe(500);
-  await expect(page.getByRole("button", { name: /favorit/i })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(detailFavorite(page)).toHaveAttribute("aria-pressed", "true");
 
   await page.evaluate(async () => {
     await fetch("/api/__mock/scenario", {
@@ -74,12 +74,9 @@ test("rollback de falha restaura o favorito e permite tentar novamente", async (
     });
   });
   const recoveredResponse = favoriteRequest(page, "emerald-ape-042", "DELETE");
-  await page.getByRole("button", { name: /favorit/i }).click();
+  await detailFavorite(page).click();
   expect((await recoveredResponse).status()).toBe(200);
-  await expect(page.getByRole("button", { name: /favorit/i })).toHaveAttribute(
-    "aria-pressed",
-    "false",
-  );
+  await expect(detailFavorite(page)).toHaveAttribute("aria-pressed", "false");
 });
 
 test("mostra o estado vazio para uma conta sem favoritos", async ({ page }) => {
