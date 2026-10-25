@@ -6,7 +6,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 ## Próximos passos (ordem de prioridade)
 
 1. Revisar os pins de #47–#65 com a gravação recém-fornecida; validar visualmente no navegador os
-   ajustes já feitos e esclarecer o controle de cópia de #64.
+   ajustes já feitos (a ferramenta de captura controlada trava até numa captura simples) e esclarecer
+   o controle de cópia de #64.
 2. Comentar todo o código (`AGENTS.md`, seção 12), pasta por pasta, em commits separados.
 3. Auditar contratos e cenários dos mocks contra o enunciado; completar o painel de dev e o reset.
 4. Revisar tempo real (deduplicação, versão, reconexão, reconciliação) e o checkout
@@ -31,6 +32,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 - Corrigida a cópia da campanha “Arte digital selecionada e muito mais” conforme o frame local (#64):
   removido o sufixo “cultura”; a ação de cópia segue indefinida no material disponível.
+- A captura controlada da home desktop voltou a travar após mais de 60 segundos e foi interrompida;
+  a revisão de renderização do navegador segue pendente, sem alegação de validação visual.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.

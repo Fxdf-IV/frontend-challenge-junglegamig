@@ -45,6 +45,8 @@ em português brasileiro.
 ## Últimos commits conhecidos
 
 `a00c72e docs: confirm footer alignment review`  
+`d32144a fix: match campaign copy to Figma`  
+`292d8dd docs: save project handoff context`  
 `3557e90 docs: record Figma audit verification`  
 `9ef5da3 docs: clarify mobile checkout design scope`  
 `478538f fix: enforce profile metadata limits`  
@@ -109,3 +111,11 @@ estado atual antes de editar ou commitar.
   Isso é leitura de código, não evidência de renderização visual.
 - Tentativas de captura de navegador anteriormente ficaram sem resposta; não declarar validação
   visual realizada por elas.
+- Nesta retomada, o frame `frame-02.jpg` foi inspecionado em resolução original: a cópia visível da
+  campanha “Arte digital selecionada e muito mais” termina em “definem a”, sem “cultura”. O sufixo
+  foi removido da implementação e registrado como FD-15 (#64), commit `d32144a`.
+- `bun run typecheck`, `bun run lint` e `bun run test` passaram após a correção de copy. Testes:
+  7 arquivos e 18 casos; lint sem erros, com 9 avisos existentes.
+- Nova captura simples da home desktop com `mcp__rea__capture_browser_scenario` também travou após
+  mais de 60 segundos e foi interrompida. Não houve screenshot/runtime evidence; browser QA permanece
+  pendente. Servidor Vite local respondeu na porta 3001 na inspeção anterior.
