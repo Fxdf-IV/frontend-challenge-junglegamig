@@ -1,29 +1,36 @@
+// Servidor Socket.IO simulado sobre MSW WebSocket + @mswjs/socket.io-binding.
 import { ws } from "msw";
 import { toSocketIo } from "@mswjs/socket.io-binding";
 import type { Nft, Order, RealtimeEvent } from "@/api/types";
 import { db } from "./db";
 
 /**
- * Socket.IO server simulated through MSW's WebSocket interception plus
- * @mswjs/socket.io-binding. The client is the real socket.io-client using
- * the websocket transport only (long-polling is not intercepted here).
+ * Representa uma conexão ativa do cliente `socket.io-client` interceptada via WebSocket.
  */
 type Conn = { io: ReturnType<typeof toSocketIo>; userId?: string; close: () => void };
 const connections = new Set<Conn>();
 const sent: RealtimeEvent<unknown>[] = [];
 let refuseUntil = 0;
 
-const socketLink = ws.link(/\/socket\.io\//);
+// O MSW remove `/socket.io/`; usar a origem ws evita comparar com o protocolo HTTP da página.
+const socketUrl = new URL("/", window.location.href);
+socketUrl.protocol = socketUrl.protocol === "https:" ? "wss:" : "ws:";
+const socketLink = ws.link(socketUrl.href);
 
+/** Handler de WebSocket do MSW que emula o protocolo Socket.IO e autenticação por sessão. */
 export const socketHandler = socketLink.addEventListener("connection", (connection) => {
   if (Date.now() < refuseUntil) {
+    // Dispara erro no WebSocket interceptado antes de fechar para que o Manager do
+    // socket.io-client registre a falha de abertura e agende a próxima reconexão.
+    const rawSocket = (connection.client as unknown as { socket?: EventTarget }).socket;
+    rawSocket?.dispatchEvent(new Event("error"));
     connection.client.close();
     return;
   }
   const io = toSocketIo(connection);
   const conn: Conn = { io, close: () => connection.client.close() };
   connections.add(conn);
-  // engine.io heartbeat so the client does not time out
+  // Heartbeat do Engine.IO para evitar timeout por inatividade no cliente.
   const ping = setInterval(() => connection.client.send("2"), 20000);
   io.client.on("auth", (_e, payload: { token?: string }) => {
     const sess = payload?.token ? db().sessions[payload.token] : undefined;
@@ -36,15 +43,17 @@ export const socketHandler = socketLink.addEventListener("connection", (connecti
   });
 });
 
+/** Envia um evento tipado para as conexões ativas, respeitando isolamento por usuário. */
 function emit<T>(evt: RealtimeEvent<T>) {
   sent.push(evt as RealtimeEvent<unknown>);
   if (sent.length > 50) sent.shift();
   for (const c of connections) {
-    if (evt.userId && c.userId !== evt.userId) continue; // user isolation
+    if (evt.userId && c.userId !== evt.userId) continue;
     c.io.client.emit(evt.type, evt);
   }
 }
 
+/** Publica atualização de preço ou estoque de um NFT para todos os clientes conectados. */
 export function emitNftUpdated(nft: Nft) {
   emit({
     eventId: crypto.randomUUID(),
@@ -55,6 +64,7 @@ export function emitNftUpdated(nft: Nft) {
   });
 }
 
+/** Publica atualização de status de um pedido restrita às conexões do usuário dono. */
 export function emitOrderUpdated(order: Order, userId: string) {
   emit({
     eventId: crypto.randomUUID(),
@@ -66,7 +76,7 @@ export function emitOrderUpdated(order: Order, userId: string) {
   });
 }
 
-/** Dev tooling: resend the last event (duplicate) or an older one (stale). */
+/** Reenvia o último evento (duplicado) ou uma cópia com versão anterior (obsoleto). */
 export function replay(kind: "duplicate" | "stale") {
   const last = sent[sent.length - 1];
   if (!last) return false;
@@ -81,6 +91,7 @@ export function replay(kind: "duplicate" | "stale") {
   return true;
 }
 
+/** Derruba todas as conexões ativas e recusa novas tentativas pelo período informado. */
 export function dropConnections(refuseMs = 3000) {
   refuseUntil = Date.now() + refuseMs;
   for (const c of [...connections]) c.close();

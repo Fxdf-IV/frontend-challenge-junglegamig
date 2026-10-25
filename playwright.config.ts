@@ -29,6 +29,6 @@ export default defineConfig({
     command: "bun run dev -- --host 127.0.0.1 --port 4174",
     url: "http://127.0.0.1:4174",
     reuseExistingServer: !process.env.CI,
-    env: { VITE_ENABLE_MOCKS: "true", VITE_SHOW_MOCK_PANEL: "false" },
+    env: { VITE_ENABLE_MOCKS: "true", VITE_SHOW_MOCK_PANEL: "true" },
   },
 });
