@@ -125,6 +125,9 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   `order.updated` nem esvaziar o carrinho aos 2,5 s antes do timeout HTTP de 8 s do cliente, agendando a
   liquidação após a retomada idempotente; reposicionado o botão mobile do `MockPanel` para `bottom-28
   right-3` para não sobrepor o controle de quantidade da barra fixa de `/nft/$id` em 390×844.
+- Geradas e validadas as baselines de regressão visual (`home`, `nft-detail`, `cart` e `checkout`) em
+  `tests/e2e/visual.spec.ts-snapshots/` para `desktop-chromium` (1440×1000) e `mobile-chromium`
+  (390×844).
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
@@ -193,3 +196,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `d42f3a7` | Testes E2E de versão e deduplicação de eventos   | Cobrir descarte de eventos duplicados/obsoletos, retomada de pedido pendente e snapshot do recibo                                   |
 | 25/10/2026 | `7820f86` | Testes E2E de teclado, foco e validação acessível| Cobrir salto de conteúdo, focus trap/restauração em dialogs e atributos ARIA em desktop e mobile                                    |
 | 25/10/2026 | `a81ae5b` | Testes E2E de skeletons, falha e recuperação     | Cobrir `.shimmer` com `prefers-reduced-motion`, recuperação de 500, expiração de sessão preservando rascunho e isolamento de contas |
+| 25/10/2026 | `79f198c` | Liquidação `order-timeout` e gatilho mobile MSW  | Aguardar retomada idempotente antes de liquidar o pedido em timeout e evitar sobreposição da barra de compra mobile em `/nft/$id`    |
