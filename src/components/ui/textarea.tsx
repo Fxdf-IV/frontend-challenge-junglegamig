@@ -1,3 +1,4 @@
+// Área de texto multilinhas Textarea (shadcn/ui) adaptada para as bordas e foco do Figma.
 import * as React from "react";
 
 import { cn } from "@/lib/utils";

@@ -19,6 +19,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote 7 de componentes UI shadcn/ui):**
+  - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `slider.tsx`, `sonner.tsx`, `switch.tsx`, `table.tsx`, `tabs.tsx` e `textarea.tsx`.
 - **Documentação e Código Comentado (Lote 6 de componentes UI shadcn/ui):**
   - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `scroll-area.tsx`, `select.tsx`, `separator.tsx`, `sheet.tsx`, `sidebar.tsx` e `skeleton.tsx`.
 - **Documentação e Código Comentado (Lote 5 de componentes UI shadcn/ui):**

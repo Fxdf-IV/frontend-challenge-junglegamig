@@ -1,3 +1,4 @@
+// Abas de navegação Tabs (shadcn/ui baseadas em Radix UI) adaptadas para os estados ativo e foco do Figma.
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
 
