@@ -40,7 +40,7 @@ function RegisterPage() {
           search={{ redirect }}
           className="font-semibold text-primary underline-offset-4 hover:underline"
         >
-          Entrar
+          Entre
         </Link>
       </p>
     </AuthShell>

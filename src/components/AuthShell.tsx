@@ -1,8 +1,8 @@
-// Estrutura visual compartilhada pelas telas de entrada e cadastro.
+// Estrutura visual compartilhada pelas telas de entrada e cadastro alinhada aos frames do Figma.
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
-/** Centraliza formulários de conta e aplica o backdrop escuro das telas modais. */
+/** Centraliza formulários de conta com modal no desktop e tela cheia imersiva no mobile conforme o Figma. */
 export function AuthShell({
   title,
   subtitle,
@@ -19,9 +19,13 @@ export function AuthShell({
   const navigate = useNavigate();
   return (
     <Dialog open onOpenChange={(open) => !open && navigate({ to: "/" })}>
-      {/* No desktop o modal segue a largura de 420px com barra inferior laranja; no mobile vira o card arredondado de 278x600. */}
-      <DialogContent className="max-h-[90vh] overflow-x-hidden overflow-y-auto border-[#38251a] bg-[#21150e] px-6 pt-10 pb-12 sm:max-w-[420px] sm:rounded-none sm:px-[70px] md:border-b-[10px] md:border-b-primary [&>button]:text-primary [&>button]:opacity-90 [&>button:hover]:opacity-100 max-md:inset-auto max-md:left-1/2 max-md:top-1/2 max-md:h-[600px] max-md:max-h-[calc(100dvh-2rem)] max-md:w-[min(278px,calc(100vw-2rem))] max-md:translate-x-[-50%] max-md:translate-y-[-50%] max-md:gap-2 max-md:rounded-[28px] max-md:px-5 max-md:pb-6 max-md:pt-16">
-        <p className="text-center text-xl font-bold tracking-[0.2em] md:hidden">KURIO</p>
+      {/* No desktop: modal de 420px com abas superiores e barra laranja; no mobile: tela cheia imersiva conforme frames do Figma */}
+      <DialogContent className="max-h-[90vh] overflow-x-hidden overflow-y-auto border-[#38251a] bg-[#21150e] px-6 pt-10 pb-12 sm:max-w-[420px] sm:rounded-none sm:px-[70px] md:border-b-[10px] md:border-b-primary [&>button]:text-primary [&>button]:opacity-90 [&>button:hover]:opacity-100 max-md:fixed max-md:inset-0 max-md:left-0 max-md:top-0 max-md:z-50 max-md:h-full max-md:max-h-none max-md:w-full max-md:max-w-none max-md:translate-x-0 max-md:translate-y-0 max-md:rounded-none max-md:border-0 max-md:bg-[#0c0805] max-md:px-7 max-md:pt-14 max-md:pb-8 max-md:[&>button]:hidden">
+        {/* Logotipo KURIO centralizado no topo do mobile conforme frames do Figma */}
+        <p className="text-center text-2xl font-bold font-mono tracking-[0.25em] text-foreground md:hidden mb-8">
+          KURIO
+        </p>
+
         {/* Navegação desktop inline ("Entrar | Criar conta") com divisor vertical conforme o Figma. */}
         <nav
           aria-label="Autenticação"
@@ -45,7 +49,9 @@ export function AuthShell({
             Criar conta
           </Link>
         </nav>
-        <DialogTitle className="mt-6 block text-center text-lg font-bold md:sr-only max-md:mt-10 max-md:text-sm">
+
+        {/* Título da tela: no mobile exibido como cabeçalho da página ("Entrar" / "Criar perfil de colecionador") */}
+        <DialogTitle className="block text-center text-base font-bold font-mono text-foreground mb-6 md:sr-only">
           {title}
         </DialogTitle>
         <DialogDescription className="mt-2 mb-4 hidden text-center text-xs leading-relaxed text-foreground/90 md:-mx-6 md:block">

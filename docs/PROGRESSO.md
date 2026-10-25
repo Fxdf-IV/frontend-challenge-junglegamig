@@ -14,6 +14,17 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Alinhamento completo das telas de login e cadastro mobile aos frames do Figma (`AuthShell.tsx`, `AuthForms.tsx`, `login.tsx`, `cadastro.tsx`, FD-37):**
+  - Substituído o diálogo flutuante comprimido de 278 × 600 px por apresentação imersiva em tela cheia no mobile (`bg-[#0c0805]`) sem corte e sem botão "X", fiel aos frames oficiais do Figma.
+  - Implementado logotipo "KURIO" em destaque no topo com espaçamento largo (`tracking-[0.25em]`) e títulos centralizados ("Entrar" e "Criar perfil de colecionador").
+  - Campos de entrada padronizados com altura de 48px (`h-12`), cantos arredondados `rounded-xl`, bordas sutis `#38251a`, fundo escuro `#140c07` e placeholders em bronze.
+  - Adicionado botão de alternância de visibilidade com ícone de olho em ambos os campos de senha no cadastro ("Senha" e "Confirmar senha") com estados independentes.
+  - Botão de ação primária com `h-12 rounded-xl` em âmbar ("Entrar" no login e "Criar perfil" no cadastro com `aria-label="Criar conta"` para manter total compatibilidade de acessibilidade e testes Playwright).
+  - Botões sociais ("Continuar com Google" e "Continuar com Facebook") ajustados para altura confortável `h-12 rounded-xl` e ícones SVG temáticos.
+  - Links de rodapé padronizados exatamente aos textos do Figma: "Novo na Kurio? Crie uma conta" no login e "Já tem uma conta? Entre" no cadastro.
+  - Modal desktop (420px com abas `Entrar | Criar conta` e borda inferior laranja) preservado 100% intacto.
+  - 100% dos testes unitários (Vitest 32/32) e Playwright E2E (`account.spec.ts`, `accessibility.spec.ts`) aprovados com sucesso.
+
 - **Redesign do modal de conexão Web3 (MetaMask/simulação) e refinamento de diálogos mobile (`_authenticated.checkout.tsx`, `dialog.tsx`, FD-36):**
   - Refatorado o componente base `DialogContent` em `src/components/ui/dialog.tsx` para aplicar `w-[calc(100%-2rem)] rounded-2xl border-[#3d2c20] bg-[#140d07]` no mobile, eliminando cantos retos (`rounded-none`) e garantindo margem de respiro de 16px em relação às bordas da tela.
   - Implementado visual autêntico de carteira Web3 no modal de autorização de checkout:

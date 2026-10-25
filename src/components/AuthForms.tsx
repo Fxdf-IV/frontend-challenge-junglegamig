@@ -12,7 +12,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 // Classes compartilhadas pelos campos escuros do modal de autenticação conforme o Figma.
 const authFieldClass =
-  "[&_input]:h-10 [&_input]:rounded-[5px] [&_input]:border-[#3d291d] [&_input]:bg-[#261810] [&_input]:text-xs [&_input]:placeholder:text-[#b5895a] [&_input:focus-visible]:border-primary";
+  "[&_input]:h-10 [&_input]:rounded-[5px] [&_input]:border-[#3d291d] [&_input]:bg-[#261810] [&_input]:text-xs [&_input]:placeholder:text-[#b5895a] [&_input:focus-visible]:border-primary max-md:[&_input]:h-12 max-md:[&_input]:rounded-xl max-md:[&_input]:border-[#38251a] max-md:[&_input]:bg-[#140c07] max-md:[&_input]:text-sm";
 
 /** Alterna a visibilidade da senha sem mover o foco do formulário. */
 function PasswordToggle({ shown, toggle }: { shown: boolean; toggle: () => void }) {
@@ -31,7 +31,7 @@ function PasswordToggle({ shown, toggle }: { shown: boolean; toggle: () => void 
 /** Ícone oficial em 4 cores do Google exibido no botão de login social. */
 function GoogleIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4 shrink-0 max-md:size-3.5">
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4 shrink-0">
       <path
         fill="#4285F4"
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -55,7 +55,7 @@ function GoogleIcon() {
 /** Ícone azul do Facebook exibido no botão de login social. */
 function FacebookIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4 shrink-0 max-md:size-3.5">
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4 shrink-0">
       <path
         fill="#3B5998"
         d="M15.12 5.32H17V2.14A26.11 26.11 0 0 0 14.26 2c-2.72 0-4.58 1.66-4.58 4.7v2.62H6.61v3.56h3.07V22h3.68v-9.12h3.06l.46-3.56h-3.52V6.65c0-1.05.29-1.73 1.76-1.73z"
@@ -96,7 +96,7 @@ export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: b
     <form
       onSubmit={submit}
       noValidate
-      className="space-y-3 [&_label]:sr-only max-md:mt-4 max-md:space-y-2 max-md:[&_input]:h-9"
+      className="space-y-3 [&_label]:sr-only max-md:mt-2 max-md:space-y-3"
     >
       {expired && (
         <p role="status" className="rounded-md bg-panel px-3 py-2 text-xs">
@@ -137,7 +137,7 @@ export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: b
       </div>
       <Button
         variant="brand"
-        className="h-10 w-full rounded-[5px] text-sm font-bold normal-case tracking-normal max-md:h-9"
+        className="h-10 w-full rounded-[5px] text-sm font-bold normal-case tracking-normal max-md:h-12 max-md:rounded-xl max-md:text-base"
         disabled={busy}
       >
         {busy ? "Entrando…" : "Entrar"}
@@ -159,7 +159,8 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formErr, setFormErr] = useState("");
   const [busy, setBusy] = useState(false);
-  const [show, setShow] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     const errs: Record<string, string> = {};
@@ -199,7 +200,7 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
     <form
       onSubmit={submit}
       noValidate
-      className="space-y-3 [&_label]:sr-only max-md:mt-4 max-md:space-y-2 max-md:[&_input]:h-9"
+      className="space-y-3 [&_label]:sr-only max-md:mt-2 max-md:space-y-3"
     >
       <FormError message={formErr} />
       <Field
@@ -219,28 +220,38 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
       />
       <Field
         label="Senha"
-        type={show ? "text" : "password"}
+        type={showPassword ? "text" : "password"}
         autoComplete="new-password"
         placeholder="Senha"
         {...bind("password")}
         className={`${authFieldClass} [&_input]:pr-10`}
       >
-        <PasswordToggle shown={show} toggle={() => setShow(!show)} />
+        <PasswordToggle shown={showPassword} toggle={() => setShowPassword(!showPassword)} />
       </Field>
       <Field
         label="Confirmar senha"
-        type={show ? "text" : "password"}
+        type={showConfirm ? "text" : "password"}
         autoComplete="new-password"
         placeholder="Confirmar senha"
-        className={authFieldClass}
+        className={`${authFieldClass} [&_input]:pr-10`}
         {...bind("confirm")}
-      />
+      >
+        <PasswordToggle shown={showConfirm} toggle={() => setShowConfirm(!showConfirm)} />
+      </Field>
       <Button
         variant="brand"
-        className="h-10 w-full rounded-[5px] text-sm font-bold normal-case tracking-normal max-md:h-9"
+        className="h-10 w-full rounded-[5px] text-sm font-bold normal-case tracking-normal max-md:h-12 max-md:rounded-xl max-md:text-base"
         disabled={busy}
+        aria-label={busy ? "Criando…" : "Criar conta"}
       >
-        {busy ? "Criando…" : "Criar conta"}
+        {busy ? (
+          "Criando…"
+        ) : (
+          <>
+            <span className="md:hidden">Criar perfil</span>
+            <span className="max-md:hidden">Criar conta</span>
+          </>
+        )}
       </Button>
       <SocialSignIn />
     </form>
@@ -250,20 +261,20 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
 /** Mostra provedores do design e informa que as integrações não estão disponíveis. */
 function SocialSignIn() {
   return (
-    <div className="space-y-3 pt-2 max-md:space-y-2 max-md:pt-1">
+    <div className="space-y-3 pt-2 max-md:space-y-3 max-md:pt-2">
       {/* A linha divisória estende até as bordas do modal no desktop, mantendo os botões alinhados aos campos. */}
-      <div className="flex items-center gap-3 py-1 text-xs text-foreground/90 sm:-mx-[70px] max-md:text-[10px]">
+      <div className="flex items-center gap-3 py-1 text-xs text-foreground/90 sm:-mx-[70px] max-md:text-xs max-md:text-muted-foreground/80">
         <span className="h-px flex-1 bg-[#3a261a]" />
         <span>Ou continue com</span>
         <span className="h-px flex-1 bg-[#3a261a]" />
       </div>
-      <div className="grid grid-cols-1 gap-3 max-md:gap-2">
+      <div className="grid grid-cols-1 gap-3 max-md:gap-2.5">
         {(["Google", "Facebook"] as const).map((provider) => (
           <Button
             key={provider}
             type="button"
             variant="outline"
-            className="h-10 w-full gap-2.5 rounded-[5px] border-[#3d291d] bg-[#261810] text-xs font-normal text-[#d5ad86] shadow-none hover:border-primary/50 hover:bg-[#2e1d14] hover:text-foreground max-md:h-7 max-md:px-2 max-md:text-xs"
+            className="h-10 w-full gap-2.5 rounded-[5px] border-[#3d291d] bg-[#261810] text-xs font-normal text-[#d5ad86] shadow-none hover:border-primary/50 hover:bg-[#2e1d14] hover:text-foreground max-md:h-12 max-md:rounded-xl max-md:border-[#38251a] max-md:bg-[#140c07] max-md:text-sm max-md:text-foreground/90 max-md:gap-3"
             onClick={() => toast.info(`A entrada com ${provider} ainda não está disponível.`)}
           >
             {provider === "Google" ? <GoogleIcon /> : <FacebookIcon />}

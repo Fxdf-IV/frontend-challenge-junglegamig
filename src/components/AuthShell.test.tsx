@@ -50,7 +50,7 @@ describe("AuthShell", () => {
     );
   });
 
-  it("keeps the mobile auth dialog as a centered, compact card", () => {
+  it("renders a full-screen immersive presentation on mobile conforming to Figma frames", () => {
     render(
       <AuthShell title="Entrar" subtitle="Acesse sua conta." activeMode="login">
         <p>Login</p>
@@ -58,9 +58,13 @@ describe("AuthShell", () => {
     );
 
     expect(screen.getByRole("dialog")).toHaveClass(
-      "max-md:w-[min(278px,calc(100vw-2rem))]",
-      "max-md:h-[600px]",
-      "max-md:rounded-[28px]",
+      "max-md:fixed",
+      "max-md:inset-0",
+      "max-md:w-full",
+      "max-md:h-full",
+      "max-md:bg-[#0c0805]",
+      "max-md:rounded-none",
     );
+    expect(screen.getByText("KURIO")).toBeInTheDocument();
   });
 });

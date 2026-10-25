@@ -45,7 +45,7 @@ function LoginPage() {
           search={{ redirect }}
           className="font-semibold text-primary underline-offset-4 hover:underline"
         >
-          Criar conta
+          Crie uma conta
         </Link>
       </p>
     </AuthShell>
