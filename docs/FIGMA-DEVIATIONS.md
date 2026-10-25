@@ -9,7 +9,7 @@ perguntas dos comentários foram tratadas como observações para revisão, não
 
 | ID | Frame / alvo do pin | Observação registrada | Situação no front-end |
 | --- | --- | --- | --- |
-| #65 | Início desktop, bloco de newsletter no rodapé; perto do formulário de e-mail/Enviar | “O alinhamento horizontal dos textos dessa div com as demais parece incorreto.” | Os quatro blocos do rodapé usam a mesma grade; revisar visualmente junto do rodapé desktop. |
+| #65 | Início desktop, bloco de newsletter no rodapé; perto do formulário de e-mail/Enviar | “O alinhamento horizontal dos textos dessa div com as demais parece incorreto.” | Conferido no frame do rodapé: título, campo, botão e texto auxiliar compartilham a borda esquerda, como as três colunas vizinhas; o `Footer.tsx` mantém esse alinhamento dentro da grade de quatro colunas. |
 | #64 | Início desktop, seção promocional com a descrição “Arte digital selecionada e muito mais” e botão Explorar | “quando clica para copiar o texto aparece no final cultura porém no design ela não aparece” | A gravação localiza a seção, mas não mostra a ação de cópia nem o texto resultante. Pendente confirmar qual controle copia e qual string deve ser copiada. |
 | #63 | Início mobile, imagem pequena de Sage Nomad sobreposta ao destaque Emerald Ape | “esta imagem nao deveria estar aqui” | A composição mobile mantém somente a imagem principal do hero; os outros NFTs aparecem na grade abaixo. A imagem sobreposta foi removida. `index.tsx`. |
 | #61 | Início desktop, espaço vertical entre primeira e segunda fileira da grade | “O espaço vertical entre a primeira e a segunda fileira de cards está menor do que o espaço entre a segunda e a terceira fileira.” | Gap vertical separado e ampliado na grade. `Catalog.tsx`. |

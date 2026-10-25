@@ -58,6 +58,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   (#18) segue em aberto porque o próprio comentário pergunta qual comportamento desejam.
 - Build de produção executado em 25/10/2026; compilação concluída sem erros. Permanecem 9 avisos
   de lint preexistentes e o bundle principal acima de 500 kB.
+- Conferido o alinhamento da newsletter no rodapé desktop para o pin #65; a implementação já
+  compartilha a linha de início dos textos com as colunas vizinhas.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra
