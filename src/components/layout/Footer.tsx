@@ -1,9 +1,10 @@
-// Rodapé principal da aplicação com destaques institucionais, newsletter simulada, links de navegação e redes sociais.
+// Rodapé principal da aplicação com destaques institucionais, newsletter simulada, links de navegação alinhados ao Figma e redes sociais.
 import { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 
+/** Destaques institucionais das três colunas superiores do rodapé. */
 const FEATURES = [
   {
     l: "W",
@@ -22,20 +23,38 @@ const FEATURES = [
   },
 ];
 
-/** Rodapé global com formulário informativo de newsletter e links do marketplace. */
+/** Lista de coleções oficiais disponíveis para filtro no catálogo a partir do rodapé. */
+const COLLECTION_LINKS = [
+  ["Arte digital", "arte-digital"],
+  ["Fotografia", "fotografia"],
+  ["Música", "musica"],
+  ["Arte 3D", "arte-3d"],
+  ["Utilidade", "utilidade"],
+] as const;
+
+/** Rodapé global com formulário informativo de newsletter, links do marketplace e redes sociais fiéis ao Figma. */
 export function Footer() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+
+  /** Processa submissão do formulário de newsletter com validação e aviso acessível de escopo. */
   const submit = (e: FormEvent) => {
     e.preventDefault();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return setError("Informe um e-mail válido");
     setError("");
     setEmail("");
-    // Newsletter is out of scope: be honest that nothing was subscribed.
+    // Newsletter fora do escopo funcional: notifica honestamente sem simular sucesso permanente.
     toast.info("A newsletter ainda não está disponível nesta demonstração.");
   };
+
+  /** Alerta acessível para funcionalidades que não estão contempladas no escopo avaliado. */
+  const notifyUnavailable = (feature: string) => {
+    toast.info(`${feature}: funcionalidade indisponível no momento`);
+  };
+
   return (
     <footer className="container-page mt-20 pb-24 md:pb-10">
+      {/* Bloco superior: 3 cards institucionais e formulário de newsletter */}
       <div className="grid gap-8 rounded-t-lg bg-card p-6 md:grid-cols-4 md:p-8">
         {FEATURES.map((f) => (
           <div key={f.l} className="md:border-r md:border-primary/50 md:pr-6">
@@ -65,7 +84,7 @@ export function Footer() {
               placeholder="digite seu e-mail..."
               className="h-10 min-w-0 flex-1 rounded-l-md border border-input bg-panel px-3 text-xs placeholder:text-muted-foreground"
             />
-            <button className="h-10 rounded-r-md bg-primary px-3 text-sm font-bold text-primary-foreground">
+            <button className="h-10 rounded-r-md bg-primary px-3 text-sm font-bold text-primary-foreground cursor-pointer">
               Enviar
             </button>
           </div>
@@ -79,6 +98,8 @@ export function Footer() {
           </p>
         </form>
       </div>
+
+      {/* Faixa intermediária horizontal de identificação institucional */}
       <div className="grid gap-3 bg-band px-6 py-5 text-xs sm:grid-cols-4 sm:items-center md:px-8">
         <span className="font-bold tracking-[0.2em]">KURIO</span>
         <span>Feito para colecionadores, criadores e cultura</span>
@@ -89,43 +110,107 @@ export function Footer() {
           +55 11 4002 8922
         </a>
       </div>
-      <div className="grid grid-cols-2 gap-8 rounded-b-lg bg-card p-6 text-xs md:grid-cols-4 md:p-8">
-        <FooterCol
-          title="Meu perfil"
-          links={[
-            ["Minha conta", "/perfil"],
-            ["Carteiras", "/carteiras"],
-            ["Carrinho", "/carrinho"],
-          ]}
-        />
-        <FooterCol
-          title="Central de ajuda"
-          links={[
-            ["Como comprar NFTs", "/aprenda"],
-            ["Carteira e segurança", "/aprenda"],
-            ["Política do mercado", "/aprenda"],
-          ]}
-        />
-        <div>
-          <h2 className="mb-3 font-bold">Coleções</h2>
-          <ul className="space-y-2 text-muted-foreground">
-            {[
-              ["Arte digital", "arte-digital"],
-              ["Fotografia", "fotografia"],
-              ["Música", "musica"],
-              ["Utilidade", "utilidade"],
-            ].map(([l, c]) => (
-              <li key={c}>
-                <Link to="/mercado" search={{ collections: [c] }} className="hover:text-primary">
-                  {l}
+
+      {/* Bloco inferior com as quatro colunas oficiais do Figma */}
+      <div className="grid grid-cols-2 gap-6 rounded-b-lg bg-card p-4 text-xs sm:gap-8 sm:p-6 md:grid-cols-4 md:p-8">
+        {/* Coluna 1: Meu perfil */}
+        <div className="min-w-0">
+          <h2 className="mb-3 font-mono text-sm font-bold text-foreground">Meu perfil</h2>
+          <ul className="space-y-2 font-mono text-xs text-muted-foreground">
+            <li>
+              <Link to="/perfil" className="transition-colors hover:text-primary">
+                Meu perfil
+              </Link>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => notifyUnavailable("Minha coleção")}
+                className="cursor-pointer text-left transition-colors hover:text-primary"
+              >
+                Minha coleção
+              </button>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => notifyUnavailable("Atividade")}
+                className="cursor-pointer text-left transition-colors hover:text-primary"
+              >
+                Atividade
+              </button>
+            </li>
+            <li>
+              <Link to="/criadores" className="transition-colors hover:text-primary">
+                Estúdio do criador
+              </Link>
+            </li>
+            <li>
+              <Link to="/favoritos" className="transition-colors hover:text-primary">
+                Lista de interesse
+              </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Coluna 2: Central de ajuda */}
+        <div className="min-w-0">
+          <h2 className="mb-3 font-mono text-sm font-bold text-foreground">Central de ajuda</h2>
+          <ul className="space-y-2 font-mono text-xs text-muted-foreground">
+            <li>
+              <Link to="/aprenda" className="transition-colors hover:text-primary">
+                Central de ajuda
+              </Link>
+            </li>
+            <li>
+              <Link to="/aprenda" className="transition-colors hover:text-primary">
+                Como comprar NFTs
+              </Link>
+            </li>
+            <li>
+              <Link to="/aprenda" className="transition-colors hover:text-primary">
+                Carteira e segurança
+              </Link>
+            </li>
+            <li>
+              <Link to="/aprenda" className="transition-colors hover:text-primary">
+                Política do mercado
+              </Link>
+            </li>
+            <li>
+              <button
+                type="button"
+                onClick={() => notifyUnavailable("Denunciar item")}
+                className="cursor-pointer text-left transition-colors hover:text-primary"
+              >
+                Denunciar item
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        {/* Coluna 3: Coleções */}
+        <div className="min-w-0">
+          <h2 className="mb-3 font-mono text-sm font-bold text-foreground">Coleções</h2>
+          <ul className="space-y-2 font-mono text-xs text-muted-foreground">
+            {COLLECTION_LINKS.map(([label, slug]) => (
+              <li key={slug}>
+                <Link
+                  to="/mercado"
+                  search={{ collections: [slug] }}
+                  className="transition-colors hover:text-primary"
+                >
+                  {label}
                 </Link>
               </li>
             ))}
           </ul>
         </div>
-        <div>
-          <h2 className="mb-3 font-bold">Redes sociais</h2>
-          <ul className="flex gap-2">
+
+        {/* Coluna 4: Redes sociais e Carteiras compatíveis */}
+        <div className="min-w-0">
+          <h2 className="mb-3 font-mono text-sm font-bold text-foreground">Redes sociais</h2>
+          <ul className="flex flex-wrap gap-2">
             {[
               [Facebook, "Facebook"],
               [Instagram, "Instagram"],
@@ -141,7 +226,7 @@ export function Footer() {
                     target="_blank"
                     rel="noreferrer noopener"
                     aria-label={`${n} (abre em nova aba)`}
-                    className="grid h-7 w-7 place-items-center rounded bg-primary text-primary-foreground"
+                    className="grid size-8 place-items-center rounded-md border border-[#3d2c20] bg-transparent text-[#CFB28C] transition-colors hover:border-primary hover:text-primary"
                   >
                     <I className="h-3.5 w-3.5" aria-hidden />
                   </a>
@@ -149,39 +234,25 @@ export function Footer() {
               );
             })}
           </ul>
-          <h2 className="mb-2 mt-5 font-bold">Carteiras compatíveis</h2>
-          <ul className="flex flex-wrap gap-1.5">
-            {["MetaMask", "WalletConnect", "Coinbase"].map((w) => (
-              <li
-                key={w}
-                className="rounded bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground"
-              >
-                {w}
-              </li>
-            ))}
-          </ul>
+          <h2 className="mb-2.5 mt-5 font-mono text-sm font-bold text-foreground">
+            Carteiras compatíveis
+          </h2>
+          <div className="flex max-w-full flex-wrap items-center justify-center gap-x-1.5 gap-y-0.5 rounded-md border border-[#3d2c20] bg-[#24180f] px-2.5 py-1.5 text-center font-mono text-[9px] tracking-wide text-primary sm:text-[10px]">
+            <span>METAMASK</span>
+            <span aria-hidden="true" className="text-muted-foreground">
+              •
+            </span>
+            <span>WALLETCONNECT</span>
+            <span aria-hidden="true" className="text-muted-foreground">
+              •
+            </span>
+            <span>COINBASE</span>
+          </div>
         </div>
       </div>
       <p className="mt-6 text-center text-xs text-muted-foreground">
         © 2026 Kurio. Propriedade digital para todos.
       </p>
     </footer>
-  );
-}
-
-function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
-  return (
-    <div>
-      <h2 className="mb-3 font-bold">{title}</h2>
-      <ul className="space-y-2 text-muted-foreground">
-        {links.map(([l, h]) => (
-          <li key={l}>
-            <Link to={h} className="hover:text-primary">
-              {l}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

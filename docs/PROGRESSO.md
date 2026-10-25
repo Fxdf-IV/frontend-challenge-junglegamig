@@ -14,6 +14,16 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Alinhamento do rodapé às opções e estilos oficiais do Figma (`src/components/layout/Footer.tsx`, FD-32):**
+  - Atualizadas as três colunas de navegação do rodapé com exatamente as 5 opções do design do Figma:
+    - Coluna 1 ("Meu perfil"): "Meu perfil" (link `/perfil`), "Minha coleção" (aviso de escopo), "Atividade" (aviso de escopo), "Estúdio do criador" (link `/criadores`) e "Lista de interesse" (link `/favoritos`).
+    - Coluna 2 ("Central de ajuda"): "Central de ajuda", "Como comprar NFTs", "Carteira e segurança", "Política do mercado" (links informativos `/aprenda`) e "Denunciar item" (aviso de escopo).
+    - Coluna 3 ("Coleções"): "Arte digital", "Fotografia", "Música", "Arte 3D" e "Utilidade" (links com busca filtrada `/mercado?collections=...`).
+  - Redes sociais estilizadas com caixas quadradas contornadas `border-[#3d2c20]` em vez de blocos sólidos laranjas.
+  - Carteiras compatíveis harmonizadas em container unificado no padrão dark/ouro `METAMASK • WALLETCONNECT • COINBASE`.
+  - Tratamento responsivo sem overflow horizontal (`min-w-0`, `p-4 sm:p-6 md:p-8`, `gap-6 sm:gap-8`) mantendo 0 px de overflow em viewports de 390, 768 e 1440 px.
+  - Criado teste unitário `src/components/layout/Footer.test.tsx` (32/32 testes Vitest passando) e atualizadas baselines do Playwright.
+
 - **Carrossel interativo em "Colecionadores também viram" no carrinho (`src/routes/carrinho.tsx`, FD-26):**
   - Implementado carrossel interativo com `embla-carousel-react` integrado à grade de recomendações do carrinho.
   - Adicionadas setas de navegação laterais circulares (`ChevronLeft` e `ChevronRight`) flutuando nas extremidades da grade (`left-1 md:-left-5` e `right-1 md:-right-5`) com estados de foco acessíveis e desabilitação nos limites.
