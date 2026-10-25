@@ -1,3 +1,4 @@
+// Provedor e hook de sessão: gerencia usuário autenticado, expiração de token e fusão do carrinho visitante.
 import {
   createContext,
   useCallback,
@@ -8,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { flushSync } from "react-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -25,6 +27,7 @@ interface SessionCtx {
 }
 const Ctx = createContext<SessionCtx | null>(null);
 
+/** Mantém o estado de autenticação e limpa caches privados ao sair ou expirar a sessão. */
 export function SessionProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -34,6 +37,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [status, setStatus] = useState<"loading" | "ready">("loading");
 
+  // Limpa dados privados em cache ao trocar de conta ou encerrar a sessão.
   const clearPrivate = useCallback(() => {
     qc.removeQueries({ queryKey: ["u"] });
     qc.removeQueries({ queryKey: ["cart"] });
@@ -65,6 +69,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     [clearPrivate, navigate],
   );
 
+  // Usa flushSync ao atualizar o usuário para que o AuthGuard veja a sessão antes do redirecionamento pós-login.
   const signIn = useCallback(
     async (s: Session) => {
       const guest = guestCartId();
@@ -77,7 +82,9 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         /* cart refetches on demand */
       }
       clearGuestCart();
-      setUserState(s.user);
+      flushSync(() => {
+        setUserState(s.user);
+      });
     },
     [qc, clearPrivate],
   );
@@ -101,6 +108,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
+/** Retorna o contexto de sessão do usuário autenticado. */
 export function useSession() {
   const c = useContext(Ctx);
   if (!c) throw new Error("useSession outside SessionProvider");

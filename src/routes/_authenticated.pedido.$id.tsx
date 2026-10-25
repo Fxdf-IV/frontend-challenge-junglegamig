@@ -1,6 +1,6 @@
 // Rota de pedido: acompanha o pagamento e apresenta o recibo confirmado em modal.
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Copy, ExternalLink, Loader2, XCircle } from "lucide-react";
 import { toast } from "sonner";
@@ -8,7 +8,13 @@ import { api } from "@/api/endpoints";
 import type { ApiError } from "@/api/client";
 import { qk } from "@/api/queries";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useSession } from "@/lib/session";
 import { formatEthSmart } from "@/lib/eth";
 import { NETWORK_LABELS, shortAddr } from "@/lib/labels";
@@ -34,6 +40,7 @@ export const Route = createFileRoute("/_authenticated/pedido/$id")({
 function OrderPage() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const { user } = useSession();
   // socket order.updated patches this cache; polling is the fallback while pending
   const q = useQuery({
@@ -42,10 +49,18 @@ function OrderPage() {
     refetchInterval: (query) => (query.state.data?.status === "pending" ? 3000 : false),
   });
   const o = q.data;
+  // Quando o pedido sai de pendente (via Socket.IO ou polling), limpa a pendência local e reconcilia o carrinho.
   useEffect(() => {
-    if (o && o.status !== "pending" && localStorage.getItem(PENDING_ORDER_KEY) === o.id)
-      localStorage.removeItem(PENDING_ORDER_KEY);
-  }, [o]);
+    if (o && o.status !== "pending") {
+      if (localStorage.getItem(PENDING_ORDER_KEY) === o.id) {
+        localStorage.removeItem(PENDING_ORDER_KEY);
+      }
+      if (o.status === "confirmed") {
+        qc.invalidateQueries({ queryKey: ["cart"] });
+        qc.invalidateQueries({ queryKey: ["quote"] });
+      }
+    }
+  }, [o, qc]);
 
   if (q.isError) {
     const e = q.error as ApiError;
@@ -113,6 +128,9 @@ function OrderPage() {
       <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto border-b-4 border-primary bg-card">
         <DialogHeader className="sr-only">
           <DialogTitle>Pedido confirmado</DialogTitle>
+          <DialogDescription>
+            Recibo da transação confirmada com resumo dos NFTs e valores pagos.
+          </DialogDescription>
         </DialogHeader>
         <img src="/nft/message.svg" alt="" width={40} height={40} className="mx-auto" />
         <h1 id="receipt-title" className="mt-3 text-center text-sm font-bold">

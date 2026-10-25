@@ -1,10 +1,10 @@
 // Rota do carrinho: permite editar itens, aplicar cupom e seguir ao checkout.
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { AlertTriangle, ArrowLeft, Minus, Plus, Trash2 } from "lucide-react";
 import { api } from "@/api/endpoints";
-import type { ApiError } from "@/api/client";
+import { toApiError, type ApiError } from "@/api/client";
 import { Button } from "@/components/ui/button";
 import { useCart, useCartMutations } from "@/lib/cart";
 import { useSession } from "@/lib/session";
@@ -36,44 +36,76 @@ export const Route = createFileRoute("/carrinho")({
 
 /** Carrega itens e cotação e mantém ações essenciais visíveis no mobile. */
 function CartPage() {
+  const qc = useQueryClient();
   const cart = useCart();
   const { update, remove } = useCartMutations();
   const { user } = useSession();
   const navigate = useNavigate();
   const [coupon, setCoupon] = useState<string | undefined>(undefined);
   const [code, setCode] = useState("");
+  const [couponErr, setCouponErr] = useState<ApiError | null>(null);
+  const [applyingCoupon, setApplyingCoupon] = useState(false);
+
   useEffect(() => {
     const c = sessionStorage.getItem(COUPON_KEY) ?? undefined;
     setCoupon(c);
     setCode(c ?? "");
   }, []);
+
   const items = cart.data?.items ?? [];
+  const uid = user?.id ?? "guest";
   const quote = useQuery({
-    queryKey: ["quote", user?.id ?? "guest", coupon ?? "", "ethereum", cart.data?.version],
+    queryKey: ["quote", uid, coupon ?? "", "ethereum", cart.data?.version],
     queryFn: () => api.quote({ coupon, network: "ethereum" }),
     enabled: !!cart.data && items.length > 0,
     retry: false,
+    staleTime: 5_000,
     placeholderData: (p) => p,
   });
-  const couponErr = quote.error as ApiError | null;
+
+  // Se um cupom salvo anteriormente na sessão falhar ao abrir o carrinho, preserva o erro e volta à cotação sem cupom.
+  useEffect(() => {
+    const qErr = quote.error as ApiError | null;
+    if (qErr && (qErr.code === "COUPON_INVALID" || qErr.code === "COUPON_EXPIRED")) {
+      setCouponErr(qErr);
+      setCoupon(undefined);
+      sessionStorage.removeItem(COUPON_KEY);
+    }
+  }, [quote.error]);
+
   const couponFailed =
     couponErr && (couponErr.code === "COUPON_INVALID" || couponErr.code === "COUPON_EXPIRED");
 
-  const applyCoupon = (e: FormEvent) => {
-    e.preventDefault();
-    const c = code.trim().toUpperCase() || undefined;
-    setCoupon(c);
-    if (c) sessionStorage.setItem(COUPON_KEY, c);
-    else sessionStorage.removeItem(COUPON_KEY);
-  };
   const removeCoupon = () => {
     setCoupon(undefined);
     setCode("");
+    setCouponErr(null);
     sessionStorage.removeItem(COUPON_KEY);
   };
-  useEffect(() => {
-    if (couponFailed) sessionStorage.removeItem(COUPON_KEY);
-  }, [couponFailed]);
+
+  // Valida o cupom antes de fixá-lo na query principal para nunca zerar a cotação nem travar o botão de checkout.
+  const applyCoupon = async (e: FormEvent) => {
+    e.preventDefault();
+    const c = code.trim().toUpperCase();
+    if (!c) {
+      removeCoupon();
+      return;
+    }
+    setApplyingCoupon(true);
+    setCouponErr(null);
+    try {
+      const res = await api.quote({ coupon: c, network: "ethereum" });
+      qc.setQueryData(["quote", uid, c, "ethereum", cart.data?.version], res);
+      setCoupon(c);
+      sessionStorage.setItem(COUPON_KEY, c);
+    } catch (err) {
+      setCouponErr(toApiError(err));
+      setCoupon(undefined);
+      sessionStorage.removeItem(COUPON_KEY);
+    } finally {
+      setApplyingCoupon(false);
+    }
+  };
 
   const q = quote.data;
   return (
@@ -231,7 +263,10 @@ function CartPage() {
               <input
                 id="coupon"
                 value={code}
-                onChange={(e) => setCode(e.target.value)}
+                onChange={(e) => {
+                  setCode(e.target.value);
+                  if (couponErr) setCouponErr(null);
+                }}
                 placeholder="Digite o código promocional..."
                 aria-invalid={!!couponFailed}
                 aria-describedby={couponFailed ? "coupon-err" : "coupon-hint"}
@@ -240,14 +275,14 @@ function CartPage() {
               <Button
                 variant="brand"
                 className="normal-case"
-                disabled={!code.trim() || items.length === 0}
+                disabled={!code.trim() || items.length === 0 || applyingCoupon}
               >
-                Aplicar
+                {applyingCoupon ? "Validando…" : "Aplicar"}
               </Button>
             </div>
             {couponFailed ? (
               <p id="coupon-err" role="alert" className="mt-1 text-[11px] text-destructive">
-                {couponErr!.message}
+                {couponErr.message}
               </p>
             ) : (
               <p id="coupon-hint" className="mt-1 text-[11px] text-muted-foreground">
@@ -261,7 +296,11 @@ function CartPage() {
               role="status"
             >
               {q.coupon.code} — {q.coupon.label}
-              <button className="text-muted-foreground underline" onClick={removeCoupon}>
+              <button
+                type="button"
+                className="text-muted-foreground underline"
+                onClick={removeCoupon}
+              >
                 Remover
               </button>
             </p>
@@ -291,7 +330,9 @@ function CartPage() {
           <Button
             variant="brand"
             className="mt-5 w-full"
-            disabled={!items.length || !q || !!q.issues.length || quote.isFetching}
+            disabled={
+              !items.length || !q || !!q.issues.length || quote.isFetching || applyingCoupon
+            }
             onClick={() => navigate({ to: "/checkout" })}
           >
             {user ? "Concluir e finalizar" : "Conectar e finalizar"}

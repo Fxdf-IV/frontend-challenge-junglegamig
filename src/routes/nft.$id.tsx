@@ -3,7 +3,7 @@ import { createFileRoute, Link, useNavigate, useRouterState } from "@tanstack/re
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
   Heart,
@@ -66,6 +66,11 @@ function NftDetail() {
   const { add } = useCartMutations();
   const [img, setImg] = useState(0);
   const [qty, setQty] = useState(1);
+  // Reinicia a miniatura e a quantidade ao navegar entre itens da mesma coleção.
+  useEffect(() => {
+    setImg(0);
+    setQty(1);
+  }, [id]);
 
   if (q.isError && (q.error as ApiError).status === 404)
     return (
@@ -152,8 +157,10 @@ function NftDetail() {
           <div className="flex flex-col-reverse gap-4 sm:flex-row">
             <ul className="hidden gap-3 sm:flex sm:flex-col" aria-label="Galeria">
               {nft.gallery.map((g, i) => (
-                <li key={g}>
+                // As miniaturas podem compartilhar o mesmo asset na fixture; índice garante chave única.
+                <li key={`${g}-${i}`}>
                   <button
+                    type="button"
                     onClick={() => setImg(i)}
                     aria-label={`Ver imagem ${i + 1}`}
                     aria-pressed={img === i}
@@ -175,7 +182,7 @@ function NftDetail() {
             </ul>
             <div className="flex-1 rounded-lg bg-card p-4">
               <img
-                src={nft.gallery[img]}
+                src={nft.gallery[img] ?? nft.image}
                 alt={`Arte do NFT ${nft.name}`}
                 width={480}
                 height={480}

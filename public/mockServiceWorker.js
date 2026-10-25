@@ -136,6 +136,21 @@ addEventListener('fetch', function (event) {
     return
   }
 
+  // Bypass document navigation requests and non-API assets so page reloads
+  // and static files never fail or stall on client MessageChannel passthrough.
+  if (event.request.mode === 'navigate') {
+    return
+  }
+
+  try {
+    const requestUrl = new URL(event.request.url)
+    if (!requestUrl.pathname.startsWith('/api/')) {
+      return
+    }
+  } catch {
+    return
+  }
+
   const requestId = crypto.randomUUID()
   event.respondWith(handleRequest(event, requestId))
 })
@@ -314,6 +329,10 @@ async function getResponse(event, client, requestId) {
       } else {
         headers.delete('accept')
       }
+    }
+
+    if (requestClone.mode === 'navigate') {
+      return fetch(requestClone)
     }
 
     return fetch(requestClone, { headers })

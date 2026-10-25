@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+// Rota de carteiras: permite cadastrar e editar as carteiras principal e secundária do colecionador.
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
 import { toast } from "sonner";
@@ -9,9 +10,11 @@ import type { Network, Wallet, WalletProvider } from "@/api/types";
 import { Button } from "@/components/ui/button";
 import { Field, FormError, inputClass } from "@/components/Field";
 import { AccountNav } from "@/components/AccountNav";
+import { useCart } from "@/lib/cart";
 import { useSession } from "@/lib/session";
 import { NETWORK_LABELS, PROVIDER_LABELS } from "@/lib/labels";
 
+/** Metadados e montagem da rota privada de gerenciamento de carteiras. */
 export const Route = createFileRoute("/_authenticated/carteiras")({
   head: () => ({
     meta: [
@@ -27,8 +30,11 @@ export const Route = createFileRoute("/_authenticated/carteiras")({
   component: Wallets,
 });
 
+/** Lista os formulários de carteira principal e secundária e atalho de retorno ao checkout. */
 function Wallets() {
   const { user } = useSession();
+  const cart = useCart();
+  const hasCartItems = !!cart.data?.items.length;
   const q = useQuery({
     queryKey: qk.wallets(user!.id),
     queryFn: api.wallets,
@@ -38,7 +44,14 @@ function Wallets() {
     <div className="container-page grid gap-8 py-8 md:grid-cols-[14rem_1fr]">
       <AccountNav />
       <div className="space-y-6">
-        <h1 className="text-lg font-bold">Carteiras</h1>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h1 className="text-lg font-bold">Carteiras</h1>
+          {hasCartItems && (
+            <Button variant="line" size="sm" asChild>
+              <Link to="/checkout">Voltar para o pagamento</Link>
+            </Button>
+          )}
+        </div>
         {q.isLoading ? (
           <div className="shimmer h-72 rounded-lg" />
         ) : q.isError ? (
@@ -66,6 +79,20 @@ const EMPTY = {
   network: "ethereum" as Network,
 };
 
+const SAMPLE_ADDRESS: Record<Wallet["role"], Record<Network, string>> = {
+  primary: {
+    ethereum: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+    polygon: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+    solana: "7fUAJdStEuGbc3sM84cKRL6yYaaSstyLSU4ve5oovLS7",
+  },
+  secondary: {
+    ethereum: "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B",
+    polygon: "0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B",
+    solana: "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
+  },
+};
+
+/** Formulário individual de criação ou edição de carteira com validação por rede. */
 function WalletForm({ role, wallet }: { role: Wallet["role"]; wallet?: Wallet }) {
   const { user } = useSession();
   const qc = useQueryClient();
@@ -178,9 +205,27 @@ function WalletForm({ role, wallet }: { role: Wallet["role"]; wallet?: Wallet })
         </div>
       </fieldset>
       {editing && (
-        <div className="mt-5 flex gap-2">
+        <div className="mt-5 flex flex-wrap gap-2">
           <Button variant="brand" className="normal-case" disabled={m.isPending}>
             {m.isPending ? "Salvando…" : wallet ? "Salvar" : "Adicionar"}
+          </Button>
+          <Button
+            type="button"
+            variant="line"
+            className="normal-case"
+            disabled={m.isPending}
+            onClick={() => {
+              setV((curr) => ({
+                ...curr,
+                label:
+                  curr.label.trim() ||
+                  (role === "primary" ? "MetaMask Principal" : "Carteira Secundária"),
+                address: SAMPLE_ADDRESS[role][curr.network],
+              }));
+              setErrors({});
+            }}
+          >
+            Gerar endereço de exemplo
           </Button>
           {wallet && (
             <Button

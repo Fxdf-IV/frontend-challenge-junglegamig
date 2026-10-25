@@ -1,21 +1,24 @@
+// Servidor Socket.IO simulado sobre a interceptação de WebSocket do MSW.
 import { ws } from "msw";
 import { toSocketIo } from "@mswjs/socket.io-binding";
 import type { Nft, Order, RealtimeEvent } from "@/api/types";
 import { db } from "./db";
 
-/**
- * Socket.IO server simulated through MSW's WebSocket interception plus
- * @mswjs/socket.io-binding. The client is the real socket.io-client using
- * the websocket transport only (long-polling is not intercepted here).
- */
 type Conn = { io: ReturnType<typeof toSocketIo>; userId?: string; close: () => void };
 const connections = new Set<Conn>();
 const sent: RealtimeEvent<unknown>[] = [];
 let refuseUntil = 0;
 
-const socketLink = ws.link(/\/socket\.io\//);
+// O MSW remove o prefixo `/socket.io/` da URL antes de testar o padrão do handler,
+// então casamos a origem WebSocket e filtramos `/socket.io` na conexão recebida.
+const socketLink = ws.link(/^wss?:\/\/[^/]+\/?$/);
 
+/** Intercepta conexões do socket.io-client, autentica a sessão e mantém o heartbeat. */
 export const socketHandler = socketLink.addEventListener("connection", (connection) => {
+  if (!connection.client.url.pathname.startsWith("/socket.io")) {
+    connection.server.connect();
+    return;
+  }
   if (Date.now() < refuseUntil) {
     connection.client.close();
     return;
@@ -23,7 +26,7 @@ export const socketHandler = socketLink.addEventListener("connection", (connecti
   const io = toSocketIo(connection);
   const conn: Conn = { io, close: () => connection.client.close() };
   connections.add(conn);
-  // engine.io heartbeat so the client does not time out
+  // Heartbeat do Engine.IO para evitar timeout na conexão simulada.
   const ping = setInterval(() => connection.client.send("2"), 20000);
   io.client.on("auth", (_e, payload: { token?: string }) => {
     const sess = payload?.token ? db().sessions[payload.token] : undefined;
@@ -40,11 +43,13 @@ function emit<T>(evt: RealtimeEvent<T>) {
   sent.push(evt as RealtimeEvent<unknown>);
   if (sent.length > 50) sent.shift();
   for (const c of connections) {
-    if (evt.userId && c.userId !== evt.userId) continue; // user isolation
+    // Eventos privados de pedido só são entregues às conexões autenticadas do mesmo usuário.
+    if (evt.userId && c.userId !== evt.userId) continue;
     c.io.client.emit(evt.type, evt);
   }
 }
 
+/** Publica atualização de preço ou disponibilidade de um NFT para todos os clientes. */
 export function emitNftUpdated(nft: Nft) {
   emit({
     eventId: crypto.randomUUID(),
@@ -55,6 +60,7 @@ export function emitNftUpdated(nft: Nft) {
   });
 }
 
+/** Publica atualização de status de pedido restrita ao usuário dono da compra. */
 export function emitOrderUpdated(order: Order, userId: string) {
   emit({
     eventId: crypto.randomUUID(),
@@ -66,7 +72,7 @@ export function emitOrderUpdated(order: Order, userId: string) {
   });
 }
 
-/** Dev tooling: resend the last event (duplicate) or an older one (stale). */
+/** Reenvia o último evento (duplicado) ou uma versão anterior (obsoleto) para testes. */
 export function replay(kind: "duplicate" | "stale") {
   const last = sent[sent.length - 1];
   if (!last) return false;
@@ -81,6 +87,7 @@ export function replay(kind: "duplicate" | "stale") {
   return true;
 }
 
+/** Derruba conexões ativas e recusa novas tentativas pelo período informado. */
 export function dropConnections(refuseMs = 3000) {
   refuseUntil = Date.now() + refuseMs;
   for (const c of [...connections]) c.close();

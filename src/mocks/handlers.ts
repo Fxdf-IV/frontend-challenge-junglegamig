@@ -212,18 +212,21 @@ export function resolveOrder(id: string) {
       o.txHash = `0x${crypto.randomUUID().replace(/-/g, "")}${crypto.randomUUID().replace(/-/g, "").slice(0, 32)}`;
       o.explorerUrl = `https://etherscan.io/tx/${o.txHash}`;
       const cart = cartFor(`user:${o.userId}`);
+      const updatedNfts: Nft[] = [];
       for (const l of o.lines) {
         const nft = s.nfts.find((n) => n.id === l.nftId)!;
         const ed = nft.editions.find((e) => e.kind === l.edition)!;
         ed.available -= l.quantity;
-        bumpNft(nft);
         const ci = cart.items.find((c) => c.nftId === l.nftId && c.edition === l.edition);
         if (ci) {
           ci.quantity -= l.quantity;
           if (ci.quantity <= 0) cart.items = cart.items.filter((c) => c !== ci);
         }
+        updatedNfts.push(nft);
       }
       cart.version++;
+      // Emite nft.updated apenas após remover os itens comprados do carrinho.
+      for (const nft of updatedNfts) bumpNft(nft);
     }
   } else {
     o.status = "declined";

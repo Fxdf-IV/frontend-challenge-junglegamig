@@ -1,6 +1,6 @@
 // Checkout: valida colecionador, carteira e cotação antes de criar o pedido.
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { AlertTriangle, ArrowLeft, Check, Plug, Unplug } from "lucide-react";
 import { toast } from "sonner";
@@ -76,20 +76,46 @@ function Checkout() {
   const [pending, setPending] = useState<string | null>(null);
   const inflight = useRef(false);
 
-  // restore draft (session expiry / refresh) and pending order
+  // Restaura rascunho (expiração de sessão / refresh) e pedido pendente com proteção contra JSON inválido.
   useEffect(() => {
     const raw = sessionStorage.getItem(DRAFT_KEY);
-    if (raw) setDraft((d) => ({ ...d, ...JSON.parse(raw) }));
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw) as Partial<typeof draft>;
+        setDraft((d) => ({ ...d, ...parsed }));
+      } catch {
+        sessionStorage.removeItem(DRAFT_KEY);
+      }
+    }
     setCoupon(sessionStorage.getItem(COUPON_KEY) ?? undefined);
     setPending(localStorage.getItem(PENDING_ORDER_KEY));
   }, []);
   useEffect(() => sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft)), [draft]);
+  // Garante seleção de carteira válida do usuário atual, mesmo se o rascunho vier de outra sessão.
   useEffect(() => {
-    if (!draft.walletId && wallets.data?.length) {
+    if (wallets.data?.length && !wallets.data.some((w) => w.id === draft.walletId)) {
       const primary = wallets.data.find((w) => w.role === "primary") ?? wallets.data[0];
       setDraft((d) => ({ ...d, walletId: primary.id, network: primary.network }));
     }
   }, [wallets.data, draft.walletId]);
+
+  // Permite criar rapidamente uma carteira simulada caso a conta ainda não tenha nenhuma cadastrada.
+  const quickWallet = useMutation({
+    mutationFn: () =>
+      api.createWallet({
+        role: "primary",
+        label: "MetaMask Principal",
+        provider: "metamask",
+        network: "ethereum",
+        address: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+      }),
+    onSuccess: (w) => {
+      qc.invalidateQueries({ queryKey: qk.wallets(uid) });
+      setDraft((d) => ({ ...d, walletId: w.id, network: w.network }));
+      toast.success("Carteira principal criada");
+    },
+    onError: (e: ApiError) => toast.error(e.message),
+  });
 
   const quoteKey = ["quote", uid, coupon ?? "", draft.network, cart.data?.version] as const;
   const quote = useQuery({
@@ -99,6 +125,14 @@ function Checkout() {
     retry: false,
     placeholderData: (p) => p,
   });
+  // Se um cupom inválido ou expirado tiver ficado salvo na sessão, limpa para não travar a cotação no checkout.
+  useEffect(() => {
+    const qErr = quote.error as ApiError | null;
+    if (qErr && (qErr.code === "COUPON_INVALID" || qErr.code === "COUPON_EXPIRED")) {
+      sessionStorage.removeItem(COUPON_KEY);
+      setCoupon(undefined);
+    }
+  }, [quote.error]);
   const q = quote.data;
   const wallet = wallets.data?.find((w) => w.id === draft.walletId);
 
@@ -140,11 +174,14 @@ function Checkout() {
     inflight.current = true;
     setSubmitting(true);
     setSubmitErr(null);
-    // same attempt => same key (survives retries after timeout and refresh)
-    let key = sessionStorage.getItem(idemKey(q.id));
+    // A mesma tentativa reutiliza a chave em retries após timeout/refresh; dados distintos geram nova chave.
+    const attemptKey = idemKey(
+      `${q.id}:${draft.walletId}:${draft.name.trim()}:${draft.email.trim()}:${draft.note.trim()}`,
+    );
+    let key = sessionStorage.getItem(attemptKey);
     if (!key) {
       key = crypto.randomUUID();
-      sessionStorage.setItem(idemKey(q.id), key);
+      sessionStorage.setItem(attemptKey, key);
     }
     try {
       const order = await api.createOrder(key, {
@@ -160,6 +197,8 @@ function Checkout() {
       });
       localStorage.setItem(PENDING_ORDER_KEY, order.id);
       qc.setQueryData(qk.order(uid, order.id), order);
+      sessionStorage.removeItem(attemptKey);
+      sessionStorage.removeItem(COUPON_KEY);
       sessionStorage.removeItem(DRAFT_KEY);
       setReview(false);
       navigate({ to: "/pedido/$id", params: { id: order.id } });
@@ -277,12 +316,23 @@ function Checkout() {
             {wallets.isLoading ? (
               <div className="shimmer h-16 rounded" />
             ) : !wallets.data?.length ? (
-              <p className="text-sm">
-                Nenhuma carteira cadastrada.{" "}
-                <Link to="/carteiras" className="font-semibold text-primary underline">
-                  Cadastrar carteira
-                </Link>
-              </p>
+              <div className="space-y-2 text-sm">
+                <p>
+                  Nenhuma carteira cadastrada.{" "}
+                  <Link to="/carteiras" className="font-semibold text-primary underline">
+                    Cadastrar carteira
+                  </Link>
+                </p>
+                <Button
+                  type="button"
+                  variant="line"
+                  size="sm"
+                  disabled={quickWallet.isPending}
+                  onClick={() => quickWallet.mutate()}
+                >
+                  {quickWallet.isPending ? "Criando carteira…" : "Criar carteira simulada"}
+                </Button>
+              </div>
             ) : (
               <ul className="space-y-2">
                 {wallets.data.map((w) => (
