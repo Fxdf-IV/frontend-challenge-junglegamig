@@ -49,6 +49,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   link inferior de cadastro ficava cortado; novo teste cobre alturas de campos e botões sociais.
 - Estendidos os contratos e os dados mock do perfil para armazenar nome ENS e apelido da carteira;
   as regras são compartilhadas entre cliente e endpoint e cobertas por teste unitário.
+- Alinhado o perfil desktop com o frame, integrando os campos ENS e apelido, o sufixo `.eth` e as
+  ações de avatar/senha sem remover os dados de bio já editáveis.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra

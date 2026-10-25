@@ -1,17 +1,22 @@
+// Rota privada para editar os dados, avatar e senha do colecionador.
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { UserRound } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/endpoints";
 import type { ApiError } from "@/api/client";
 import { qk } from "@/api/queries";
 import type { User } from "@/api/types";
 import { Button } from "@/components/ui/button";
-import { Field, FormError, inputClass } from "@/components/Field";
+import { Field, FormError } from "@/components/Field";
 import { AccountNav } from "@/components/AccountNav";
+import { ProfileMetadataFields } from "@/components/profile/ProfileMetadataFields";
 import { useSession } from "@/lib/session";
+import { validateProfileMetadata } from "@/lib/profile-metadata";
 import { cn } from "@/lib/utils";
 
+/** Rota autenticada para editar o perfil do colecionador. */
 export const Route = createFileRoute("/_authenticated/perfil")({
   head: () => ({
     meta: [
@@ -27,7 +32,7 @@ export const Route = createFileRoute("/_authenticated/perfil")({
   component: Profile,
 });
 
-/** Resize the chosen image to a 160px JPEG data URL before upload. */
+/** Recorta a imagem escolhida para um avatar JPEG de 160 px antes do envio. */
 async function toAvatar(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) throw new Error("Selecione um arquivo de imagem");
   if (file.size > 5_000_000) throw new Error("Imagem maior que 5 MB");
@@ -49,6 +54,7 @@ async function toAvatar(file: File): Promise<string> {
   return c.toDataURL("image/jpeg", 0.85);
 }
 
+/** Carrega os dados da conta e envia alterações de perfil e avatar. */
 function Profile() {
   const { user, setUser } = useSession();
   const qc = useQueryClient();
@@ -64,6 +70,8 @@ function Profile() {
         email: me.data.email,
         bio: me.data.bio ?? "",
         avatar: me.data.avatar,
+        ensName: me.data.ensName ?? "",
+        walletNickname: me.data.walletNickname ?? "",
       });
   }, [me.data]);
 
@@ -89,6 +97,13 @@ function Profile() {
       errs.username = "Use 3–20 letras minúsculas, números, _ ou .";
     if (!v.email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.email))
       errs.email = "Informe um e-mail válido";
+    Object.assign(
+      errs,
+      validateProfileMetadata({
+        ensName: v.ensName ?? "",
+        walletNickname: v.walletNickname ?? "",
+      }),
+    );
     if ((v.bio ?? "").length > 160) errs.bio = "Máximo de 160 caracteres";
     setErrors(errs);
     if (!Object.keys(errs).length) save.mutate({ ...v, avatar: v.avatar ?? "" });
@@ -132,34 +147,23 @@ function Profile() {
                 onChange={(e) => setV({ ...v, email: e.target.value })}
                 error={errors.email}
               />
+              <ProfileMetadataFields
+                ensName={v.ensName ?? ""}
+                walletNickname={v.walletNickname ?? ""}
+                errors={errors}
+                onEnsNameChange={(ensName) => setV({ ...v, ensName })}
+                onWalletNicknameChange={(walletNickname) => setV({ ...v, walletNickname })}
+              />
               <div>
-                <label htmlFor="bio" className="mb-1.5 block text-xs font-semibold">
-                  Bio
-                </label>
-                <input
-                  id="bio"
-                  value={v.bio ?? ""}
-                  onChange={(e) => setV({ ...v, bio: e.target.value })}
-                  aria-invalid={!!errors.bio}
-                  aria-describedby={errors.bio ? "bio-err" : undefined}
-                  className={inputClass}
-                />
-                {errors.bio && (
-                  <p id="bio-err" className="mt-1 text-[11px] text-destructive">
-                    {errors.bio}
-                  </p>
-                )}
-              </div>
-              <div className="sm:col-span-2">
                 <p className="mb-1.5 text-xs font-semibold" id="avatar-label">
                   Avatar
                 </p>
                 <div className="flex items-center gap-4">
-                  <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-full bg-panel text-lg font-bold">
+                  <span className="grid h-8 w-8 place-items-center overflow-hidden rounded-full bg-panel text-lg font-bold">
                     {v.avatar ? (
                       <img src={v.avatar} alt="Seu avatar" className="h-full w-full object-cover" />
                     ) : (
-                      (v.displayName ?? "?").charAt(0).toUpperCase()
+                      <UserRound className="h-5 w-5" aria-hidden="true" />
                     )}
                   </span>
                   <input
@@ -189,16 +193,15 @@ function Profile() {
                   >
                     Alterar
                   </Button>
-                  {v.avatar && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => setV({ ...v, avatar: undefined })}
-                    >
-                      Remover
-                    </Button>
-                  )}
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    disabled={!v.avatar}
+                    onClick={() => setV({ ...v, avatar: undefined })}
+                  >
+                    Remover
+                  </Button>
                 </div>
                 {errors.avatar && (
                   <p role="alert" className="mt-1 text-[11px] text-destructive">
@@ -206,6 +209,13 @@ function Profile() {
                   </p>
                 )}
               </div>
+              <Field
+                label="Bio"
+                value={v.bio ?? ""}
+                onChange={(event) => setV({ ...v, bio: event.target.value })}
+                error={errors.bio}
+                maxLength={160}
+              />
             </div>
           )}
           <Button
@@ -213,7 +223,7 @@ function Profile() {
             className="mt-5 normal-case"
             disabled={save.isPending || me.isLoading}
           >
-            {save.isPending ? "Salvando…" : "Salvar alterações"}
+            {save.isPending ? "Salvando…" : "Salvar"}
           </Button>
         </form>
         <PasswordForm />
@@ -222,6 +232,7 @@ function Profile() {
   );
 }
 
+/** Valida e altera a senha atual sem misturar essa operação ao salvamento do perfil. */
 function PasswordForm() {
   const [v, setV] = useState({ current: "", next: "", confirm: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -248,7 +259,7 @@ function PasswordForm() {
     <form onSubmit={submit} noValidate className={cn("rounded-lg bg-card p-5")}>
       <h2 className="mb-4 font-bold">Alterar senha</h2>
       <FormError message={errors.form} />
-      <div className="grid gap-4 sm:max-w-md">
+      <div className="grid gap-4 sm:max-w-[278px]">
         <Field
           label="Senha atual"
           type="password"
