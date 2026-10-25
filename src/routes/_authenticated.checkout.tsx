@@ -2,11 +2,22 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { AlertTriangle, ArrowLeft, ArrowRight, Check, Plug, Unplug } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Globe,
+  Link2,
+  Plug,
+  ShieldCheck,
+  Unplug,
+  Wallet,
+} from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/endpoints";
 import { toApiError, type ApiError } from "@/api/client";
-import type { Network, Quote } from "@/api/types";
+import type { Network, Quote, WalletProvider } from "@/api/types";
 import { qk } from "@/api/queries";
 import { Button } from "@/components/ui/button";
 import {
@@ -488,6 +499,7 @@ function Checkout() {
         }}
       >
         <DialogContent
+          className="max-w-sm rounded-2xl border border-[#3d2c20] bg-[#140d07] p-5 shadow-2xl backdrop-blur-md"
           onCloseAutoFocus={(e) => {
             // O botão fica desabilitado enquanto `conn === "connecting"`, perdendo o foco ativo;
             // devolvemos o foco explicitamente ao gatilho quando o modal controlado fecha sem aprovar.
@@ -497,18 +509,63 @@ function Checkout() {
             }
           }}
         >
-          <DialogHeader>
-            <DialogTitle>
+          {/* Banner visual de handshake da conexão Web3 (DApp Kurio <-> Carteira) */}
+          <div className="flex items-center justify-center gap-3 pt-1 pb-1">
+            <div className="grid size-12 place-items-center rounded-2xl border border-primary/30 bg-primary/10 text-primary shadow-sm font-mono font-black text-lg">
+              K
+            </div>
+            <div className="flex items-center gap-1 text-[#CFB28C]" aria-hidden="true">
+              <span className="size-1 rounded-full bg-[#CFB28C]/60" />
+              <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+              <Link2 className="size-4 text-primary" />
+              <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="size-1 rounded-full bg-[#CFB28C]/60" />
+            </div>
+            <div className="grid size-12 place-items-center rounded-2xl border border-[#3d2c20] bg-[#1a110a] text-primary shadow-sm">
+              <WalletBadgeIcon provider={wallet?.provider} />
+            </div>
+          </div>
+
+          <DialogHeader className="space-y-1 text-center sm:text-center">
+            <DialogTitle className="text-base font-bold font-mono tracking-wide text-foreground">
               {wallet ? PROVIDER_LABELS[wallet.provider] : "Carteira"} (simulação)
             </DialogTitle>
-            <DialogDescription>
-              Kurio solicita acesso à conta {wallet && shortAddr(wallet.address)} na rede{" "}
-              {NETWORK_LABELS[draft.network]}.
+            <DialogDescription className="text-xs font-mono text-muted-foreground">
+              Kurio solicita permissão para conectar sua carteira e assinar pedidos.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
+
+          {/* Card com os dados da conta e rede blockchain */}
+          <div className="rounded-xl border border-[#3d2c20]/80 bg-[#160e08] p-3.5 space-y-2.5">
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-muted-foreground flex items-center gap-1.5">
+                <Wallet className="size-3.5 text-primary" aria-hidden="true" />
+                Conta
+              </span>
+              <span className="font-semibold text-foreground bg-background/80 px-2 py-0.5 rounded-md border border-border/40">
+                {wallet ? shortAddr(wallet.address) : "—"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs font-mono">
+              <span className="text-muted-foreground flex items-center gap-1.5">
+                <Globe className="size-3.5 text-[#CFB28C]" aria-hidden="true" />
+                Rede
+              </span>
+              <span className="font-medium text-[#CFB28C] flex items-center gap-1.5">
+                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                {NETWORK_LABELS[draft.network]}
+              </span>
+            </div>
+            <div className="pt-2 border-t border-[#3d2c20]/60 flex items-center gap-1.5 text-[11px] font-mono text-muted-foreground">
+              <ShieldCheck className="size-3.5 text-emerald-400 shrink-0" aria-hidden="true" />
+              <span>Nenhum fundo será debitado nesta etapa.</span>
+            </div>
+          </div>
+
+          <DialogFooter className="grid grid-cols-2 gap-3 pt-1 sm:flex sm:justify-end sm:gap-2">
             <Button
-              variant="line"
+              variant="outline"
+              className="h-11 rounded-xl border-[#3d2c20] bg-transparent text-muted-foreground hover:text-foreground hover:bg-[#23170e] font-mono text-xs transition-colors cursor-pointer"
               onClick={() => {
                 setConn("refused");
                 setPrompt(false);
@@ -518,6 +575,7 @@ function Checkout() {
             </Button>
             <Button
               variant="brand"
+              className="h-11 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-mono font-bold text-xs shadow-md transition-all active:scale-[0.98] cursor-pointer"
               onClick={() => {
                 setConn("connected");
                 setPrompt(false);
@@ -607,6 +665,38 @@ function Checkout() {
       </Dialog>
     </div>
   );
+}
+
+/** Ícone temático da carteira Web3 conectada no modal de simulação. */
+function WalletBadgeIcon({ provider }: { provider?: WalletProvider }) {
+  if (provider === "metamask") {
+    return (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="size-6 text-amber-500"
+        aria-hidden="true"
+      >
+        <path
+          d="M21.5 7.5L13.5 2L12 3.5L10.5 2L2.5 7.5L4.5 12.5L2 15.5L7 16.5L8.5 22L12 20L15.5 22L17 16.5L22 15.5L19.5 12.5L21.5 7.5Z"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M8.5 10.5L12 12.5L15.5 10.5M9.5 15.5H14.5"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+  return <Wallet className="size-6 text-primary" aria-hidden="true" />;
 }
 
 /** Resume itens, desconto, taxa e total da cotação atual. */

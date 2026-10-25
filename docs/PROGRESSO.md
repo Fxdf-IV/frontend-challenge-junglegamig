@@ -14,6 +14,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Redesign do modal de conexão Web3 (MetaMask/simulação) e refinamento de diálogos mobile (`_authenticated.checkout.tsx`, `dialog.tsx`, FD-36):**
+  - Refatorado o componente base `DialogContent` em `src/components/ui/dialog.tsx` para aplicar `w-[calc(100%-2rem)] rounded-2xl border-[#3d2c20] bg-[#140d07]` no mobile, eliminando cantos retos (`rounded-none`) e garantindo margem de respiro de 16px em relação às bordas da tela.
+  - Implementado visual autêntico de carteira Web3 no modal de autorização de checkout:
+    - Banner visual de handshake no topo conectando o Kurio à carteira (logo Kurio em dourado ↔ pontos pulsantes ↔ ícone temático da carteira).
+    - Card de dados técnicos com endereço abreviado, indicador de rede ativa com pulso verde e aviso acessível de que nenhum fundo será debitado.
+    - Botões de ação lado a lado (`Recusar` e `Aprovar conexão`) com proporções equilibradas e tipografia mono sem caixas pesadas de texto.
+  - Passagem garantida de 100% dos testes unitários e de checkout no Playwright.
+
 - **Substituição das letras W, C e D por ícones temáticos nos cards do rodapé (`src/components/layout/Footer.tsx`, FD-35):**
   - Atendido o comentário #17 do Figma e solicitação do usuário substituindo as letras placeholder 'W', 'C' e 'D' por ícones vetoriais de alto padrão visual:
     - **Segurança da carteira:** `ShieldCheck` (ícone de escudo com verificação, representando segurança e proteção da carteira).
