@@ -8,7 +8,7 @@ Legenda de leitura: "Implementado" significa que o código existe, mas o requisi
 automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1 e 2 estão verificados;
 o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 7 · Implementado 66 · Em andamento 8 · Pendente 28 (109 itens)
+**Resumo atual:** Verificado 12 · Implementado 61 · Em andamento 8 · Pendente 28 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -33,7 +33,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Início: destaques, catálogo, busca, filtros, ordenação  | Implementado | `routes/index.tsx`, `components/nft/Catalog.tsx`                  |
 | Favoritos: navegação mobile, visitante, lista e vazio   | Verificado   | `tests/e2e/favorites.spec.ts` (desktop/mobile)                     |
 | Detalhe: galeria, edição, quantidade, favoritos, compra | Implementado | `routes/nft.$id.tsx`                                              |
-| Carrinho: quantidades, remoção, cupom, resumo           | Implementado | `routes/carrinho.tsx`                                             |
+| Carrinho: quantidades, remoção, cupom, resumo           | Verificado   | `tests/e2e/cart.spec.ts` (desktop/mobile)                          |
 | Pagamento: dados, carteira e rede, revisão, envio       | Implementado | `routes/_authenticated.checkout.tsx`                              |
 | Confirmação de pedido                                   | Implementado | `routes/_authenticated.pedido.$id.tsx`                            |
 | Login com retorno ao fluxo anterior                     | Verificado   | `tests/e2e/account.spec.ts` (login privado e refresh, desktop/mobile) |
@@ -59,9 +59,9 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Item                                                    | Status       | Onde / prova                           |
 | ------------------------------------------------------- | ------------ | -------------------------------------- |
 | Adicionar, alterar, remover respeitando disponibilidade | Implementado | `lib/cart.ts`, handlers `/cart`        |
-| Carrinho persiste e itens do visitante migram no login  | Implementado | `lib/session.tsx` (`mergeCart`)        |
-| Cupom: aplicar, remover, inválido, expirado             | Implementado | `carrinho.tsx`, `buildQuote`           |
-| Subtotal, desconto, taxa e total vindos da API          | Implementado | `buildQuote`, `lib/eth.ts`             |
+| Carrinho persiste e itens do visitante migram no login  | Verificado   | `tests/e2e/cart.spec.ts` (migração no login) |
+| Cupom: aplicar, remover, inválido, expirado             | Verificado   | `tests/e2e/cart.spec.ts` (válido, inválido, expirado) |
+| Subtotal, desconto, taxa e total vindos da API          | Verificado   | `tests/e2e/cart.spec.ts` (subtotal e total via cotação) |
 | Reflete preço e disponibilidade em tempo real           | Implementado | `lib/realtime.tsx` (`nft.updated`)     |
 | ETH como string decimal; quantidades inteiras           | Implementado | `lib/eth.ts`, `eth.test.ts` (unitário) |
 
@@ -159,7 +159,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 2. Detalhe direto e recurso inexistente                                 | Verificado (`tests/e2e/nft-detail.spec.ts`; ambos viewports) |
 | 3. Cadastro, login, expiração, logout, troca de usuário                 | Em andamento (`tests/e2e/account.spec.ts`; 11 passaram, logout/troca desktop; 1 skip mobile) |
 | 4. Favoritos com falha e recuperação                                    | Verificado (`tests/e2e/favorites.spec.ts`; 8/8, desktop/mobile) |
-| 5. Carrinho, quantidades, remoção, cupom, persistência                  | Pendente |
+| 5. Carrinho, quantidades, remoção, cupom, persistência                  | Verificado (`tests/e2e/cart.spec.ts`; 6/6, desktop/mobile) |
 | 6. Compra completa até o recibo                                         | Pendente |
 | 7. Falha de pagamento, clique repetido, timeout e idempotência          | Pendente |
 | 8. Perfil, avatar, senha e carteiras com erros                          | Pendente |

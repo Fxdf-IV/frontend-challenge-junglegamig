@@ -190,3 +190,17 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   lint sem erros/com 9 avisos conhecidos e Vitest 18/18. O focused E2E passou 8/8 com um worker.
 - Próximo trabalho: grupo 5 carrinho, criar `tests/e2e/cart.spec.ts` e cobrir add/update/remove, migração
   do visitante no login, cupom e totais. Fazer commit separado e atualizar o progresso e este handoff.
+
+## Continuação — grupo 5 Carrinho
+
+- Implementado `tests/e2e/cart.spec.ts`; focused E2E passou **6/6** (3 cenários em desktop e mobile,
+  com um worker). Cobre estado vazio, add/PATCH/delete, quantidade e valores ETH, cupom KURIO10 com
+  cálculo e remoção, `VERAO25` expirado, código inválido e migração de carrinho visitante após login.
+- O grupo está funcionalmente coberto; não houve alteração de produção. Arquivos do lote estão sem
+  commit: `tests/e2e/cart.spec.ts`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`,
+  `docs/superpowers/plans/2026-10-25-playwright-e2e.md` e este handoff.
+- Antes do commit separado `test: cover cart persistence and totals`, executar typecheck, lint e Vitest.
+  Depois registrar o hash aqui. Matriz atual prevista: Verificado 12, Implementado 61,
+  Em andamento 8, Pendente 28 (109 itens).
+- Próximo grupo a implementar: 6, checkout confirmado e recibo; grupos 3 e 6–12 ainda têm trabalho,
+  assim como regressão visual, Lighthouse, documentação de arquitetura/README e validação final.
