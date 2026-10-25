@@ -67,7 +67,7 @@ export function Field({
         </p>
       )}
       {error && (
-        <p id={errId} role="alert" className="mt-1 text-[11px] text-destructive">
+        <p id={errId} className="mt-1 text-[11px] text-destructive">
           {error}
         </p>
       )}

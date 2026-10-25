@@ -142,7 +142,7 @@ function CartPage() {
             <div className="rounded-lg bg-card p-10 text-center">
               <p className="font-semibold text-muted-foreground">Seu carrinho está vazio</p>
               <Button variant="explore" className="mt-4" asChild>
-                <Link to="/" hash="catalogo">
+                <Link to="/" hash="catalogo" aria-label="Explorar NFTs">
                   Explorar <ArrowRight className="size-4" aria-hidden="true" />
                 </Link>
               </Button>
@@ -316,7 +316,7 @@ function CartPage() {
                   <dd className="font-medium">{formatEthSmart(q?.subtotal ?? "0")}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Desconto do lançamento</dt>
+                  <dt className="text-muted-foreground">Desconto de lançamento</dt>
                   <dd className="font-medium">
                     {q?.discount && q.discount !== "0"
                       ? `(-) ${formatEthSmart(q.discount)}`

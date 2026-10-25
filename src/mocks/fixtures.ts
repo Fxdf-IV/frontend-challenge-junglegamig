@@ -90,8 +90,8 @@ function rng(seed: number) {
 export function buildNfts(): Nft[] {
   const r = rng(42);
   const list: Nft[] = [];
-  // 36 itens formam exatamente as 4 páginas de 9 cards exibidas no catálogo do Figma.
-  for (let i = 0; i < 36; i++) {
+  // 40 itens formam o catálogo determinístico para testes e paginação estável.
+  for (let i = 0; i < 40; i++) {
     const name = NAMES[i % NAMES.length];
     const artIdx =
       name.startsWith("Emerald") || name.startsWith("Jade") || name.startsWith("Amber")

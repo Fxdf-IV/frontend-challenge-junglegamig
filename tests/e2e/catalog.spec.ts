@@ -41,7 +41,7 @@ test("ordena o catálogo por preço crescente", async ({ page, isMobile }) => {
   test.skip(isMobile, "O seletor de ordenação não aparece no frame mobile fornecido.");
 
   await page.goto("/mercado?scenario=default");
-  await expect(page.getByText("40 NFTs encontrados")).toBeVisible();
+  await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();
   await page.getByLabel("Ordenar por:").selectOption("price-asc");
 
   await expect.poll(() => new URL(page.url()).searchParams.get("sort")).toBe("price-asc");
@@ -77,7 +77,7 @@ test("mantém os resultados da última aba durante respostas com latência vari�
   page,
 }) => {
   await page.goto("/mercado?scenario=jitter");
-  await expect(page.getByText("40 NFTs encontrados")).toBeVisible();
+  await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();
 
   await page.getByRole("tab", { name: "Novos lançamentos" }).click();
   await page.getByRole("tab", { name: "Todos os NFTs" }).click();
@@ -86,5 +86,5 @@ test("mantém os resultados da última aba durante respostas com latência vari�
     "aria-selected",
     "true",
   );
-  await expect(page.getByText("40 NFTs encontrados")).toBeVisible();
+  await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();
 });

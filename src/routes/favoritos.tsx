@@ -69,7 +69,7 @@ function FavoritesPage() {
         <div className="rounded-lg bg-card p-8 text-center">
           <p className="text-muted-foreground">Você ainda não salvou nenhum NFT.</p>
           <Button variant="explore" className="mt-4" asChild>
-            <Link to="/" hash="catalogo">
+            <Link to="/" hash="catalogo" aria-label="Explorar NFTs">
               Explorar <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </Button>

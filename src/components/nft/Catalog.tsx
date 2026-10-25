@@ -221,6 +221,9 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
               />
             </div>
           )}
+          <div className="md:hidden mt-8">
+            <FeaturedOffer />
+          </div>
         </div>
       </div>
     </section>
@@ -362,6 +365,7 @@ function FeaturedOffer() {
           decoding="async"
           className="aspect-[3/4] w-full rounded-2xl object-cover transition-transform duration-300 group-hover:scale-[1.03]"
         />
+        <h4 className="sr-only">Sage Nomad #046</h4>
       </Link>
     </div>
   );
