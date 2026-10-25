@@ -824,6 +824,12 @@ export const handlers = [
         address: b.address!,
         provider: b.provider!,
         network: b.network!,
+        displayName: b.displayName,
+        profileName: b.profileName,
+        secondaryAddress: b.secondaryAddress,
+        referralCode: b.referralCode,
+        email: b.email,
+        ensName: b.ensName,
       };
       list.push(w);
       save();

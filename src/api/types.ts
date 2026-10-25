@@ -163,6 +163,12 @@ export interface Wallet {
   address: string;
   provider: WalletProvider;
   network: Network;
+  displayName?: string;
+  profileName?: string;
+  secondaryAddress?: string;
+  referralCode?: string;
+  email?: string;
+  ensName?: string;
 }
 
 /** Estados terminais e pendentes de um pedido. */

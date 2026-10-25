@@ -212,14 +212,6 @@ export const SEED_WALLETS: Record<string, Wallet[]> = {
       provider: "metamask",
       network: "ethereum",
     },
-    {
-      id: "w_ana_2",
-      role: "secondary",
-      label: "Principal",
-      address: "0xA11CE00000000000000000000000000000C0FFEE",
-      provider: "walletconnect",
-      network: "polygon",
-    },
   ],
   u_bruno: [],
 };
