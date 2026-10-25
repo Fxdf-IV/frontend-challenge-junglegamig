@@ -175,3 +175,18 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 - Próximo lote previsto: grupo 4, favoritos e carrinho, em teste separado. Depois seguir grupos 5–12,
   regressão visual, Lighthouse, documentação README/ARCHITECTURE, auditoria completa e build final.
   Manter lotes pequenos e commits separados; atualizar progresso e handoff em cada mudança relevante.
+
+## Continuação — grupo 4 Favoritos
+
+- Implementado `tests/e2e/favorites.spec.ts`, com quatro cenários executados em desktop e mobile.
+  Resultado focado: **8/8 passaram** com `--workers=1`: CTA de visitante e retorno, favoritos vazios
+  (Bruno), adicionar e persistir após refresh (Ana), falha 500 com rollback e nova tentativa bem-sucedida.
+- Não houve mudança de produção neste lote; a cobertura exercita o fluxo de `useToggleFavorite` e os
+  handlers REST existentes. O mock `favorite-fail` é inicializado por query e trocado para `default`
+  pela API local de controle somente para verificar a recuperação.
+- O carrinho foi separado deste grupo e deve ser implementado como próximo lote/commit (`cart.spec.ts`);
+  não misturar com os testes de favoritos.
+- Arquivos do grupo 4 ainda estão sem commit: `tests/e2e/favorites.spec.ts`, `docs/PROGRESSO.md`,
+  `docs/REQUISITOS-COBERTURA.md`, `docs/superpowers/plans/2026-10-25-playwright-e2e.md` e este handoff.
+  Antes do commit executar typecheck, lint e Vitest; depois commit coeso `test: cover favorites with
+  failure recovery` e registrar seu hash aqui.

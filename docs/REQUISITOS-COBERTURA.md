@@ -8,7 +8,7 @@ Legenda de leitura: "Implementado" significa que o código existe, mas o requisi
 automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1 e 2 estão verificados;
 o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 4 · Implementado 69 · Em andamento 8 · Pendente 28 (109 itens)
+**Resumo atual:** Verificado 7 · Implementado 66 · Em andamento 8 · Pendente 28 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -31,7 +31,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Item                                                    | Status       | Onde / prova                                                      |
 | ------------------------------------------------------- | ------------ | ----------------------------------------------------------------- |
 | Início: destaques, catálogo, busca, filtros, ordenação  | Implementado | `routes/index.tsx`, `components/nft/Catalog.tsx`                  |
-| Favoritos: navegação mobile, visitante, lista e vazio   | Implementado | `routes/favoritos.tsx`, `Header.tsx`                              |
+| Favoritos: navegação mobile, visitante, lista e vazio   | Verificado   | `tests/e2e/favorites.spec.ts` (desktop/mobile)                     |
 | Detalhe: galeria, edição, quantidade, favoritos, compra | Implementado | `routes/nft.$id.tsx`                                              |
 | Carrinho: quantidades, remoção, cupom, resumo           | Implementado | `routes/carrinho.tsx`                                             |
 | Pagamento: dados, carteira e rede, revisão, envio       | Implementado | `routes/_authenticated.checkout.tsx`                              |
@@ -52,7 +52,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Filtros combináveis; filtro reinicia a página             | Implementado | `Catalog.tsx` (função `set`)                |
 | Consultas refletem os params; vazio, falha, fora de ordem | Implementado | `api/queries.ts`, cenário `empty`, `jitter` |
 | Detalhe: acesso direto, inexistente, esgotado, limite     | Implementado | `routes/nft.$id.tsx`                        |
-| Favoritos persistem por usuário                           | Implementado | `lib/favorites.ts`, handlers `/favorites`   |
+| Favoritos persistem por usuário                           | Verificado   | `tests/e2e/favorites.spec.ts` (add, lista e refresh) |
 
 ## Carrinho
 
@@ -98,7 +98,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Descarte de respostas obsoletas                           | Implementado | Query keys com params; revisar uso de `signal` |
 | Isolamento por usuário e por parâmetros                   | Implementado | Query keys `["u", userId, ...]`                |
 | Rotas inexistentes e acesso direto                        | Implementado | `NotFoundComponent` em `__root.tsx`            |
-| Atualização otimista com rollback                         | Implementado | `lib/favorites.ts`                             |
+| Atualização otimista com rollback                         | Verificado   | `tests/e2e/favorites.spec.ts` (falha 500 e nova tentativa) |
 | Política de cache documentada                             | Pendente     | `ARCHITECTURE.md`                              |
 
 ## 5. Contratos REST
@@ -158,7 +158,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 1. Busca, filtros, ordenação, paginação, histórico                      | Verificado (`tests/e2e/catalog.spec.ts`; desktop/mobile, sort desktop) |
 | 2. Detalhe direto e recurso inexistente                                 | Verificado (`tests/e2e/nft-detail.spec.ts`; ambos viewports) |
 | 3. Cadastro, login, expiração, logout, troca de usuário                 | Em andamento (`tests/e2e/account.spec.ts`; 11 passaram, logout/troca desktop; 1 skip mobile) |
-| 4. Favoritos com falha e recuperação                                    | Pendente |
+| 4. Favoritos com falha e recuperação                                    | Verificado (`tests/e2e/favorites.spec.ts`; 8/8, desktop/mobile) |
 | 5. Carrinho, quantidades, remoção, cupom, persistência                  | Pendente |
 | 6. Compra completa até o recibo                                         | Pendente |
 | 7. Falha de pagamento, clique repetido, timeout e idempotência          | Pendente |

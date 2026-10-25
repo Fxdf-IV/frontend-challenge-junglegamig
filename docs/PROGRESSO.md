@@ -14,7 +14,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
    (revalidação, duplo clique, timeout com idempotência).
 5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
 6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: grupos 1–2 verificados; grupo 3 parcial; faltam grupos 4–12 e regressão visual.
+7. Playwright: grupos 1, 2 e 4 verificados; grupo 3 parcial; faltam grupos 5–12 e regressão visual.
 8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
 9. `README.md` e `ARCHITECTURE.md` completos.
 10. Formatar o código com Prettier para zerar o lint.
@@ -63,9 +63,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   credenciais inválidas, cadastro e refresh, cadastro duplicado e limpeza de token inválido; 1 skip
   mobile documentado para troca de conta. Não cobre ainda expiração por relógio nem dados privados
   diferentes de usuários.
-- Checks pre-commit deste lote: `bun run typecheck`, `bun run lint` (zero erros, 9 avisos conhecidos)
-  e `bun run test` (7 arquivos, 18 testes) passaram; focused E2E, 11 passaram e 1 skip. O próximo
-  E2E será favoritos/carrinho; grupos 4–12 e regressão visual continuam pendentes.
+- Checks pre-commit do grupo 3: `bun run typecheck`, `bun run lint` (zero erros, 9 avisos conhecidos)
+  e `bun run test` (7 arquivos, 18 testes) passaram; focused E2E, 11 passaram e 1 skip. O E2E de
+  favoritos do grupo 4 também passou; o próximo será carrinho.
+- Grupo 4 de Playwright verificado com `tests/e2e/favorites.spec.ts`: 8/8 passaram em Chromium desktop
+  e mobile (rodados com um worker para evitar colisão de Service Worker). Cobre convite ao visitante,
+  favoritos vazios, persistência após refresh e rollback/recuperação de erro HTTP 500.
+- Favoritos é um commit próprio; o carrinho, grupo 5, fica para o próximo lote sem compartilhar o
+  commit. Continuam pendentes os grupos 3 (cobertura parcial) e 5–12, mais regressão visual.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
