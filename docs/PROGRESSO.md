@@ -14,6 +14,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Refinamento do Header mobile com ícones oficiais do Figma e botões circulares sem borda (`src/components/layout/Header.tsx`, FD-30):**
+  - Refatorado o cabeçalho no mobile para container flex `h-14 items-center justify-between` mantendo a grade desktop `md:grid md:h-16 md:grid-cols-[1fr_auto_1fr]` 100% inalterada.
+  - Substituídos os ícones genéricos da Lucide no mobile pelos vetores SVG oficiais do Figma (`Search.svg`, `Shop.svg`, `User.svg`) no tom suave `#CFB28C`.
+  - Eliminada a borda retangular laranja do botão de perfil no mobile (`rounded-full size-9 border-0`), harmonizando os 3 botões de ação (busca, carrinho e perfil/login) em formato de pílula circular.
+  - Ajustado o badge de contagem de itens do carrinho para `-top-1 -right-1 font-mono text-[10px]`.
+  - Suporte completo ao estado deslogado com ícone circular de usuário direcionando para `/login`.
+  - Testes unitários (27/27) e testes E2E do Playwright validados com 100% de aprovação.
+
 - **Consolidação dos relatórios oficiais do Lighthouse (`lighthouse/RESULTS.md` e `lighthouse/reports/`):**
   - Gerado `lighthouse/RESULTS.md` detalhando as 12 medições oficiais (medianas: Desktop 100/99, Mobile 87/86, Acessibilidade 100, Melhores Práticas 100 e SEO 100).
   - Incluída a análise técnica requerida pela Seção 10 de `REQUISITOS.md` explicando o impacto da simulação matemática Lantern sob Service Worker do MSW vs. a performance real (LCP real de 249 ms e TBT de 0 ms).
