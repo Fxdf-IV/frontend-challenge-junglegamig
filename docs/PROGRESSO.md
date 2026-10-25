@@ -14,7 +14,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
    (revalidação, duplo clique, timeout com idempotência).
 5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
 6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: configuração e os 12 grupos de teste, um commit por grupo; depois regressão visual.
+7. Playwright: completar os 12 grupos (smoke da home desktop/mobile já passa); depois regressão visual.
 8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
 9. `README.md` e `ARCHITECTURE.md` completos.
 10. Formatar o código com Prettier para zerar o lint.
@@ -30,6 +30,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Adicionada base Playwright com projetos Chromium 1440×1000 e 390×844, execução pelo servidor Vite
+  isolado e smoke test das seções da home. `bun run test:e2e` passou nos dois viewports; só cobre o
+  início e não verifica os demais grupos nem regressão visual.
+- `bun run typecheck`, `bun run test` (18 testes) e `bun run lint` passaram; lint mantém 9 avisos.
+  Uma execução simultânea de lint/E2E encontrou uma condição de corrida no diretório temporário; o
+  lint foi repetido sozinho e passou. Os comandos devem ser executados em sequência durante o commit.
 - Plano E2E salvo em `docs/superpowers/plans/2026-10-25-playwright-e2e.md`, dividido por grupo de
   requisito para preparar Playwright e avançar em commits pequenos.
 - Preparado `.worktrees/` ignorado para executar a implementação E2E isolada em branch `codex/`,
