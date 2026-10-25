@@ -53,7 +53,11 @@ export function LoginForm({ onDone, expired }: { onDone: () => void; expired?: b
     }
   };
   return (
-    <form onSubmit={submit} noValidate className="space-y-3 [&_label]:sr-only">
+    <form
+      onSubmit={submit}
+      noValidate
+      className="space-y-3 [&_label]:sr-only max-md:mt-4 max-md:space-y-2 max-md:[&_input]:h-9"
+    >
       {expired && (
         <p role="status" className="rounded-md bg-panel px-3 py-2 text-xs">
           Sua sessão expirou. Entre novamente para continuar de onde parou.
@@ -147,7 +151,11 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
     error: errors[k],
   });
   return (
-    <form onSubmit={submit} noValidate className="space-y-3 [&_label]:sr-only">
+    <form
+      onSubmit={submit}
+      noValidate
+      className="space-y-3 [&_label]:sr-only max-md:mt-4 max-md:space-y-2 max-md:[&_input]:h-9"
+    >
       <FormError message={formErr} />
       <Field
         label="Nome de usuário"
@@ -190,7 +198,7 @@ export function RegisterForm({ onDone }: { onDone: () => void }) {
 /** Mostra provedores do design e informa que as integrações não estão disponíveis. */
 function SocialSignIn() {
   return (
-    <div className="space-y-3 pt-1">
+    <div className="space-y-3 pt-1 max-md:space-y-2">
       <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
         <span className="h-px flex-1 bg-border" />
         <span>ou continue com</span>
@@ -202,6 +210,7 @@ function SocialSignIn() {
             key={provider}
             type="button"
             variant="line"
+            className="max-md:h-7 max-md:px-2 max-md:text-xs"
             onClick={() => toast.info(`A entrada com ${provider} ainda não está disponível.`)}
           >
             <span aria-hidden className="font-bold">

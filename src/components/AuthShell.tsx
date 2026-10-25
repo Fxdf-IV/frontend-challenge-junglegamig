@@ -20,7 +20,7 @@ export function AuthShell({
   const navigate = useNavigate();
   return (
     <Dialog open onOpenChange={(open) => !open && navigate({ to: "/" })}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto border-border bg-card px-6 py-8 sm:max-w-[360px] sm:px-10 max-md:inset-auto max-md:left-1/2 max-md:top-1/2 max-md:h-[600px] max-md:max-h-[calc(100dvh-2rem)] max-md:w-[min(278px,calc(100vw-2rem))] max-md:translate-x-[-50%] max-md:translate-y-[-50%] max-md:gap-2 max-md:rounded-[28px] max-md:px-5 max-md:pb-6 max-md:pt-24">
+      <DialogContent className="max-h-[90vh] overflow-y-auto border-border bg-card px-6 py-8 sm:max-w-[360px] sm:px-10 max-md:inset-auto max-md:left-1/2 max-md:top-1/2 max-md:h-[600px] max-md:max-h-[calc(100dvh-2rem)] max-md:w-[min(278px,calc(100vw-2rem))] max-md:translate-x-[-50%] max-md:translate-y-[-50%] max-md:gap-2 max-md:rounded-[28px] max-md:px-5 max-md:pb-6 max-md:pt-20">
         <p className="text-center text-lg font-bold tracking-[0.3em]">KURIO</p>
         <nav aria-label="Autenticação" className="hidden grid-cols-2 text-center md:grid">
           <Link
@@ -40,7 +40,7 @@ export function AuthShell({
             Criar conta
           </Link>
         </nav>
-        <DialogTitle className="mt-6 block text-center text-lg font-bold md:sr-only max-md:mt-10 max-md:text-sm">
+        <DialogTitle className="mt-6 block text-center text-lg font-bold md:sr-only max-md:mt-12 max-md:text-sm">
           {title}
         </DialogTitle>
         <DialogDescription className="mb-6 mt-1 hidden text-center text-xs text-muted-foreground md:block">

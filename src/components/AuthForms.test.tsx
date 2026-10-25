@@ -38,4 +38,16 @@ describe("RegisterForm", () => {
     });
     expect(onDone).toHaveBeenCalledOnce();
   });
+
+  it("compacts fields and social buttons for the mobile auth card", () => {
+    const { container } = render(<RegisterForm onDone={vi.fn()} />);
+
+    expect(container.querySelector("form")).toHaveClass(
+      "max-md:mt-4",
+      "max-md:space-y-2",
+      "max-md:[&_input]:h-9",
+    );
+    expect(screen.getByRole("button", { name: "Google" })).toHaveClass("max-md:h-7");
+    expect(screen.getByRole("button", { name: "Facebook" })).toHaveClass("max-md:h-7");
+  });
 });
