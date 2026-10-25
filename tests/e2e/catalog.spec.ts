@@ -36,9 +36,7 @@ test("sincroniza busca, coleção e histórico com a URL", async ({ page }) => {
   );
 });
 
-test("ordena o catálogo por preço crescente", async ({ page, isMobile }) => {
-  test.skip(isMobile, "O seletor de ordenação não aparece no frame mobile fornecido.");
-
+test("ordena o catálogo por preço crescente", async ({ page }) => {
   await page.goto("/mercado?scenario=default");
   await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();
   await page.getByLabel("Ordenar por:").selectOption("price-asc");

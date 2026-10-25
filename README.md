@@ -129,10 +129,14 @@ bun run lighthouse
 
 ---
 
-## 6. Deploy público e fallback SPA
+## 6. Deploy público
 
-A aplicação é configurada para deploy estático ou SSR com fallback de rotas SPA garantindo acesso direto e atualização de página (`refresh`) em qualquer URL:
+A aplicação usa SSR com TanStack Start e Nitro. Na Vercel, `vercel.json` declara o framework
+`tanstack-start`, e o adaptador Nitro detecta o ambiente para gerar a função de servidor e os
+assets no formato nativo da plataforma. Não configure `.output/public` como diretório de saída
+estático nem reescreva todas as rotas para `/`: isso remove o servidor SSR do deploy e quebra o
+acesso direto a páginas como `/nft/emerald-ape-042`.
 
-- **Vercel:** configuração em `vercel.json` com reescrita para `/`.
-- **Cloudflare Pages / Netlify:** arquivo `public/_redirects` com regra `/* /index.html 200`.
-- Os mocks do MSW e a simulação de tempo real via `@mswjs/socket.io-binding` operam 100% no cliente em qualquer ambiente estático público.
+Os mocks MSW e o transporte de tempo real operam no cliente também na versão publicada. Em hosts
+estáticos, `public/_redirects` contém uma regra SPA, mas o build padrão deste projeto é SSR; use
+uma integração de servidor compatível com TanStack Start/Nitro para publicar esse build.

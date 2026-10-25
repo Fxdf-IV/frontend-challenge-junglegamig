@@ -73,18 +73,18 @@ test("limpa token expirado e redireciona à tela de login", async ({ page }) => 
 });
 
 test("troca de conta remove os dados privados da sessão anterior", async ({ page }) => {
-  test.skip(page.viewportSize()?.width === 390, "a navegação mobile não oferece ação para sair");
   await page.goto("/login?scenario=default");
   await loginAs(page, "bruno@kurio.dev");
+  await page.goto("/perfil");
   await expect(page.getByRole("button", { name: "Conta de Bruno Lima" })).toBeVisible();
 
   await page.getByRole("button", { name: "Conta de Bruno Lima" }).click();
   await page.getByRole("menuitem", { name: "Sair" }).click();
-  await expect(page.getByRole("link", { name: "Entrar" })).toBeVisible();
+  await expect(page).toHaveURL(/\/login/);
+  await expect(page.getByRole("button", { name: "Entrar" })).toBeVisible();
 
-  await page.goto("/login?scenario=default");
   await loginAs(page, "ana@kurio.dev");
-  await expect(page.getByRole("button", { name: "Conta de Ana Sato" })).toBeVisible();
   await page.goto("/perfil");
+  await expect(page.getByRole("button", { name: "Conta de Ana Sato" })).toBeVisible();
   await expect(page.getByLabel("Nome de exibição *")).toHaveValue("Ana Sato");
 });
