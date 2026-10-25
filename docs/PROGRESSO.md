@@ -14,6 +14,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Remoção do badge sobreposto Sage Nomad no hero mobile (`src/routes/index.tsx`, FD-28 / comentário #63 do Figma):**
+  - Atendendo à solicitação do usuário e resolvendo o comentário #63 do Figma ("esta imagem nao deveria estar aqui"), foi removida a imagem secundária de Sage Nomad (`absolute -bottom-3 -left-3 size-14 md:hidden`) sobreposta ao card de Emerald Ape no banner mobile de `src/routes/index.tsx`.
+  - A composição mobile agora apresenta exclusivamente o destaque principal Emerald Ape com visual limpo.
+  - Atualizadas as baselines de regressão visual do Playwright (`cart` e `home`) e refinada a seleção de rotas em `visual.spec.ts`.
+
 - **Alinhamento do carrinho desktop com o Figma sem alterar o mobile (`carrinho.tsx`, FD-27):**
   - Removido o título duplicado "Carrinho de NFTs" no desktop, alinhado o cabeçalho da grade de itens com o cabeçalho do "Resumo da carteira" através de linha divisória compartilhada (`border-[#3d2c20]`).
   - Cada item na versão desktop passa a ser um cartão horizontal independente (`bg-[#19110a]` com thumbnail integrado nivelado à esquerda, nome completo do NFT, `ID do token: #0042`, preço em coluna própria, stepper com botões circulares primários, total e botão de exclusão alinhado à direita).

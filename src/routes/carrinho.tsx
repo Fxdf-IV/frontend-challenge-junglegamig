@@ -186,8 +186,8 @@ function CartPage() {
                 <span />
               </div>
 
-              {/* Lista móvel (preservada exatamente conforme a versão mobile) */}
-              <ul className="space-y-3 md:hidden">
+              {/* Lista unificada com fidelidade ao Figma em mobile e desktop */}
+              <ul className="space-y-3 mt-3">
                 {items.map((it) => {
                   const limit = Math.min(it.available, it.maxPerOrder);
                   const busy =
@@ -197,99 +197,32 @@ function CartPage() {
                     (remove.isPending && remove.variables?.nftId === it.nftId);
                   return (
                     <li
-                      key={`${it.nftId}-${it.edition}-mobile`}
-                      className="relative grid grid-cols-[auto_1fr_auto] items-center gap-3 p-3 bg-card rounded-xl border border-border/40"
+                      key={`${it.nftId}-${it.edition}`}
+                      className="grid grid-cols-[1fr_auto_auto] items-center gap-2 sm:gap-3 p-3 bg-card rounded-xl border border-border/40 md:grid-cols-[1fr_6.5rem_8.5rem_7rem_2.5rem] md:gap-4 md:bg-[#19110a] md:rounded-lg md:border-[#2c2017] md:p-0 md:pr-4"
                       aria-busy={busy}
                     >
-                      <img
-                        src={it.image}
-                        alt=""
-                        width={96}
-                        height={96}
-                        className="h-20 w-20 rounded-xl object-cover"
-                      />
-                      <div className="min-w-0 pr-2">
-                        <Link
-                          to="/nft/$id"
-                          params={{ id: it.nftId }}
-                          search={{ edition: it.edition }}
-                          className="block truncate text-sm font-semibold hover:text-primary"
-                        >
-                          {it.name}
-                        </Link>
-                        <p className="text-[11px] text-muted-foreground">Edição {it.edition}</p>
-                        {it.notice && (
-                          <p
-                            role="status"
-                            className="mt-1 flex items-center gap-1 text-[11px] text-primary"
-                          >
-                            <AlertTriangle className="h-3 w-3" aria-hidden /> {it.notice}
-                          </p>
-                        )}
-                        <p className="mt-1 text-sm font-bold text-primary">
-                          {formatEth(it.unitPrice)}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <QuantityControl
-                          name={it.name}
-                          quantity={it.quantity}
-                          limit={limit}
-                          busy={busy}
-                          onChange={(quantity) =>
-                            update.mutate({ nftId: it.nftId, edition: it.edition, quantity })
-                          }
-                        />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-primary hover:text-primary/80 hover:bg-primary/10"
-                          aria-label={`Remover ${it.name}`}
-                          disabled={busy}
-                          onClick={() => remove.mutate({ nftId: it.nftId, edition: it.edition })}
-                        >
-                          <TrashFigmaIcon className="h-5 w-5" />
-                        </Button>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-
-              {/* Lista desktop com fidelidade total aos cards horizontais do Figma */}
-              <ul className="hidden md:block space-y-3 mt-3">
-                {items.map((it) => {
-                  const limit = Math.min(it.available, it.maxPerOrder);
-                  const busy =
-                    (update.isPending &&
-                      update.variables?.nftId === it.nftId &&
-                      update.variables.edition === it.edition) ||
-                    (remove.isPending && remove.variables?.nftId === it.nftId);
-                  return (
-                    <li
-                      key={`${it.nftId}-${it.edition}-desktop`}
-                      className="grid grid-cols-[1fr_6.5rem_8.5rem_7rem_2.5rem] items-center gap-4 bg-[#19110a] rounded-lg overflow-hidden pr-4 border border-[#2c2017]"
-                      aria-busy={busy}
-                    >
-                      {/* Coluna 1: Imagem + Nome + Token ID */}
-                      <div className="flex items-center gap-4 min-w-0">
+                      {/* Coluna 1: Imagem + Nome + Token ID / Detalhes */}
+                      <div className="flex items-center gap-3 md:gap-4 min-w-0 md:py-2">
                         <img
                           src={it.image}
                           alt=""
                           width={80}
                           height={80}
-                          className="h-20 w-20 object-cover shrink-0 rounded-l-lg"
+                          className="h-20 w-20 object-cover shrink-0 rounded-xl md:rounded-l-lg md:rounded-r-none"
                         />
-                        <div className="min-w-0 py-2">
+                        <div className="min-w-0 pr-2 md:pr-0">
                           <Link
                             to="/nft/$id"
                             params={{ id: it.nftId }}
                             search={{ edition: it.edition }}
-                            className="block font-mono font-bold text-base text-foreground hover:text-primary truncate"
+                            className="block truncate font-mono font-bold text-sm md:text-base text-foreground hover:text-primary"
                           >
                             {it.name}
                           </Link>
-                          <p className="text-xs font-mono text-primary mt-1">
+                          <p className="text-[11px] text-muted-foreground md:hidden">
+                            Edição {it.edition}
+                          </p>
+                          <p className="hidden md:block text-xs font-mono text-primary mt-1">
                             ID do token: {formatTokenId(it.name)}
                           </p>
                           {it.notice && (
@@ -300,16 +233,19 @@ function CartPage() {
                               <AlertTriangle className="h-3 w-3 shrink-0" aria-hidden /> {it.notice}
                             </p>
                           )}
+                          <p className="mt-1 text-sm font-bold text-primary md:hidden">
+                            {formatEth(it.unitPrice)}
+                          </p>
                         </div>
                       </div>
 
-                      {/* Coluna 2: Preço Unitário */}
-                      <div className="font-mono font-bold text-base text-foreground">
+                      {/* Coluna 2: Preço Unitário (Desktop) */}
+                      <div className="hidden md:block font-mono font-bold text-base text-foreground">
                         {formatEth(it.unitPrice)}
                       </div>
 
                       {/* Coluna 3: Edições (QuantityControl) */}
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center shrink-0">
                         <QuantityControl
                           name={it.name}
                           quantity={it.quantity}
@@ -321,17 +257,17 @@ function CartPage() {
                         />
                       </div>
 
-                      {/* Coluna 4: Total por item */}
-                      <div className="font-mono font-bold text-base text-primary">
+                      {/* Coluna 4: Total por item (Desktop) */}
+                      <div className="hidden md:block font-mono font-bold text-base text-primary">
                         {formatEthSmart(ethMul(it.unitPrice, it.quantity))}
                       </div>
 
                       {/* Coluna 5: Ícone de exclusão */}
-                      <div className="flex justify-end">
+                      <div className="flex justify-end shrink-0">
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="text-primary hover:text-primary/80 hover:bg-transparent p-1 cursor-pointer"
+                          className="text-primary hover:text-primary/80 hover:bg-primary/10 md:hover:bg-transparent p-1 cursor-pointer"
                           aria-label={`Remover ${it.name}`}
                           disabled={busy}
                           onClick={() => remove.mutate({ nftId: it.nftId, edition: it.edition })}
@@ -359,8 +295,8 @@ function CartPage() {
             "md:static md:bg-transparent md:border-0 md:p-0 md:rounded-none md:shadow-none",
           )}
         >
-          {/* Cabeçalho do resumo desktop alinhado na mesma altura do cabeçalho da tabela */}
-          <div className="hidden md:block pb-2 border-b border-[#3d2c20]">
+          {/* Cabeçalho do resumo alinhado na mesma altura do cabeçalho da tabela */}
+          <div className="pb-2 border-b border-[#3d2c20]">
             <h2
               id="summary-title"
               className="text-sm font-mono font-bold text-foreground tracking-wider"

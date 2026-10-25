@@ -41,7 +41,7 @@ test("não apresenta overflow horizontal em 390, 768 e 1440 px", async ({ page }
   for (const width of [390, 768, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     for (const [path, heading] of routes) {
-      await page.goto(path);
+      await page.goto(path, { waitUntil: "domcontentloaded" });
       await expect(page.getByRole("heading", { name: heading }).first()).toBeVisible();
       await expectNoHorizontalOverflow(page);
     }

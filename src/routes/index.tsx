@@ -110,15 +110,6 @@ function Home() {
             fetchPriority="high"
             className="aspect-square w-28 rounded-2xl object-cover shadow-md md:w-full md:rounded-2xl"
           />
-          <img
-            src="/nft/sage.webp"
-            alt=""
-            aria-hidden="true"
-            width={96}
-            height={96}
-            loading="lazy"
-            className="absolute -bottom-3 -left-3 size-14 rounded-2xl border-2 border-card object-cover shadow-lg md:hidden"
-          />
         </div>
         <div className="col-span-2 mt-2 flex justify-center gap-2 md:hidden" aria-hidden="true">
           <span className="h-2 w-2 rounded-full bg-primary" />
