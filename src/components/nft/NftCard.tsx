@@ -1,4 +1,4 @@
-// Card de NFT para grades de catálogo: apresenta arte, raridade, preço e atalho de favoritos.
+// Card de NFT para grades de catálogo: apresenta arte limpa fiel ao Figma, preço e atalho de favoritos.
 import { Link } from "@tanstack/react-router";
 import { Heart } from "lucide-react";
 import type { Nft } from "@/api/types";
@@ -7,12 +7,11 @@ import { useFavorites, useToggleFavorite } from "@/lib/favorites";
 import { cn } from "@/lib/utils";
 
 /**
- * Renderiza o card individual com imagem recortada, selo de raridade opcional,
+ * Renderiza o card individual com imagem recortada limpa conforme o Figma,
  * preço em ETH e botão de favoritar otimista no canto superior.
  */
 export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   const soldOut = nft.editions.every((e) => e.available === 0);
-  const rarity = nft.attributes?.find((a) => a === "Raro" || a === "Épico" || a === "Lendário");
   const { data: favIds } = useFavorites();
   const toggle = useToggleFavorite();
   const isFav = favIds?.includes(nft.id) ?? false;
@@ -35,11 +34,6 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
             decoding="async"
             className="h-full w-full rounded-2xl object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
-          {rarity && (
-            <span className="absolute top-0 left-0 rounded-tl-2xl rounded-br-md bg-primary px-3 py-1 text-[10px] font-bold uppercase text-primary-foreground shadow-sm">
-              {rarity}
-            </span>
-          )}
           <button
             type="button"
             aria-label={isFav ? `Remover dos salvos: ${nft.name}` : `Salvar ${nft.name} nos salvos`}

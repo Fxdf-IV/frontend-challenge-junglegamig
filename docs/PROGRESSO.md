@@ -14,6 +14,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Remoção de tags de raridade dos cards de NFT para fidelidade 100% ao Figma (`src/components/nft/NftCard.tsx`, FD-34):**
+  - Removidas as abas triangulares de raridade ("RARO", "ÉPICO", "LENDÁRIO") que ficavam sobrepostas no canto superior esquerdo da imagem dos cards de NFT.
+  - Como validado com o usuário, tais tags não fazem parte de nenhum requisito do enunciado (`REQUISITOS.md`) e não existem no Figma.
+  - Cards do catálogo agora exibem arte limpa com cantos arredondados, botão circular translúcido de favoritos no canto superior direito e metadados de preço e estoque abaixo da imagem.
+  - Atualizadas as baselines de regressão visual do Playwright (4/4 testes aprovados sem divergência visual).
+
 - **Refinamento visual da barra de ferramentas e abas do catálogo (`src/components/nft/Catalog.tsx`, `src/styles.css`, FD-33):**
   - Adicionado utilitário `@utility no-scrollbar` em `src/styles.css` eliminando qualquer barra de rolagem horizontal cinza nativa do navegador em Windows/macOS/Linux.
   - Adicionado `shrink-0` nas abas de navegação do catálogo ("Todos os NFTs", "Novos lançamentos", "Em alta") e borda de base horizontal `border-b border-[#3d2c20]/60`, garantindo que o texto nunca mais seja truncado (ex.: "Em al").
