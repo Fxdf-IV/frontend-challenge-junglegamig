@@ -2,7 +2,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { AlertTriangle, ArrowLeft, Check, Plug, Unplug } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, Check, Plug, Unplug } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "@/api/endpoints";
 import { toApiError, type ApiError } from "@/api/client";
@@ -222,9 +222,11 @@ function Checkout() {
   if (cart.data && !cart.data.items.length && !pending)
     return (
       <div className="container-page py-16 text-center">
-        <p className="font-semibold">Seu carrinho está vazio.</p>
-        <Button variant="brand" className="mt-4" asChild>
-          <Link to="/mercado">Explorar NFTs</Link>
+        <p className="font-semibold text-muted-foreground">Seu carrinho está vazio.</p>
+        <Button variant="explore" className="mt-4" asChild>
+          <Link to="/" hash="catalogo">
+            Explorar <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
         </Button>
       </div>
     );

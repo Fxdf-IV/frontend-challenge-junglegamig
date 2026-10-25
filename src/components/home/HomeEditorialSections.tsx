@@ -1,5 +1,6 @@
 // Seções de campanhas e artigos que completam a página inicial abaixo do catálogo.
 import { Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const JOURNAL = [
@@ -134,13 +135,15 @@ function Campaign({
         <p className="mt-2 text-[8px] leading-relaxed text-muted-foreground sm:text-[10px] md:text-xs">
           {description}
         </p>
-        <Button variant="brand" size="sm" className="mt-2 h-7 px-3 text-[9px]" asChild>
+        <Button variant="explore" size="sm" className="mt-3 text-xs" asChild>
           {search ? (
             <Link to="/mercado" search={search}>
-              Explorar
+              Explorar <ArrowRight className="size-3.5" aria-hidden="true" />
             </Link>
           ) : (
-            <Link to="/mercado">Explorar</Link>
+            <Link to="/mercado">
+              Explorar <ArrowRight className="size-3.5" aria-hidden="true" />
+            </Link>
           )}
         </Button>
       </div>

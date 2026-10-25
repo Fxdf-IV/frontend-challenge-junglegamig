@@ -93,17 +93,10 @@ function Home() {
               digital rara, apoie artistas e tenha uma parte da cultura da internet.
             </span>
           </p>
-          <div className="mt-3 md:mt-6">
-            <Link
-              to="/"
-              hash="catalogo"
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary transition-colors hover:text-primary/80 md:hidden"
-            >
-              Explorar <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-            </Link>
-            <Button variant="brand" size="sm" className="hidden md:inline-flex" asChild>
+          <div className="mt-4 md:mt-6">
+            <Button variant="explore" size="sm" className="md:h-10 md:px-5 md:text-sm" asChild>
               <Link to="/" hash="catalogo">
-                Explorar
+                Explorar <ArrowRight className="size-4" aria-hidden="true" />
               </Link>
             </Button>
           </div>

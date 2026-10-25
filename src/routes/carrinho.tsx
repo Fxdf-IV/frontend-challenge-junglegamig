@@ -2,7 +2,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
-import { AlertTriangle, ArrowLeft, Minus, Plus } from "lucide-react";
+import { AlertTriangle, ArrowLeft, ArrowRight, Minus, Plus } from "lucide-react";
 import { api } from "@/api/endpoints";
 import { toApiError, type ApiError } from "@/api/client";
 import { Button } from "@/components/ui/button";
@@ -133,9 +133,11 @@ function CartPage() {
             </div>
           ) : items.length === 0 ? (
             <div className="rounded-lg bg-card p-10 text-center">
-              <p className="font-semibold">Seu carrinho está vazio</p>
-              <Button variant="brand" className="mt-4" asChild>
-                <Link to="/mercado">Explorar NFTs</Link>
+              <p className="font-semibold text-muted-foreground">Seu carrinho está vazio</p>
+              <Button variant="explore" className="mt-4" asChild>
+                <Link to="/" hash="catalogo">
+                  Explorar <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
               </Button>
             </div>
           ) : (

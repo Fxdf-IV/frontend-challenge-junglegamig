@@ -1,6 +1,7 @@
 // Tela de favoritos: resolve os NFTs salvos e oferece retorno à exploração.
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { ArrowRight } from "lucide-react";
 import { nftListQuery } from "@/api/queries";
 import { NftCard, NftCardSkeleton } from "@/components/nft/NftCard";
 import { Button } from "@/components/ui/button";
@@ -66,9 +67,11 @@ function FavoritesPage() {
         </div>
       ) : (
         <div className="rounded-lg bg-card p-8 text-center">
-          <p>Você ainda não salvou nenhum NFT.</p>
-          <Button variant="brand" className="mt-4" asChild>
-            <Link to="/mercado">Explorar NFTs</Link>
+          <p className="text-muted-foreground">Você ainda não salvou nenhum NFT.</p>
+          <Button variant="explore" className="mt-4" asChild>
+            <Link to="/" hash="catalogo">
+              Explorar <ArrowRight className="size-4" aria-hidden="true" />
+            </Link>
           </Button>
         </div>
       )}
