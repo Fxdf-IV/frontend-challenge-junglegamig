@@ -155,7 +155,7 @@ export function HomeEditorialSections() {
           image="/nft/neon.webp"
           alt="Neon Vessel usando blazer e gola alta"
           title="Arte digital selecionada e muito mais"
-          description="Explore novos artistas, coleções verificadas e obras digitais que definem a cultura."
+          description="Explore novos artistas, coleções verificadas e obras digitais que definem a"
         />
       </section>
 

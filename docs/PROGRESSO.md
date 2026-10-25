@@ -29,6 +29,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Corrigida a cópia da campanha “Arte digital selecionada e muito mais” conforme o frame local (#64):
+  removido o sufixo “cultura”; a ação de cópia segue indefinida no material disponível.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
