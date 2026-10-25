@@ -1,3 +1,4 @@
+// Componente Carousel (shadcn/ui baseado em Embla) adaptado com botões de navegação e espaçamentos do Figma.
 import * as React from "react";
 import useEmblaCarousel, { type UseEmblaCarouselType } from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";

@@ -19,6 +19,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote 2 de componentes UI shadcn/ui):**
+  - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `breadcrumb.tsx`, `button.tsx`, `calendar.tsx`, `card.tsx`, `carousel.tsx` e `chart.tsx`.
 - **Documentação e Código Comentado (Lote 1 de componentes UI shadcn/ui):**
   - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `accordion.tsx`, `alert-dialog.tsx`, `alert.tsx`, `aspect-ratio.tsx`, `avatar.tsx` e `badge.tsx`.
 - **Documentação e Código Comentado (Lote rotas mercado, aprendizado, criadores e autenticadas):**

@@ -1,3 +1,4 @@
+// Componente Button (shadcn/ui) adaptado com as variantes 'brand' (laranja), 'line' (outline), ghost e tamanhos do Figma.
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
