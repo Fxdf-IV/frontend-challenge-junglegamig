@@ -8,7 +8,7 @@ Legenda de leitura: todos os 12 grupos funcionais do Playwright e os baselines d
 desktop e mobile estão verificados (`88 passed, 2 skipped`). Restam fontes locais, documentação
 (`README.md` e `ARCHITECTURE.md`), auditoria Lighthouse e configuração/deploy final.
 
-**Resumo atual:** Verificado 94 · Implementado 0 · Em andamento 3 · Pendente 12 (109 itens)
+**Resumo atual:** Verificado 99 · Implementado 0 · Em andamento 3 · Pendente 7 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -99,7 +99,7 @@ desktop e mobile estão verificados (`88 passed, 2 skipped`). Restam fontes loca
 | Isolamento por usuário e por parâmetros                   | Verificado | `tests/e2e/loading-recovery.spec.ts`, `tests/e2e/catalog.spec.ts`                          |
 | Rotas inexistentes e acesso direto                        | Verificado | `src/test/app-routing.test.tsx`, `tests/e2e/nft-detail.spec.ts`                            |
 | Atualização otimista com rollback                         | Verificado | `tests/e2e/favorites.spec.ts` (falha 500 e nova tentativa)                                 |
-| Política de cache documentada                             | Pendente   | `ARCHITECTURE.md`                                                                          |
+| Política de cache documentada                             | Verificado | `ARCHITECTURE.md` (seção 5)                                                                |
 
 ## 5. Contratos REST
 
@@ -108,7 +108,7 @@ desktop e mobile estão verificados (`88 passed, 2 skipped`). Restam fontes loca
 | Sessão e conta; NFTs; favoritos; carrinho                               | Verificado | `tests/e2e/account.spec.ts`, `tests/e2e/catalog.spec.ts`, `tests/e2e/favorites.spec.ts`, `tests/e2e/cart.spec.ts`  |
 | Cotação; pedidos idempotentes; perfil; carteiras                        | Verificado | `tests/e2e/checkout-failures.spec.ts`, `tests/e2e/profile-wallets.spec.ts`                                         |
 | Erros: validação, sessão, permissão, inexistente, conflito, transitório | Verificado | `tests/e2e/account.spec.ts`, `tests/e2e/checkout-failures.spec.ts`, `tests/e2e/loading-recovery.spec.ts`, `tests/e2e/nft-detail.spec.ts` |
-| Contratos documentados                                                  | Pendente   | `ARCHITECTURE.md`                                                                                                  |
+| Contratos documentados                                                  | Verificado | `ARCHITECTURE.md` (seção 2)                                                                                                  |
 
 ## 6. Mocking com MSW
 
@@ -122,7 +122,7 @@ desktop e mobile estão verificados (`88 passed, 2 skipped`). Restam fontes loca
 | Socket.IO via `@mswjs/socket.io-binding`                                            | Verificado | `mocks/realtime.ts`, `tests/e2e/checkout-realtime.spec.ts`                                            |
 | Mudanças refletem em REST e eventos                                                 | Verificado | `bumpNft`, `resolveOrder`, `tests/e2e/checkout-realtime.spec.ts`                                      |
 | Mock ativado por variável de ambiente e no build de demo                            | Verificado | `VITE_ENABLE_MOCKS`, `bun run build` e `tests/e2e/*.spec.ts`                                          |
-| Limitações do transporte documentadas                                               | Pendente   | `ARCHITECTURE.md`                                                                                     |
+| Limitações do transporte documentadas                                               | Verificado | `ARCHITECTURE.md` (seção 6)                                                                                     |
 
 ## 7. Tempo real
 
@@ -185,7 +185,7 @@ desktop e mobile estão verificados (`88 passed, 2 skipped`). Restam fontes loca
 | Testes e configuração de auditoria                                              | Em andamento | Playwright verificado (90 testes); falta Lighthouse                     |
 | Deploy público com mocks e tempo real                                           | Pendente     | Depende da conta do usuário                                             |
 | Acesso direto e refresh em qualquer rota                                        | Em andamento | Verificado localmente (`nft-detail.spec.ts`, `account.spec.ts`); falta fallback de SPA no deploy |
-| `README.md` completo                                                            | Pendente     | Hoje só tem o básico                                                    |
-| `ARCHITECTURE.md` completo                                                      | Pendente     | Ainda não existe                                                        |
+| `README.md` completo                                                            | Verificado   | `README.md` (setup, env vars, credenciais, cenários, comandos e falhas) |
+| `ARCHITECTURE.md` completo                                                      | Verificado   | `ARCHITECTURE.md` (REST, Socket.IO, sessão, carrinho, cache, MSW e UX)  |
 | Scripts: dev com mocks, build, preview, typecheck, lint, Playwright, Lighthouse | Em andamento | `test:e2e` e `test:e2e:ui` disponíveis; falta `lighthouse`              |
 | Execução a partir de checkout limpo                                             | Pendente     | Validar ao final                                                        |

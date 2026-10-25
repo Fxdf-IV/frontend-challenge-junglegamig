@@ -1,0 +1,157 @@
+# Arquitetura — Kurio NFT Marketplace
+
+Documento de arquitetura, contratos de transporte, gestão de estado, tempo real e decisões de UX do Kurio NFT Marketplace.
+
+## 1. Visão geral e organização de pastas
+
+A aplicação segue separação estrita entre contratos de rede, regras de negócio puras, componentes visuais e simulação de backend:
+
+- `src/api/`: cliente HTTP Axios (`client.ts`), contratos TypeScript compartilhados (`types.ts`), chamadas de endpoint (`endpoints.ts`) e definições de queries/chaves do TanStack Query (`queries.ts`).
+- `src/lib/`: regras de negócio puras e provedores de contexto — aritmética decimal de ETH em wei (`eth.ts`), validação de cupom e cálculo de cotação (`coupon.ts`), deduplicação e versão monotônica de eventos (`event-guard.ts`), serialização de filtros de catálogo na URL (`catalog-search.ts`), metadados de perfil (`profile-metadata.ts`), sessão (`session.tsx`), carrinho (`cart.ts`) e Socket.IO (`realtime.tsx`).
+- `src/components/`: componentes de interface desacoplados da camada de rede, organizados em `layout/`, `nft/`, `profile/` e primitivos `ui/` (shadcn/ui + Radix UI adaptados aos tokens do Figma em `src/styles.css`).
+- `src/routes/`: rotas baseadas em arquivos do TanStack Router, incluindo a casca global (`__root.tsx`) e a guarda de rotas privadas (`_authenticated.tsx`).
+- `src/mocks/`: simulação de rede na camada de Service Worker com MSW (`handlers.ts`), banco determinístico persistido em `localStorage` (`db.ts`), fixtures (`fixtures.ts`) e servidor Socket.IO simulado com `@mswjs/socket.io-binding` (`realtime.ts`).
+
+Nenhuma regra de negócio ou resposta fictícia reside em componentes JSX ou interceptadores Axios: toda operação passa por requisições HTTP reais ou frames WebSocket interceptados pelo MSW.
+
+---
+
+## 2. Contratos REST e formato de erros
+
+Todas as rotas REST utilizam o prefixo `/api` (configurável via `VITE_API_URL`) e trafegam JSON tipado em `src/api/types.ts`. Valores monetários em ETH trafegam exclusivamente como strings decimais (`EthString`), nunca como `number`.
+
+### Endpoints principais
+
+| Método e rota | Autenticação | Descrição |
+| --- | --- | --- |
+| `POST /api/auth/login` | Pública | Autentica por `email` e `password`, retorna `Session` (`token`, `expiresAt`, `user`). |
+| `POST /api/auth/register` | Pública | Cria conta validando formato e unicidade de e-mail (`409 EMAIL_TAKEN`) e usuário (`409 USERNAME_TAKEN`). |
+| `POST /api/auth/logout` | Bearer | Invalida o token da sessão atual no servidor. |
+| `GET /api/auth/session` | Bearer | Revalida a sessão ativa e retorna os dados públicos do usuário. |
+| `GET /api/nfts` | Pública | Lista paginada e filtrada (`q`, `collections`, `editions`, `networks`, `minPrice`, `maxPrice`, `onlyAvailable`, `sort`, `page`, `pageSize`) com facetas (`facets`). |
+| `GET /api/nfts/:id` | Pública | Retorna detalhe completo do NFT, edições, disponibilidade e `version`. |
+| `GET /api/favorites` | Bearer | Lista IDs e objetos `Nft` favoritados pelo usuário autenticado. |
+| `POST /api/favorites/:id` | Bearer | Adiciona NFT aos favoritos do usuário. |
+| `DELETE /api/favorites/:id` | Bearer | Remove NFT dos favoritos do usuário. |
+| `GET /api/cart` | Bearer ou `X-Cart-Id` | Retorna carrinho atual reconciliado com preço e disponibilidade vigentes. |
+| `POST /api/cart/items` | Bearer ou `X-Cart-Id` | Adiciona ou incrementa item/edição respeitando `Math.min(available, maxPerOrder)`. |
+| `PATCH /api/cart/items` | Bearer ou `X-Cart-Id` | Atualiza quantidade inteira de um item no carrinho. |
+| `DELETE /api/cart/items` | Bearer ou `X-Cart-Id` | Remove item/edição do carrinho. |
+| `POST /api/cart/merge` | Bearer | Mescla itens do `guestCartId` no carrinho da conta autenticada respeitando limites de estoque. |
+| `POST /api/quote` | Bearer ou `X-Cart-Id` | Calcula `Quote` determinística (`id` por SHA-256 dos itens, preços, cupom e rede), `subtotal`, `discount`, `networkFee`, `total` e `issues`. |
+| `POST /api/orders` | Bearer + `Idempotency-Key` | Cria pedido pendente após revalidar `quoteId`, estoque, preço, cupom e carteira. |
+| `GET /api/orders/:id` | Bearer | Consulta estado atual e recibo snapshot do pedido (`pending`, `confirmed`, `declined`). |
+| `PATCH /api/me` | Bearer | Atualiza perfil (`displayName`, `username`, `bio`, `ensName`, `walletNickname`). |
+| `PUT /api/me/avatar` | Bearer | Atualiza ou remove (`avatar: null`) o avatar em data URL validada. |
+| `POST /api/me/password` | Bearer | Valida `currentPassword` por hash SHA-256 com salt e grava nova senha. |
+| `GET /api/wallets` | Bearer | Lista carteiras cadastradas do usuário (`primary` e `secondary`). |
+| `POST /api/wallets` | Bearer | Cria ou substitui carteira validando endereço EVM (`0x...`) ou Solana (Base58). |
+| `PATCH /api/wallets/:id` | Bearer | Edita rótulo, rede, provedor, endereço ou papel da carteira. |
+| `DELETE /api/wallets/:id` | Bearer | Remove carteira cadastrada. |
+
+### Formato único de erro (`ApiErrorBody`)
+
+Erros HTTP retornam sempre `{ error: { code, message, fields?, quote? } }`, normalizados por `toApiError()` em `src/api/client.ts`:
+
+- `VALIDATION` (`400`/`422`): erro de validação de formulário, acompanhado de `fields: Record<string, string>` associado a cada campo via `aria-invalid` e `aria-describedby`.
+- `INVALID_CREDENTIALS` (`401`): e-mail ou senha incorretos no login.
+- `UNAUTHORIZED` / `SESSION_EXPIRED` (`401`): ausência de token ou sessão expirada.
+- `FORBIDDEN` (`403`): tentativa de acessar pedido ou carteira de outro usuário.
+- `NOT_FOUND` (`404`): NFT, pedido ou item inexistente.
+- `EMAIL_TAKEN` / `USERNAME_TAKEN` (`409`): conflito no cadastro.
+- `COUPON_INVALID` / `COUPON_EXPIRED` (`422`): cupom inexistente ou fora da validade.
+- `AVAILABILITY` / `QUOTE_STALE` (`409`): estoque esgotado/insuficiente ou mudança de preço/taxa/cupom entre a cotação e o envio do pedido; inclui a nova `quote` no corpo para atualização imediata da revisão.
+- `IDEMPOTENCY_CONFLICT` (`409`): reutilização de `Idempotency-Key` com payload diferente.
+- `UNAVAILABLE` / `SERVER_ERROR` (`503`/`500`) e `NETWORK` / `TIMEOUT`: falhas transitórias de rede ou servidor.
+
+---
+
+## 3. Política de sessão e isolamento de dados
+
+- O token Bearer é mantido em `localStorage` sob a chave `kurio.token` (`tokenStore` em `src/api/client.ts`).
+- As senhas nos mocks nunca são armazenadas em texto puro: `src/mocks/db.ts` calcula `sha256("${salt}:${password}")` via Web Crypto API.
+- **Isolamento por usuário:** todas as query keys privadas iniciam com `["u", userId, ...]` (`qk.favorites`, `qk.wallets`, `qk.order`) ou incluem o identificador de sessão/visitante (`qk.cart(userId ?? "guest")`, `qk.quote(userId ?? "guest", ...)`).
+- **Logout e troca de conta:** `SessionProvider` remove `kurio.token`, remove `kurio.pendingOrder`, limpa `["u"]` e `["cart"]` no `QueryClient` e reautentica o socket (`socket.emit("auth", { token: null })`), impedindo qualquer vazamento de dados privados entre contas.
+- **Expiração de sessão (`401 SESSION_EXPIRED`):** o interceptador de resposta em `src/api/client.ts` limpa o token, dispara o evento `auth:expired` tratado pelo `SessionProvider` (que limpa caches privados) e redireciona para `/login?redirect=<rota-atual>&expired=true`, exibindo banner informativo (`role="status"`). O rascunho do colecionador no checkout é mantido em `sessionStorage` (`kurio.checkoutDraft`) e restaurado após novo login.
+
+---
+
+## 4. Estado do carrinho, cotação e pedidos idempotentes
+
+- **Visitante vs. autenticado:** enquanto visitante, o cliente gera um identificador `guest_<uuid>` em `localStorage` (`kurio.guestCart`) enviado no header `X-Cart-Id`. Ao fazer login ou criar conta com itens no carrinho visitante, `SessionProvider` chama `POST /api/cart/merge` e limpa o carrinho anônimo.
+- **Cálculos monetários:** realizados exclusivamente com `BigInt` escalado em wei ($10^{18}$) em `src/lib/eth.ts` (`toWei`, `fromWei`, `ethAdd`, `ethSub`, `ethMul`, `ethBps`) e `src/lib/coupon.ts`.
+- **Revalidação e bloqueio no checkout:**
+  - A cotação gera um `quote.id` determinístico (hash SHA-256 das linhas, preços unitários, cupom e taxa de rede).
+  - Antes de criar o pedido em `POST /api/orders`, o handler recalcula a cotação contra o estado atual do catálogo. Se preço, disponibilidade, cupom ou taxa tiverem mudado (`quote.id !== body.quoteId` ou `quote.issues.length > 0`), responde `409 QUOTE_STALE` ou `409 AVAILABILITY` com a nova cotação. A UI atualiza o modal de revisão, destaca o alerta e exige nova confirmação explícita (ou bloqueia o botão se a edição esgotou).
+- **Idempotência e proteção contra duplo clique:**
+  - `inflight.current` bloqueia submissões concorrentes por clique duplo.
+  - Cada tentativa para um `quote.id` gera uma `Idempotency-Key` persistida em `sessionStorage` (`kurio.idem.<quoteId>`). Em caso de timeout HTTP (`order-timeout`), clicar em `"Tentar novamente"` reenvia a mesma chave e o mesmo corpo, recuperando o pedido já criado (`200 OK`) sem duplicar cobrança ou reserva de estoque.
+- **Estados do pedido e imutabilidade do recibo:**
+  - Um pedido nasce `pending` e transita uma única vez para `confirmed` ou `declined` (estados terminais).
+  - O carrinho só tem seus itens deduzidos quando o pedido passa para `confirmed`; em caso de `declined`, os itens permanecem intactos no carrinho para nova tentativa.
+  - O recibo (`Order.lines`, `subtotal`, `discount`, `networkFee`, `total`) é um snapshot gravado no momento da criação e não se altera quando o catálogo sofre mudanças posteriores de preço ou estoque.
+
+---
+
+## 5. Política de cache, retries e sincronização (TanStack Query)
+
+- **Query keys determinísticas (`src/api/queries.ts`):**
+  - Catálogo: `["nfts", "list", params]` onde `params` contém busca, coleções, edições, redes, faixa de preço, disponibilidade, ordenação e página. Mudar qualquer filtro reinicia `page` para `1` na URL (`src/lib/catalog-search.ts`).
+  - Detalhe: `["nfts", "detail", id]`.
+  - Carrinho e cotação: `["cart", userId ?? "guest"]` e `["quote", userId ?? "guest", coupon, network, cartVersion]`.
+- **Descarte de respostas obsoletas:** `nftListQuery` e `nftDetailQuery` repassam o `signal` do TanStack Query ao Axios (`api.listNfts(params, signal)`), cancelando requisições substituídas e garantindo que respostas atrasadas (cenário `jitter`) nunca sobrescrevam a combinação de parâmetros ativa.
+- **Política de retries:**
+  - Configurada no `QueryClient` (`src/router.tsx`): até 1 nova tentativa automática apenas para erros transitórios (`NETWORK`, `TIMEOUT` ou `503 UNAVAILABLE`). Erros `4xx` e `500 SERVER_ERROR` falham imediatamente para exibir feedback claro e botão `"Tentar novamente"`.
+  - `staleTime` padrão de 15 s, com `refetchOnWindowFocus: false` para previsibilidade durante simulação de cenários.
+- **Atualização otimista com rollback:** `useToggleFavorite` (`src/api/queries.ts`) aplica o estado favoritado/desfavoritado imediatamente em `["u", userId, "favorites"]` no `onMutate` e restaura o snapshot anterior em `onError` (demonstrado pelo cenário `favorite-fail`), sempre invalidando a query no `onSettled`.
+
+---
+
+## 6. Tempo real (Socket.IO), reconciliação REST e limitações sob MSW
+
+### Protocolo de eventos e reconciliação
+
+O `RealtimeProvider` (`src/lib/realtime.tsx`) mantém uma conexão `socket.io-client` por aba e processa dois eventos de domínio:
+
+1. `nft.updated`: carrega `{ eventId, type: "nft.updated", resourceId, version, updatedAt, data: Nft }`.
+   - Passa pelo filtro puro `createEventGuard()` (`src/lib/event-guard.ts`), que descarta `eventId` já visto (duplicata) ou `version <= última versão aplicada` para `nft.updated:<resourceId>`.
+   - Atualiza em memória o cache de detalhe e listas apenas se `nft.version < event.version`.
+   - Se o NFT estiver no carrinho ativo, invalida `["cart"]` e `["quote"]`, exibe aviso e anuncia a mudança em região `aria-live="polite"`.
+2. `order.updated`: carrega `{ eventId, type: "order.updated", resourceId, userId, version, updatedAt, data: Order }`.
+   - Ignora eventos cujo `userId` difira do usuário autenticado na aba atual.
+   - Passa por `createEventGuard()` e atualiza `["u", userId, "order", orderId]` se a versão for mais nova. Quando `status === "confirmed"`, invalida `["cart"]`.
+3. **Reconexão:** ao restabelecer conexão após queda (`connect` subsequente ao primeiro), o cliente reenvia `auth` com o token atual e invalida `["nfts"]`, `["cart"]` e as queries de pedido ativo (`["u", ..., "order", ...]`), reconciliando o estado local com a fonte de verdade REST. No desmontar (`cleanup`), remove todos os listeners (`s.removeAllListeners()`, `s.io.removeAllListeners()`) e desconecta o socket.
+
+### Transporte e limitações do Socket.IO sob MSW
+
+- O mock utiliza `@mswjs/socket.io-binding` acoplado ao `ws.link(...)` do MSW (`src/mocks/realtime.ts`).
+- **Ordem de interceptação do `WebSocket`:** o módulo `engine.io-client` captura `globalThis.WebSocket` no momento em que é avaliado. Para garantir que ele utilize o `WebSocketProxy` instalado pelo MSW (e não o `WebSocket` nativo do navegador), `src/lib/realtime.tsx` importa `socket.io-client` dinamicamente (`import("socket.io-client")`) dentro do `useEffect` do `RealtimeProvider`, que só monta após o `MocksGate` concluir `await worker.start()`.
+- **Normalização de path no MSW:** o interceptador WebSocket do MSW 3 remove o prefixo `/socket.io/` antes de comparar o padrão da URL; por isso `src/mocks/realtime.ts` vincula o link à origem `ws://`/`wss://` da aplicação.
+- **Escopo do mock no navegador:** como os handlers e o estado em memória residem no contexto da página/Service Worker local, os eventos simulados pelo painel de cenários (`+0,05 ETH`, `Esgotar`, `Reenviar duplicado`, `Enviar antigo`, `Derrubar conexão`) trafegam pelo pipeline real `MSW -> WebSocketProxy -> engine.io-client -> socket.io-client -> RealtimeProvider` dentro do navegador.
+
+---
+
+## 7. Decisões de UX, acessibilidade e performance
+
+- **Acessibilidade (WCAG AA):**
+  - Link `"Pular para o conteúdo"` (`#conteudo`) como primeiro elemento focável da página.
+  - Todos os modais (`Dialog`) e gavetas (`Sheet`) prendem o foco enquanto abertos e devolvem o foco ao botão gatilho ao fechar com `Escape` (incluindo restauração explícita via `onCloseAutoFocus` nos modais controlados de carteira e revisão do checkout).
+  - Campos de formulário utilizam componente `Field` (`src/components/Field.tsx`) que conecta `<label>`, `aria-invalid` e `aria-describedby` às mensagens de erro locais ou vindas da API.
+  - Regiões `role="status"` e `aria-live="polite"` anunciam mudanças de conexão de carteira, expiração de sessão e eventos Socket.IO sem depender apenas de cor.
+  - Skeletons `.shimmer` preservam as dimensões dos cards/painéis para evitar layout shift (CLS = 0) e desativam a animação quando `prefers-reduced-motion: reduce` está ativo.
+- **Performance:**
+  - Fonte `JetBrains Mono` servida localmente em `public/fonts/*.woff2` com `font-display: swap` e `<link rel="preload">` para o subset latino.
+  - Imagens de NFT servidas localmente em `public/art/*.svg` com atributos `width` e `height` explícitos; a imagem principal acima da dobra usa `fetchPriority="high"` e as demais `loading="lazy"`.
+  - Importação sob demanda do `socket.io-client` e dos mocks, mantendo o bundle inicial enxuto.
+- **Rotas fora de escopo:** links editoriais, suporte e páginas institucionais (`/criadores`, `/aprenda`) renderizam o componente `ComingSoon`, informando claramente que a seção não faz parte do escopo em vez de simular ação bem-sucedida.
+
+---
+
+## 8. Resumo dos desvios do Figma
+
+O registro completo item a item encontra-se em `docs/FIGMA-DEVIATIONS.md` (`FD-01` a `FD-15`). Os desvios e complementos de maior impacto são:
+
+1. **Estados obrigatórios sem frame dedicado no Figma (`FD-05`, `FD-08`, `#3`, `#19`, `#20`):** criados mantendo a mesma identidade visual para estados de carregamento (skeletons), vazio, erro 4xx/5xx, pedido pendente e pedido recusado, além das visualizações mobile (390 px) de perfil, carteiras e confirmação de pedido. No checkout mobile (`#20`), os campos de identificação do colecionador foram mantidos visíveis porque o fluxo funcional exige seu preenchimento e validação antes da revisão.
+2. **Composição mobile da Home, Detalhe e Autenticação (`FD-01`, `FD-02`, `FD-03`, `FD-10`, `FD-13`):** removida a imagem secundária sobreposta no hero mobile (`#63`), ocultadas as miniaturas da galeria no detalhe mobile (`#24`), adicionada barra inferior de navegação com acesso direto aos favoritos e ajustado o modal mobile de login/cadastro para cartão centralizado (`278 × 600 px`) sem corte de controles.
+3. **Seções editoriais e alinhamentos de catálogo/rodapé (`FD-09`, `FD-15`, `#60`, `#61`, `#64`, `#65`):** implementadas as seções `"NFT em destaque"` (layout assimétrico com Sage Nomad #046 e cards Golden), banners promocionais e `"Diário da Cunhagem"`; ajustada a copy da campanha (`#64`) e alinhamentos de grade no catálogo e rodapé.
+4. **Metadados de perfil e tokens de referência (`FD-10`, `FD-14`, `#21`):** incluídos os campos de nome ENS (`.eth`, limite de 63 caracteres) e apelido da carteira (limite de 40 caracteres) no perfil do colecionador, e alinhado o item de referência Emerald Ape `#042` ao token `#0042`, nota `4.8` e `19` avaliações.
