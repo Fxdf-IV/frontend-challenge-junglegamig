@@ -43,9 +43,12 @@ em português brasileiro.
   deve seguir comentários em pt-BR e o arquivo deve ganhar comentário de topo se ainda não tiver.
 - Instruções completas e regras do enunciado estão em `AGENTS.md`; prevalecem sobre esta nota.
 
-## Últimos commits conhecidos
+## Commits relevantes desta retomada
+
+Para o HEAD atual, consulte `git log -n 8 --oneline`; a lista abaixo destaca os lotes funcionais.
 
 - `9347fa3 docs: record visual QA capture blocker`
+- `13d301d docs: log resumed Figma audit batches`
 - `ed60376 docs: clean handoff commit list`
 - `d32144a fix: match campaign copy to Figma`
 - `292d8dd docs: save project handoff context`
@@ -122,3 +125,6 @@ estado atual antes de editar ou commitar.
 - Nova captura simples da home desktop com `mcp__rea__capture_browser_scenario` também travou após
   mais de 60 segundos e foi interrompida. Não houve screenshot/runtime evidence; browser QA permanece
   pendente. Servidor Vite local respondeu na porta 3001 na inspeção anterior.
+- O plano E2E foi salvo em `docs/superpowers/plans/2026-10-25-playwright-e2e.md`; divide a configuração
+  e os 12 grupos exigidos em lotes testáveis, seguidos de regressão visual. A execução do plano ainda
+  não começou; Playwright não está instalado/configurado.

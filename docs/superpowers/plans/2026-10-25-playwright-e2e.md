@@ -1,0 +1,130 @@
+# Playwright E2E Implementation Plan
+
+> **For agentic workers:** Execute this plan task by task. Every task ends with focused validation and a small commit.
+
+**Goal:** Add executable Playwright coverage for the twelve E2E groups required by `AGENTS.md`, with isolated mock state and desktop/mobile projects.
+
+**Architecture:** Playwright starts the Vite app against the existing MSW browser worker. Each test gets a fresh browser context; deterministic scenarios are selected through `?scenario=` and the mock panel/reset API is used only when a test changes state mid-flow. Tests assert visible UI and user outcomes.
+
+**Tech Stack:** Bun, `@playwright/test`, Chromium, Vite, MSW, React, TypeScript.
+
+**Spec:** `AGENTS.md`, sections 1, 5, 6 and 8; `docs/REQUISITOS-COBERTURA.md`.
+
+## Global Constraints
+
+- Run `bun run typecheck`, `bun run lint` and `bun run test` before each commit.
+- Use Chromium at 1440 px desktop and 390 px mobile; isolate state per test and control scenario/latency.
+- Assert interface and operation results; Socket.IO coverage must use the actual client and MSW transport.
+- Preserve no-charge operation; do not configure paid services.
+- Each commit updates `docs/PROGRESSO.md`; update requirement statuses only when the recorded proof supports them.
+
+## Review Focus
+
+- Mock worker startup and direct-route navigation: tests wait for the first route-specific API result before asserting.
+- Persistent local storage between tests: each test receives a fresh browser context and starts with a scenario query.
+- Async/realtime flakiness: use deterministic scenarios and wait on visible state, not fixed sleeps.
+- User/session isolation: seed two users and assert private data does not cross sessions.
+- Mobile layout: exercise 390 px and assert key actions remain visible without horizontal overflow.
+
+---
+
+### Task 1: Playwright foundation and home smoke tests
+
+**Files:** `package.json`, `bun.lock`, `playwright.config.ts`, `tests/e2e/home.spec.ts`, `docs/PROGRESSO.md`.
+
+- [ ] Add `@playwright/test` as a dev dependency and scripts `test:e2e` and `test:e2e:ui`.
+- [ ] Configure Chromium desktop (1440×1000) and mobile (390×844), isolated contexts, HTML report, trace on retry, and a Vite web server on port 4174.
+- [ ] Add smoke tests asserting the home heading, catalog content and campaign section on both projects; fail on uncaught page errors.
+- [ ] Run the two home tests and all required pre-commit checks.
+- [ ] Commit as `test: add Playwright home smoke coverage`.
+
+### Task 2: Catalog and history
+
+**Files:** `tests/e2e/catalog.spec.ts`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`.
+
+- [ ] Cover search, combinable filters, sort, pagination, query-string history/back, empty results and delayed/out-of-order responses.
+- [ ] Verify URL and rendered result set after each operation.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover catalog navigation and history`.
+
+### Task 3: NFT detail and not-found
+
+**Files:** `tests/e2e/nft-detail.spec.ts`, progress and coverage docs.
+
+- [ ] Cover direct access, gallery, edition selection, quantity limits, favorite toggle, add-to-cart and 404.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover NFT detail and not-found states`.
+
+### Task 4: Account and session
+
+**Files:** `tests/e2e/account.spec.ts`, progress and coverage docs.
+
+- [ ] Cover registration, duplicate account, login, preserved redirect, refresh, expiry and logout/cache cleanup.
+- [ ] Verify private data remains isolated between Ana and Bruno.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover account and session flows`.
+
+### Task 5: Favorites and cart
+
+**Files:** `tests/e2e/favorites-cart.spec.ts`, progress and coverage docs.
+
+- [ ] Cover favorite persistence, optimistic rollback on `favorite-fail`, empty state, add/update/remove cart, guest migration, coupon and totals.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover favorites and cart flows`.
+
+### Task 6: Successful checkout
+
+**Files:** `tests/e2e/checkout-success.spec.ts`, progress and coverage docs.
+
+- [ ] Cover collector form, saved wallet, simulated connection, quote/review, confirmed order and receipt snapshot.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover successful checkout flow`.
+
+### Task 7: Checkout failures and idempotency
+
+**Files:** `tests/e2e/checkout-failures.spec.ts`, progress and coverage docs.
+
+- [ ] Cover declined payment, stale price, sold-out edition, invalid/expired coupon, timeout recovery, double-click blocking and same-key retry.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover checkout failures and idempotency`.
+
+### Task 8: Profile and wallets
+
+**Files:** `tests/e2e/profile-wallets.spec.ts`, progress and coverage docs.
+
+- [ ] Cover profile metadata limits, avatar/password actions, create/edit primary and secondary wallets, network/provider validation and 390 px usability.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover profile and wallet management`.
+
+### Task 9: Checkout Socket.IO
+
+**Files:** `tests/e2e/checkout-realtime.spec.ts`, progress and coverage docs.
+
+- [ ] Verify a pending checkout updates through the Socket.IO client and receipt; test disconnect/reconnect and REST reconciliation.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover checkout realtime reconciliation`.
+
+### Task 10: Event versioning
+
+**Files:** `tests/e2e/event-versioning.spec.ts`, progress and coverage docs.
+
+- [ ] Verify duplicate and older `nft.updated` / `order.updated` events are ignored and newer versions reconcile.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover event deduplication and versions`.
+
+### Task 11: Keyboard and focus
+
+**Files:** `tests/e2e/accessibility.spec.ts`, progress and coverage docs.
+
+- [ ] Cover keyboard navigation, visible focus, dialog focus trap/restore, labels, inline errors and live announcements.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover keyboard and focus behavior`.
+
+### Task 12: Skeletons and recovery
+
+**Files:** `tests/e2e/loading-recovery.spec.ts`, progress and coverage docs.
+
+- [ ] Cover loading placeholders, failed requests, retry, session recovery and reduced-motion behavior.
+- [ ] Run focused E2E and pre-commit checks; commit `test: cover loading and recovery states`.
+
+### Task 13: Visual regression and final suite
+
+**Files:** `playwright.config.ts`, `tests/e2e/visual.spec.ts`, `tests/e2e/*.spec.ts`, progress and coverage docs.
+
+- [ ] Add stable desktop/mobile baselines for home, detail, cart and checkout using fixed mock data and fonts.
+- [ ] Run the full E2E suite, typecheck, lint, unit tests and production build; document any baseline/environment limitations.
+- [ ] Commit `test: add responsive visual regression coverage`.
+
+## Coverage notes
+
+Only update matrix rows to `Verificado` after their named E2E assertion passes. This plan does not cover Lighthouse, full code comments, missing architecture documentation or deployment; those remain separate workstreams in `docs/PROGRESSO.md`.
