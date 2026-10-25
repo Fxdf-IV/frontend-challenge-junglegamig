@@ -1,3 +1,4 @@
+// Rota autenticada para gerenciamento das carteiras cripto (principal e secundária) do usuário.
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
@@ -12,6 +13,7 @@ import { AccountNav } from "@/components/AccountNav";
 import { useSession } from "@/lib/session";
 import { NETWORK_LABELS, PROVIDER_LABELS } from "@/lib/labels";
 
+/** Rota de gerenciamento de carteiras com formulários para carteira principal e secundária. */
 export const Route = createFileRoute("/_authenticated/carteiras")({
   head: () => ({
     meta: [

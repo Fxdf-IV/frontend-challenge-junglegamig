@@ -1,6 +1,8 @@
+// Rota editorial "/criadores" com indicação explícita de conteúdo em desenvolvimento.
 import { createFileRoute } from "@tanstack/react-router";
 import { ComingSoon } from "@/components/ComingSoon";
 
+/** Definição da rota "/criadores" com metadados de cabeçalho. */
 export const Route = createFileRoute("/criadores")({
   head: () => ({
     meta: [

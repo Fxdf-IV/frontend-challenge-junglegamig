@@ -1,8 +1,10 @@
+// Layout protegido para rotas que exigem autenticação prévia do usuário.
+// Redireciona para /login preservando a URL original em caso de sessão ausente ou expirada.
 import { createFileRoute, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useSession } from "@/lib/session";
 
-/** Guards private flows. Session lives client-side (mock API), so the guard runs after hydration. */
+/** Guarda de rotas autenticadas da aplicação. */
 export const Route = createFileRoute("/_authenticated")({
   component: AuthGuard,
 });

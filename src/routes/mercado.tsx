@@ -1,8 +1,10 @@
+// Rota "/mercado" com catálogo completo, validação de busca/filtros na URL via Zod e paginação.
 import { createFileRoute } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { Catalog } from "@/components/nft/Catalog";
 import { catalogSearchSchema } from "@/lib/catalog-search";
 
+/** Rota pública do catálogo de mercado com sincronização de filtros na URL. */
 export const Route = createFileRoute("/mercado")({
   validateSearch: zodValidator(catalogSearchSchema),
   head: () => ({

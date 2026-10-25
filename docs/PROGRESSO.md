@@ -19,6 +19,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote rotas mercado, aprendizado, criadores e autenticadas):**
+  - Adicionados comentários de topo em pt-BR e JSDocs em `src/routes/aprenda.tsx`, `src/routes/criadores.tsx`, `src/routes/mercado.tsx`, `src/routes/_authenticated.tsx` e `src/routes/_authenticated.carteiras.tsx`.
 - **Documentação e Código Comentado (Lote componentes base de layout e formulários):**
   - Adicionados comentários de topo em pt-BR e JSDocs em `src/components/layout/Footer.tsx`, `src/components/nft/NftCard.tsx`, `src/components/ComingSoon.tsx` e `src/components/Field.tsx` seguindo as diretrizes de `AGENTS.md` (seção 12).
 - **Documentação e Código Comentado (Lote lib/eth, storage, redirect e session):**
