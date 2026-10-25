@@ -29,6 +29,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
+  sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
 - Usado o PNG composto do ZIP, o arquivo local de comentários e a gravação com pins para corrigir a composição mobile da
   home, detalhe, carrinho e checkout; ajustar autenticação e recibo para modal; criar destino de
