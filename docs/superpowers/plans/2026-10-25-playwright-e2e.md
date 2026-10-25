@@ -70,7 +70,7 @@
 - [x] Group 4: cover visitor CTA, empty state, favorite persistence across refresh, optimistic rollback on `favorite-fail`, and successful retry. Focused E2E passed 8/8 across desktop/mobile.
 - [x] Commit favorites separately from cart as `5e00e02 test: cover favorites with failure recovery`.
 - [x] Group 5: cover empty/add/update/remove cart, guest migration, coupon apply/remove/errors and totals in `cart.spec.ts`; focused E2E passed 6/6 across desktop/mobile.
-- [ ] Run pre-commit checks and commit separately as `test: cover cart persistence and totals`.
+- [x] Run pre-commit checks and commit separately as `8be3b9a test: cover cart persistence and totals`.
 
 ### Task 6: Successful checkout
 

@@ -154,8 +154,9 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 
 - Branch de implementação: `codex/playwright-e2e` no worktree
   `C:\Users\Vi\Projetos\frontend-challenge-junglegamig\.worktrees\playwright-e2e`.
-- Commits E2E desta branch: `2a30fb6` home, `ace6105` catálogo, `e73eae2` detalhe e `b14649d`
-  conta/sessão. O worktree está limpo após o lote; não fazer merge nem push sem pedido do usuário.
+- Commits E2E desta branch: `2a30fb6` home, `ace6105` catálogo, `e73eae2` detalhe, `b14649d`
+  conta/sessão, `5e00e02` favoritos e `8be3b9a` carrinho. O worktree está limpo após o lote; não
+  fazer merge nem push sem pedido do usuário.
 - O grupo 3 criou `tests/e2e/account.spec.ts` (6 cenários em desktop/mobile). Resultado focado mais
   recente: **11 passaram, 1 skip intencional** (troca de conta mobile, pois o menu de sessão não existe
   na navegação mobile). Abrange redirect para login/perfil, refresh, credenciais incorretas, cadastro,
@@ -172,7 +173,7 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   Implementado 69, Em andamento 8, Pendente 28; 109 itens).
 - Plano atualizado: grupos 1–3 estão commitados (`ace6105`, `e73eae2`, `b14649d`), além da fundação
   de home (`2a30fb6`).
-- Próximo lote previsto: grupo 4, favoritos e carrinho, em teste separado. Depois seguir grupos 5–12,
+- Próximo lote previsto: grupo 6, checkout confirmado. Depois seguir grupos 7–12,
   regressão visual, Lighthouse, documentação README/ARCHITECTURE, auditoria completa e build final.
   Manter lotes pequenos e commits separados; atualizar progresso e handoff em cada mudança relevante.
 
@@ -184,8 +185,7 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 - Não houve mudança de produção neste lote; a cobertura exercita o fluxo de `useToggleFavorite` e os
   handlers REST existentes. O mock `favorite-fail` é inicializado por query e trocado para `default`
   pela API local de controle somente para verificar a recuperação.
-- O carrinho foi separado deste grupo e deve ser implementado como próximo lote/commit (`cart.spec.ts`);
-  não misturar com os testes de favoritos.
+- O carrinho foi separado dos testes de favoritos em `cart.spec.ts` e teve commit próprio (`8be3b9a`).
 - O lote foi commitado como `5e00e02 test: cover favorites with failure recovery`; typecheck passou,
   lint sem erros/com 9 avisos conhecidos e Vitest 18/18. O focused E2E passou 8/8 com um worker.
 - Próximo trabalho: grupo 5 carrinho, criar `tests/e2e/cart.spec.ts` e cobrir add/update/remove, migração
@@ -196,11 +196,8 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 - Implementado `tests/e2e/cart.spec.ts`; focused E2E passou **6/6** (3 cenários em desktop e mobile,
   com um worker). Cobre estado vazio, add/PATCH/delete, quantidade e valores ETH, cupom KURIO10 com
   cálculo e remoção, `VERAO25` expirado, código inválido e migração de carrinho visitante após login.
-- O grupo está funcionalmente coberto; não houve alteração de produção. Arquivos do lote estão sem
-  commit: `tests/e2e/cart.spec.ts`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`,
-  `docs/superpowers/plans/2026-10-25-playwright-e2e.md` e este handoff.
-- Antes do commit separado `test: cover cart persistence and totals`, executar typecheck, lint e Vitest.
-  Depois registrar o hash aqui. Matriz atual prevista: Verificado 12, Implementado 61,
-  Em andamento 8, Pendente 28 (109 itens).
+- O grupo foi commitado em `8be3b9a test: cover cart persistence and totals`; typecheck passou, lint
+  sem erros/com 9 avisos conhecidos e Vitest 18/18. O focused E2E passou 6/6 com um worker.
+- Matriz atual: Verificado 12, Implementado 61, Em andamento 8, Pendente 28 (109 itens).
 - Próximo grupo a implementar: 6, checkout confirmado e recibo; grupos 3 e 6–12 ainda têm trabalho,
   assim como regressão visual, Lighthouse, documentação de arquitetura/README e validação final.
