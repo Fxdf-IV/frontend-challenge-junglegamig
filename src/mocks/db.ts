@@ -1,9 +1,10 @@
+// Banco de dados em memória do mock persistido em localStorage com suporte a reset determinístico.
 import type { Cart, CartItem, Nft, Order, ScenarioId, Wallet } from "@/api/types";
 import { buildNfts, SEED_USERS, SEED_WALLETS, type UserRecord } from "./fixtures";
 
 /**
- * Mock "server" state. Persisted to localStorage so refresh keeps state;
- * resetDb() restores the deterministic seed.
+ * Estado completo do servidor simulado. Persistido em localStorage para manter sessão e dados;
+ * resetDb() restaura os dados semente determinísticos da aplicação.
  */
 export interface DbState {
   seedVersion: number;

@@ -1,3 +1,4 @@
+// Testes unitários para cálculos de precisão decimal de ETH sem derivação de ponto flutuante.
 import { describe, expect, it } from "vitest";
 import { ethAdd, ethBps, ethMul, ethSub, formatEth, toWei, fromWei } from "./eth";
 

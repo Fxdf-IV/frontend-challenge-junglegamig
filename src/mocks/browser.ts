@@ -1,10 +1,11 @@
+// Inicialização do MSW no navegador: registra interceptores REST e WebSocket do Socket.IO.
 import { setupWorker } from "msw/browser";
 import { loadDb, db, save } from "./db";
 import { handlers, schedulePendingOrders } from "./handlers";
 import { socketHandler } from "./realtime";
 import type { ScenarioId } from "@/api/types";
 
-/** Starts MSW (REST + Socket.IO). Enabled by VITE_ENABLE_MOCKS (default on). */
+/** Inicia o Service Worker do MSW e interceptador Socket.IO com cenário determinístico. */
 export async function startMocks() {
   await loadDb();
   // ?scenario=<id> lets demos and tests select a deterministic scenario

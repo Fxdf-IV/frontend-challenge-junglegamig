@@ -1,3 +1,4 @@
+// Configuração do ambiente global de testes Vitest com polyfills para DOM e matchMedia.
 import "@testing-library/jest-dom/vitest";
 
 Object.defineProperty(window, "scrollTo", {
