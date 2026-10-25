@@ -27,7 +27,8 @@ em português brasileiro.
 - Browser controlado da ferramenta REA travou em capturas de login e perfil mesmo com estado mock
   mínimo. Uma tentativa de controle direto de Chrome foi rejeitada; não repetir esse método.
 - Uma captura anterior confirmou o rodapé e a oferta da home. A newsletter está alinhada no desktop.
-  Comentário #64 (cópia de texto/campanha) continua ambíguo: não inventar comportamento.
+  No #64, o sufixo “cultura” foi removido após comparar com o frame local; a ação de cópia citada
+  no comentário segue sem controle identificável. Não inventar esse comportamento.
 
 ## Repositório
 
@@ -45,6 +46,7 @@ em português brasileiro.
 ## Últimos commits conhecidos
 
 - `9347fa3 docs: record visual QA capture blocker`
+- `ed60376 docs: clean handoff commit list`
 - `d32144a fix: match campaign copy to Figma`
 - `292d8dd docs: save project handoff context`
 - `a00c72e docs: confirm footer alignment review`
