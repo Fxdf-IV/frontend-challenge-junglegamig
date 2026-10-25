@@ -14,7 +14,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
    (revalidação, duplo clique, timeout com idempotência).
 5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
 6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: grupos 1–7 verificados; grupo 3 parcial; faltam grupos 8–12 e regressão visual.
+7. Playwright: grupos 1–8 verificados; grupo 3 parcial; faltam grupos 9–12 e regressão visual.
 8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
 9. `README.md` e `ARCHITECTURE.md` completos.
 10. Formatar o código com Prettier para zerar o lint.
@@ -84,6 +84,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   bloqueio de clique duplo e recuperação do timeout com a mesma chave e corpo da requisição. Cupons
   inválidos/expirados já foram cobertos no grupo 5 pelo carrinho. Typecheck passou, lint sem erros
   (9 avisos conhecidos) e Vitest 18/18 passaram. Próximo lote: grupo 8 (perfil e carteiras).
+- Grupo 8 passou em `tests/e2e/profile-wallets.spec.ts`: **8/8** em desktop/mobile. Cobre limites e
+  persistência ENS/apelido, upload/salvamento/remoção do avatar, senha atual incorreta e atualização,
+  além de criação/edição das carteiras principal e secundária e validação de endereço Ethereum/Solana.
+  Os fluxos exercitados em 390 px não tiveram overflow horizontal. Typecheck passou, lint sem erros
+  (9 avisos conhecidos) e Vitest 18/18 passaram. Próximo lote: grupo 9 (Socket.IO no checkout).
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.

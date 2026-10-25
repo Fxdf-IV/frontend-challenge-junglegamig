@@ -90,8 +90,8 @@
 
 **Files:** `tests/e2e/profile-wallets.spec.ts`, progress and coverage docs.
 
-- [ ] Cover profile metadata limits, avatar/password actions, create/edit primary and secondary wallets, network/provider validation and 390 px usability.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover profile and wallet management`.
+- [x] Cover profile metadata limits, avatar/password actions, create/edit primary and secondary wallets, network/provider validation and 390 px usability; focused E2E passed 8/8 desktop/mobile.
+- [x] Pre-commit typecheck, lint (0 errors, 9 existing warnings) and Vitest (18/18) passed; commit `test: cover profile and wallet management` is next.
 
 ### Task 9: Checkout Socket.IO
 

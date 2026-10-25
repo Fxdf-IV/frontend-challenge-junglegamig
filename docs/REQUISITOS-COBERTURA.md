@@ -5,10 +5,10 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 (regras em `AGENTS.md`, seção 13).
 
 Legenda de leitura: "Implementado" significa que o código existe, mas o requisito ainda não tem prova
-automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–7 estão verificados;
+automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–8 estão verificados;
 o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 17 · Implementado 57 · Em andamento 8 · Pendente 27 (109 itens)
+**Resumo atual:** Verificado 20 · Implementado 55 · Em andamento 8 · Pendente 26 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -23,7 +23,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Tailwind CSS       | Implementado | `src/styles.css`                                            |
 | shadcn/ui          | Implementado | `src/components/ui` (adaptar aos tokens do Figma)           |
 | MSW                | Implementado | `src/mocks`                                                 |
-| Playwright         | Em andamento | Grupos 1–7 verificados; grupo 3 parcial; grupos 8–12 e regressão visual pendentes |
+| Playwright         | Em andamento | Grupos 1–8 verificados; grupo 3 parcial; grupos 9–12 e regressão visual pendentes |
 | Lighthouse         | Pendente     | Sem configuração nem relatórios                             |
 
 ## 3. Telas e fluxos
@@ -38,8 +38,8 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Confirmação de pedido                                   | Verificado   | `tests/e2e/checkout-success.spec.ts` (pedido confirmado e recibo após refresh) |
 | Login com retorno ao fluxo anterior                     | Verificado   | `tests/e2e/account.spec.ts` (login privado e refresh, desktop/mobile) |
 | Cadastro com conflito                                   | Verificado   | `tests/e2e/account.spec.ts` (conflito duplicado, desktop/mobile)   |
-| Perfil: dados, avatar, senha                            | Implementado | `routes/_authenticated.perfil.tsx`                                |
-| Carteiras principal e secundária                        | Implementado | `routes/_authenticated.carteiras.tsx`                             |
+| Perfil: dados, avatar, senha                            | Verificado   | `tests/e2e/profile-wallets.spec.ts` (metadados, avatar, senha)    |
+| Carteiras principal e secundária                        | Verificado   | `tests/e2e/profile-wallets.spec.ts` (criar, editar, validar)      |
 | Desktop e mobile fiéis ao Figma                         | Em andamento | `docs/FIGMA-DEVIATIONS.md`; falta acesso aos pins/frame por frame |
 | Perfil, carteiras e confirmação em mobile               | Em andamento | Sem frame no Figma; revisar em 390 px                             |
 | Ações fora do escopo não aparentam sucesso              | Em andamento | `components/ComingSoon.tsx`; revisar links do header e footer     |
@@ -162,7 +162,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 5. Carrinho, quantidades, remoção, cupom, persistência                  | Verificado (`tests/e2e/cart.spec.ts`; 6/6, desktop/mobile) |
 | 6. Compra completa até o recibo                                         | Verificado (`tests/e2e/checkout-success.spec.ts`; 2/2, desktop/mobile) |
 | 7. Falha de pagamento, clique repetido, timeout e idempotência          | Verificado (`tests/e2e/checkout-failures.spec.ts`; 10/10, desktop/mobile) |
-| 8. Perfil, avatar, senha e carteiras com erros                          | Pendente |
+| 8. Perfil, avatar, senha e carteiras com erros                          | Verificado (`tests/e2e/profile-wallets.spec.ts`; 8/8, desktop/mobile) |
 | 9. Preço/disponibilidade via Socket.IO no checkout                      | Pendente |
 | 10. Eventos duplicados/antigos, desconexão, retomada                    | Pendente |
 | 11. Teclado, foco de dialogs, validação                                 | Pendente |
