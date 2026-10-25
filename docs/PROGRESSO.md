@@ -51,6 +51,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   as regras são compartilhadas entre cliente e endpoint e cobertas por teste unitário.
 - Alinhado o perfil desktop com o frame, integrando os campos ENS e apelido, o sufixo `.eth` e as
   ações de avatar/senha sem remover os dados de bio já editáveis.
+- Limitados os campos de metadados do perfil a 63 caracteres para ENS e 40 para o apelido da
+  carteira, com regressão unitária para valores acima do limite.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra

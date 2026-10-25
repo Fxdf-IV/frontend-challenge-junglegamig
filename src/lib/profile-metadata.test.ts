@@ -21,6 +21,15 @@ describe("validateProfileMetadata", () => {
     expect(validateProfileMetadata({})).toEqual({});
   });
 
+  it("rejects metadata values longer than their supported limits", () => {
+    expect(
+      validateProfileMetadata({ ensName: "a".repeat(64), walletNickname: "a".repeat(41) }),
+    ).toEqual({
+      ensName: "Informe seu nome ENS",
+      walletNickname: "Informe o apelido da carteira",
+    });
+  });
+
   it("provides metadata in the collector demo profile", () => {
     expect(SEED_USERS[0]).toMatchObject({ ensName: "ana", walletNickname: "Ana principal" });
   });

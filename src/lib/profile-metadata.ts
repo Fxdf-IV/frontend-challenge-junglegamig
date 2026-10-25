@@ -13,8 +13,9 @@ export function validateProfileMetadata(value: Partial<ProfileMetadata>) {
   const walletNickname =
     typeof value.walletNickname === "string" ? value.walletNickname.trim() : undefined;
 
-  if (value.ensName !== undefined && !ensName) errors.ensName = "Informe seu nome ENS";
-  if (value.walletNickname !== undefined && !walletNickname)
+  if (value.ensName !== undefined && (!ensName || ensName.length > 63))
+    errors.ensName = "Informe seu nome ENS";
+  if (value.walletNickname !== undefined && (!walletNickname || walletNickname.length > 40))
     errors.walletNickname = "Informe o apelido da carteira";
 
   return errors;
