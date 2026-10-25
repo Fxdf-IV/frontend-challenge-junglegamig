@@ -132,6 +132,9 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   principais e comparação visual em desktop e mobile. A suíte Playwright completa rodou de ponta a
   ponta e passou com **88 aprovados, 2 skips mobile intencionais e 0 falhas**; `bun run build` também
   compilou em 316 ms sem aviso de chunk > 500 kB.
+- Extraídas as regras puras de cupom/cotação (`src/lib/coupon.ts`) e de deduplicação/versão de eventos
+  Socket.IO (`src/lib/event-guard.ts`), com testes unitários dedicados (`src/lib/coupon.test.ts` e
+  `src/lib/event-guard.test.ts`), elevando a suíte Vitest para 9 arquivos e 24 testes.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
@@ -202,3 +205,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `a81ae5b` | Testes E2E de skeletons, falha e recuperação     | Cobrir `.shimmer` com `prefers-reduced-motion`, recuperação de 500, expiração de sessão preservando rascunho e isolamento de contas |
 | 25/10/2026 | `79f198c` | Liquidação `order-timeout` e gatilho mobile MSW  | Aguardar retomada idempotente antes de liquidar o pedido em timeout e evitar sobreposição da barra de compra mobile em `/nft/$id`    |
 | 25/10/2026 | `99043ab` | Baselines PNG de regressão visual                | Versionar capturas de referência para início, detalhe, carrinho e pagamento em desktop (1440×1000) e mobile (390×844)                |
+| 25/10/2026 | `08e91dc` | Regressão visual e verificação responsiva E2E    | Validar ausência de overflow horizontal (390/768/1440 px), baselines visuais e suíte E2E completa (88 aprovados, 2 skips)             |

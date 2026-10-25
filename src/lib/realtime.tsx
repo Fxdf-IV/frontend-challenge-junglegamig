@@ -12,6 +12,7 @@ import type {
   OrderUpdatedEvent,
 } from "@/api/types";
 import { tokenStore } from "@/api/client";
+import { createEventGuard } from "./event-guard";
 import { useSession } from "./session";
 
 type Status = "connecting" | "connected" | "disconnected";
@@ -35,16 +36,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
   const [announce, setAnnounce] = useState("");
 
   useEffect(() => {
-    const seen = new Set<string>();
-    const versions = new Map<string, number>();
-    const fresh = (e: { eventId: string; resourceId: string; version: number; type: string }) => {
-      if (seen.has(e.eventId)) return false;
-      seen.add(e.eventId);
-      const k = `${e.type}:${e.resourceId}`;
-      if ((versions.get(k) ?? 0) >= e.version) return false;
-      versions.set(k, e.version);
-      return true;
-    };
+    const fresh = createEventGuard();
 
     let cancelled = false;
     let cleanupSocket: (() => void) | undefined;

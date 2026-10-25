@@ -15,7 +15,8 @@ import type {
   User,
   Wallet,
 } from "@/api/types";
-import { ethAdd, ethBps, ethCmp, ethMul, ethSub } from "@/lib/eth";
+import { ethAdd, ethCmp, ethMul } from "@/lib/eth";
+import { calculateQuoteTotals, resolveCoupon } from "@/lib/coupon";
 import { validateProfileMetadata } from "@/lib/profile-metadata";
 import {
   COLLECTION_LABELS,
@@ -152,20 +153,15 @@ async function buildQuote(
     };
   });
   const subtotal = lines.length ? ethAdd(...lines.map((l) => l.lineTotal)) : "0";
-  let coupon: Quote["coupon"];
-  if (couponCode) {
-    const c = COUPONS[couponCode.trim().toUpperCase()];
-    if (!c)
-      return err(422, "COUPON_INVALID", "Cupom inválido", { fields: { coupon: "Cupom inválido" } });
-    if (c.expired)
-      return err(422, "COUPON_EXPIRED", "Este cupom expirou", {
-        fields: { coupon: "Este cupom expirou" },
-      });
-    coupon = { code: couponCode.trim().toUpperCase(), bps: c.bps, label: c.label };
+  const couponRes = resolveCoupon(couponCode, COUPONS);
+  if (!couponRes.ok) {
+    return err(422, couponRes.code, couponRes.message, {
+      fields: { coupon: couponRes.message },
+    });
   }
-  const discount = coupon ? ethBps(subtotal, coupon.bps) : "0";
+  const coupon = couponRes.coupon;
   const networkFee = lines.length ? NETWORK_FEES[network] : "0";
-  const total = ethAdd(ethSub(subtotal, discount), networkFee);
+  const { discount, total } = calculateQuoteTotals(subtotal, coupon?.bps, networkFee);
   const fingerprint = JSON.stringify({
     lines: lines.map((l) => [l.nftId, l.edition, l.quantity, l.unitPrice]),
     coupon: coupon?.code,
