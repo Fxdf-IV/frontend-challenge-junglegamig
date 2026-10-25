@@ -44,17 +44,18 @@ em português brasileiro.
 
 ## Últimos commits conhecidos
 
-`a00c72e docs: confirm footer alignment review`  
-`d32144a fix: match campaign copy to Figma`  
-`292d8dd docs: save project handoff context`  
-`3557e90 docs: record Figma audit verification`  
-`9ef5da3 docs: clarify mobile checkout design scope`  
-`478538f fix: enforce profile metadata limits`  
-`d5d167e fix: align collector profile with Figma`  
-`62ec27d feat: store ens and wallet profile metadata`  
-`7c48660 fix: fit mobile auth content to Figma`  
-`7b224af docs: add Figma deviation logs and progress tracking documentation`  
-`ba5b003 fix: match auth forms to Figma`
+- `9347fa3 docs: record visual QA capture blocker`
+- `d32144a fix: match campaign copy to Figma`
+- `292d8dd docs: save project handoff context`
+- `a00c72e docs: confirm footer alignment review`
+- `3557e90 docs: record Figma audit verification`
+- `9ef5da3 docs: clarify mobile checkout design scope`
+- `478538f fix: enforce profile metadata limits`
+- `d5d167e fix: align collector profile with Figma`
+- `62ec27d feat: store ens and wallet profile metadata`
+- `7c48660 fix: fit mobile auth content to Figma`
+- `7b224af docs: add Figma deviation logs and progress tracking documentation`
+- `ba5b003 fix: match auth forms to Figma`
 
 Na retomada de 25/10, `git status --short` estava limpo antes da criação desta nota. Confirmar o
 estado atual antes de editar ou commitar.
