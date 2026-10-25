@@ -1,3 +1,5 @@
+// Provedor de contexto de autenticação de sessão do usuário no marketplace.
+// Coordena token JWT, unificação de carrinho convidado após login, expiração e logout.
 import {
   createContext,
   useCallback,
@@ -25,6 +27,7 @@ interface SessionCtx {
 }
 const Ctx = createContext<SessionCtx | null>(null);
 
+/** Provedor de estado de sessão global da aplicação. */
 export function SessionProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -101,6 +104,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
+/** Hook para consumir a sessão atual, usuário autenticado e ações de login/logout. */
 export function useSession() {
   const c = useContext(Ctx);
   if (!c) throw new Error("useSession outside SessionProvider");

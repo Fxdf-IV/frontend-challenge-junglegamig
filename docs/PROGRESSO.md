@@ -19,6 +19,10 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote lib/eth, storage, redirect e session):**
+  - Adicionados comentários de topo em pt-BR e JSDocs em `src/lib/eth.ts`, `src/lib/checkout-storage.ts`, `src/lib/redirect.ts` e `src/lib/session.tsx` conforme diretrizes de `AGENTS.md` (seção 12).
+- **Documentação e Código Comentado (Lote mocks e runtime):**
+  - Adicionados comentários de topo em pt-BR e JSDoc em `src/mocks/browser.ts`, `src/mocks/db.ts`, `src/router.tsx`, `src/start.ts`, `src/test/setup.ts`, `src/lib/eth.test.ts` e `src/components/AccountNav.tsx`.
 - **Documentação e Código Comentado (Lote api/lib):**
   - Adicionados comentários de topo em pt-BR e JSDoc em `src/api/endpoints.ts`, `src/api/queries.ts`, `src/lib/cart.ts`, `src/lib/catalog-search.ts`, `src/lib/error-page.ts`, `src/lib/favorites.ts`, `src/lib/labels.ts`, `src/lib/utils.ts` e `src/hooks/use-mobile.tsx`.
   - Configurado `eslint.config.js` para ignorar o binário gerado do MSW e autorizar exportação legítima de variantes/hooks em shadcn/ui e contextos, zerando todos os avisos de lint (0 erros e 0 avisos).
