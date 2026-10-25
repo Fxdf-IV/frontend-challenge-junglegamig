@@ -14,6 +14,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Exibição unificada da edição do NFT no carrinho desktop e mobile (`src/routes/carrinho.tsx`):**
+  - Removida a ocultação de `Edição {it.edition}` no viewport desktop (`md:hidden`), permitindo a visualização clara da numeração de edição junto ao ID do token tanto no desktop quanto no mobile.
+  - Validação completa com passagem de 100% dos testes E2E (`nft-detail.spec.ts` e suíte completa de 90 testes do Playwright: 88 passaram, 2 skips intencionais em mobile).
+
+- **Unificação completa na branch principal `main` e remoção de worktrees temporárias:**
+  - Todas as implementações, testes e mocks foram consolidados diretamente na branch `main`.
+  - Passagem garantida de 100% dos checks de qualidade: `bun run typecheck` (0 erros), `bun run lint` (0 erros), `bun run test` (10 arquivos, 27 testes unitários), `bun run build` e `bun run test:e2e` (90 testes E2E).
+
 - **Unificação da lista de itens e exibição de edição e token ID no carrinho (`src/routes/carrinho.tsx`):**
   - Consolidada a listagem de itens do carrinho em uma única grade responsiva sem duplicação de nós no DOM, mantendo a fidelidade visual aos cards do Figma em mobile e desktop.
   - Exibido o identificador da edição e o token ID em ambas as resoluções (`Edição {edition} · ID: {tokenId}`), atendendo às asserções do Playwright em `nft-detail.spec.ts`.
