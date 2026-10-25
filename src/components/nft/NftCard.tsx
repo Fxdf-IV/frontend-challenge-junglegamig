@@ -1,7 +1,9 @@
+// Cartão de exibição resumida de NFT com imagem, preço em ETH e indicador de estoque.
 import { Link } from "@tanstack/react-router";
 import type { Nft } from "@/api/types";
 import { formatEth } from "@/lib/eth";
 
+/** Cartão de NFT com navegação para a rota de detalhe e suporte a prioridade de imagem. */
 export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   const soldOut = nft.editions.every((e) => e.available === 0);
   return (
@@ -45,6 +47,7 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   );
 }
 
+/** Esqueleto de carregamento com shimmer nas mesmas proporções do cartão. */
 export function NftCardSkeleton() {
   return (
     <div aria-hidden>

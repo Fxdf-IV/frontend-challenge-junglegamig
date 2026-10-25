@@ -1,10 +1,12 @@
+// Componente de campo de formulário com rótulo, dicas e tratamento acessível de erros via ARIA.
 import { useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+/** Classes base de estilização para campos de entrada de texto. */
 export const inputClass =
   "h-10 w-full rounded-md border border-input bg-card px-3 text-sm placeholder:text-muted-foreground aria-[invalid=true]:border-destructive";
 
-/** Labelled input with associated error/hint (aria-describedby). */
+/** Campo com label, suporte a ícone/conteúdo embutido e associação de erro via aria-describedby. */
 export function Field({
   label,
   error,
@@ -50,6 +52,7 @@ export function Field({
   );
 }
 
+/** Caixa de alerta para mensagens de erro gerais de formulário com role="alert". */
 export function FormError({ message }: { message?: string }) {
   if (!message) return null;
   return (

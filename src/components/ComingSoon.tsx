@@ -1,6 +1,7 @@
+// Componente placeholder para seções fora do escopo funcional com indicação explícita.
 import { Link } from "@tanstack/react-router";
 
-/** Out-of-scope sections: explicit, never pretending to work. */
+/** Seções fora do escopo da demonstração com mensagem informativa e retorno ao mercado. */
 export function ComingSoon({ title }: { title: string }) {
   return (
     <section className="container-page grid min-h-[50vh] place-items-center py-16 text-center">

@@ -19,6 +19,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote componentes base de layout e formulários):**
+  - Adicionados comentários de topo em pt-BR e JSDocs em `src/components/layout/Footer.tsx`, `src/components/nft/NftCard.tsx`, `src/components/ComingSoon.tsx` e `src/components/Field.tsx` seguindo as diretrizes de `AGENTS.md` (seção 12).
 - **Documentação e Código Comentado (Lote lib/eth, storage, redirect e session):**
   - Adicionados comentários de topo em pt-BR e JSDocs em `src/lib/eth.ts`, `src/lib/checkout-storage.ts`, `src/lib/redirect.ts` e `src/lib/session.tsx` conforme diretrizes de `AGENTS.md` (seção 12).
 - **Documentação e Código Comentado (Lote mocks e runtime):**
