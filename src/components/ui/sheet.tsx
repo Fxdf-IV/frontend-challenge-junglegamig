@@ -1,3 +1,4 @@
+// Painel lateral deslizante Sheet (shadcn/ui baseado em Radix UI Dialog) adaptado para menus mobile do Figma.
 "use client";
 
 import * as React from "react";

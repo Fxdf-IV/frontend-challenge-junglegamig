@@ -1,3 +1,4 @@
+// Painel de controle para alternar cenários determinísticos do MSW, simular eventos Socket.IO e restaurar o banco local.
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FlaskConical } from "lucide-react";
@@ -33,18 +34,23 @@ const SCENARIOS: Array<[ScenarioId, string]> = [
   ["payment-declined", "Pagamento recusado"],
 ];
 
-/** Demo control panel. Every action goes through MSW REST handlers; events reach the app via socket.io-client. */
+/** Painel de demonstração que aciona handlers REST do MSW e eventos via socket.io-client. */
 export function MockPanel() {
   const qc = useQueryClient();
   const cart = useCart();
   const { status } = useRealtime();
   const [scenario, setScenario] = useState<string>("default");
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     api.mock
       .scenario()
       .then((r) => setScenario(r.scenario))
       .catch(() => {});
   }, []);
+
+  if (!mounted) return null;
 
   const change = async (s: string) => {
     await api.mock.setScenario(s);
@@ -60,7 +66,7 @@ export function MockPanel() {
         <Button
           variant="secondary"
           size="sm"
-          className="fixed bottom-16 left-3 z-40 md:bottom-4"
+          className="fixed bottom-28 right-3 z-40 md:bottom-4 md:left-3 md:right-auto"
           aria-label="Abrir painel de cenários de simulação"
         >
           <FlaskConical /> Cenários

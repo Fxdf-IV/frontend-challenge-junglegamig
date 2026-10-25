@@ -1,6 +1,8 @@
+// Rota editorial informativa "/aprenda" com indicação explícita de conteúdo em desenvolvimento.
 import { createFileRoute } from "@tanstack/react-router";
 import { ComingSoon } from "@/components/ComingSoon";
 
+/** Definição da rota "/aprenda" com metadados de cabeçalho. */
 export const Route = createFileRoute("/aprenda")({
   head: () => ({
     meta: [

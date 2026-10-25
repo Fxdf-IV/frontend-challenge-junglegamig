@@ -1,3 +1,4 @@
+// Endpoints REST do cliente HTTP: cataloga rotas de NFTs, autenticação, carrinho, checkout e mocks.
 import { call, http } from "./client";
 import type {
   Cart,
@@ -13,6 +14,7 @@ import type {
   Wallet,
 } from "./types";
 
+/** Coleção de métodos tipados para consumo de todos os recursos da API REST do marketplace. */
 export const api = {
   listNfts: (p: NftListParams, signal?: AbortSignal) => {
     const sp = new URLSearchParams();

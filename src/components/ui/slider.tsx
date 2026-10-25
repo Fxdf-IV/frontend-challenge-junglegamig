@@ -1,3 +1,4 @@
+// Controle deslizante Slider (shadcn/ui baseado em Radix UI) adaptado para faixas de valores e cores do Figma.
 import * as React from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
 

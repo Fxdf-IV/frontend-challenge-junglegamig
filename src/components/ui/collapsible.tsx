@@ -1,3 +1,4 @@
+// Primitiva Collapsible (shadcn/ui baseada em Radix UI) para seções recolhíveis conforme padrões do Figma.
 "use client";
 
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";

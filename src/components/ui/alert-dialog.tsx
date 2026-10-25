@@ -1,3 +1,4 @@
+// Diálogo de confirmação modal AlertDialog (shadcn/ui) adaptado para os tokens de overlay e foco do Figma.
 import * as React from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 

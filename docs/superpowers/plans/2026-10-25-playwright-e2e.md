@@ -30,101 +30,107 @@
 
 ### Task 1: Playwright foundation and home smoke tests
 
-**Files:** `package.json`, `bun.lock`, `playwright.config.ts`, `tests/e2e/home.spec.ts`, `docs/PROGRESSO.md`.
+**Files:** `package.json`, `bun.lock`, `.gitignore`, `playwright.config.ts`, `tests/e2e/home.spec.ts`, `README.md`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`.
 
-- [ ] Add `@playwright/test` as a dev dependency and scripts `test:e2e` and `test:e2e:ui`.
-- [ ] Configure Chromium desktop (1440×1000) and mobile (390×844), isolated contexts, HTML report, trace on retry, and a Vite web server on port 4174.
-- [ ] Add smoke tests asserting the home heading, catalog content and campaign section on both projects; fail on uncaught page errors.
-- [ ] Run the two home tests and all required pre-commit checks.
-- [ ] Commit as `test: add Playwright home smoke coverage`.
+- [x] Add `@playwright/test` as a dev dependency and scripts `test:e2e` and `test:e2e:ui`.
+- [x] Configure Chromium desktop (1440×1000) and mobile (390×844), isolated contexts, HTML report, trace on retry, and a Vite web server on port 4174.
+- [x] Add smoke tests asserting the home heading, catalog content and campaign section on both projects; fail on uncaught page errors.
+- [x] Run the two home tests and all required pre-commit checks; Chrome desktop/mobile passed. `typecheck` and Vitest passed; lint passed when rerun serially after a parallel E2E run briefly created/removed its ignored output directory.
+- [x] Commit as `test: add Playwright home smoke coverage` (`2a30fb6`).
 
 ### Task 2: Catalog and history
 
 **Files:** `tests/e2e/catalog.spec.ts`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`.
 
-- [ ] Cover search, combinable filters, sort, pagination, query-string history/back, empty results and delayed/out-of-order responses.
-- [ ] Verify URL and rendered result set after each operation.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover catalog navigation and history`.
+- [x] Cover search, combinable filters, sort, pagination, query-string history/back, empty results and delayed/out-of-order responses.
+- [x] Verify URL and rendered result set after each operation.
+- [x] Run focused E2E and pre-commit checks; full E2E passed with 11 passed / 1 intentionally skipped, Vitest 18/18, typecheck clean, lint 0 errors / 9 existing warnings.
+- [x] Commit `test: cover catalog navigation and history` (`ace6105`).
 
 ### Task 3: NFT detail and not-found
 
 **Files:** `tests/e2e/nft-detail.spec.ts`, progress and coverage docs.
 
-- [ ] Cover direct access, gallery, edition selection, quantity limits, favorite toggle, add-to-cart and 404.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover NFT detail and not-found states`.
+- [x] Cover direct access, gallery, edition selection, quantity limits, favorite redirect, add-to-cart and 404.
+- [x] Run focused E2E and pre-commit checks; full suite passed with 19 passed / 1 skipped, Vitest 18/18, typecheck clean, lint 0 errors / 9 warnings.
+- [x] Commit `test: cover NFT detail and not-found states` (`e73eae2`).
 
 ### Task 4: Account and session
 
 **Files:** `tests/e2e/account.spec.ts`, progress and coverage docs.
 
-- [ ] Cover registration, duplicate account, login, preserved redirect, refresh, expiry and logout/cache cleanup.
-- [ ] Verify private data remains isolated between Ana and Bruno.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover account and session flows`.
+- [x] Cover registration, duplicate account, login, preserved redirect, refresh and invalid-token cleanup. Clock expiry and private-cache isolation still need stronger assertions.
+- [x] Verify session switch between Ana and Bruno on desktop; mobile skips because its current navigation has no logout action.
+- [x] Focused E2E: 11 passed, 1 intentional mobile skip. Pre-commit `typecheck`, lint (0 errors/9 warnings) and Vitest (18/18) passed; committed as `b14649d test: cover account and session flows`.
 
 ### Task 5: Favorites and cart
 
-**Files:** `tests/e2e/favorites-cart.spec.ts`, progress and coverage docs.
+**Files:** `tests/e2e/favorites.spec.ts`, `tests/e2e/cart.spec.ts`, progress and coverage docs.
 
-- [ ] Cover favorite persistence, optimistic rollback on `favorite-fail`, empty state, add/update/remove cart, guest migration, coupon and totals.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover favorites and cart flows`.
+- [x] Group 4: cover visitor CTA, empty state, favorite persistence across refresh, optimistic rollback on `favorite-fail`, and successful retry. Focused E2E passed 8/8 across desktop/mobile.
+- [x] Commit favorites separately from cart as `5e00e02 test: cover favorites with failure recovery`.
+- [x] Group 5: cover empty/add/update/remove cart, guest migration, coupon apply/remove/errors and totals in `cart.spec.ts`; focused E2E passed 6/6 across desktop/mobile.
+- [x] Run pre-commit checks and commit separately as `8be3b9a test: cover cart persistence and totals`.
 
 ### Task 6: Successful checkout
 
 **Files:** `tests/e2e/checkout-success.spec.ts`, progress and coverage docs.
 
-- [ ] Cover collector form, saved wallet, simulated connection, quote/review, confirmed order and receipt snapshot.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover successful checkout flow`.
+- [x] Cover collector form, saved wallet, simulated connection, quote/review, confirmed order and receipt refresh in `checkout-success.spec.ts`; focused E2E passed 2/2 across desktop/mobile.
+- [x] Pre-commit checks passed; commit `135c951 test: cover successful checkout flow`.
 
 ### Task 7: Checkout failures and idempotency
 
 **Files:** `tests/e2e/checkout-failures.spec.ts`, progress and coverage docs.
 
-- [ ] Cover declined payment, stale price, sold-out edition, invalid/expired coupon, timeout recovery, double-click blocking and same-key retry.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover checkout failures and idempotency`.
+- [x] Cover declined payment, stale price, sold-out edition, timeout recovery, double-click blocking and same-key retry; invalid/expired coupons were already covered in Task 5.
+- [x] Focused E2E passed 10/10 across desktop/mobile; typecheck, lint (0 errors, 9 existing warnings) and Vitest (18/18) passed. Commit `2ecbec7 test: cover checkout failures and idempotency`.
 
 ### Task 8: Profile and wallets
 
 **Files:** `tests/e2e/profile-wallets.spec.ts`, progress and coverage docs.
 
-- [ ] Cover profile metadata limits, avatar/password actions, create/edit primary and secondary wallets, network/provider validation and 390 px usability.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover profile and wallet management`.
+- [x] Cover profile metadata limits, avatar/password actions, create/edit primary and secondary wallets, network/provider validation and 390 px usability; focused E2E passed 8/8 desktop/mobile.
+- [x] Pre-commit typecheck, lint (0 errors, 9 existing warnings) and Vitest (18/18) passed; committed as `971c250 test: cover profile and wallet management`.
 
 ### Task 9: Checkout Socket.IO
 
 **Files:** `tests/e2e/checkout-realtime.spec.ts`, progress and coverage docs.
 
-- [ ] Verify a pending checkout updates through the Socket.IO client and receipt; test disconnect/reconnect and REST reconciliation.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover checkout realtime reconciliation`.
+- [x] Verify a pending checkout updates through the Socket.IO client and receipt; test live price/availability change in checkout review, disconnect/reconnect and REST reconciliation. Focused E2E passed 6/6 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover checkout realtime reconciliation`.
 
 ### Task 10: Event versioning
 
 **Files:** `tests/e2e/event-versioning.spec.ts`, progress and coverage docs.
 
-- [ ] Verify duplicate and older `nft.updated` / `order.updated` events are ignored and newer versions reconcile.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover event deduplication and versions`.
+- [x] Verify duplicate and older `nft.updated` / `order.updated` events are ignored, newer versions reconcile, pending order resumes after disconnect without duplicate purchase, and receipt snapshot stays immutable. Focused E2E passed 4/4 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover event deduplication and versions`.
 
 ### Task 11: Keyboard and focus
 
-**Files:** `tests/e2e/accessibility.spec.ts`, progress and coverage docs.
+**Files:** `tests/e2e/accessibility.spec.ts`, `src/routes/_authenticated.checkout.tsx`, progress and coverage docs.
 
-- [ ] Cover keyboard navigation, visible focus, dialog focus trap/restore, labels, inline errors and live announcements.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover keyboard and focus behavior`.
+- [x] Cover keyboard navigation, visible focus, dialog focus trap/restore, labels, inline errors and live announcements; focused E2E passed 4/4 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover keyboard and focus behavior`.
 
 ### Task 12: Skeletons and recovery
 
-**Files:** `tests/e2e/loading-recovery.spec.ts`, progress and coverage docs.
+**Files:** `tests/e2e/loading-recovery.spec.ts`, `src/routes/_authenticated.checkout.tsx`, progress and coverage docs.
 
-- [ ] Cover loading placeholders, failed requests, retry, session recovery and reduced-motion behavior.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover loading and recovery states`.
+- [x] Cover loading placeholders, reduced-motion behavior, failed requests, retry, session recovery preserving checkout draft, and private data isolation between users; focused E2E passed 6/6 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover loading and recovery states`.
 
 ### Task 13: Visual regression and final suite
 
 **Files:** `playwright.config.ts`, `tests/e2e/visual.spec.ts`, `tests/e2e/*.spec.ts`, progress and coverage docs.
 
-- [ ] Add stable desktop/mobile baselines for home, detail, cart and checkout using fixed mock data and fonts.
-- [ ] Run the full E2E suite, typecheck, lint, unit tests and production build; document any baseline/environment limitations.
-- [ ] Commit `test: add responsive visual regression coverage`.
+- [x] Add stable desktop/mobile baselines for home, detail, cart and checkout using fixed mock data and fonts (`99043ab`).
+- [x] Run the full E2E suite (88 passed, 2 intentional mobile skips), typecheck, lint, unit tests (18/18) and production build; verify zero horizontal overflow at 390, 768 and 1440 px.
+- [x] Commit `test: add responsive visual regression coverage`.
 
 ## Coverage notes
 
 Only update matrix rows to `Verificado` after their named E2E assertion passes. This plan does not cover Lighthouse, full code comments, missing architecture documentation or deployment; those remain separate workstreams in `docs/PROGRESSO.md`.
+
+Ruling: test sorting only on desktop because the supplied mobile frame does not expose a sort control — this avoids driving an invisible control — risk if wrong: mobile sorting remains untested and unavailable to users.

@@ -1,3 +1,4 @@
+// Componente Card (shadcn/ui) adaptado com bordas, preenchimentos bg-card e raio de arredondamento do Figma.
 import * as React from "react";
 
 import { cn } from "@/lib/utils";

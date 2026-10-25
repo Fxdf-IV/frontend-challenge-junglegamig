@@ -75,6 +75,7 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
 vi.mock("@/api/endpoints", () => ({
   api: {
     quote: mocks.quote,
+    listNfts: vi.fn().mockResolvedValue({ items: [], total: 0 }),
   },
 }));
 

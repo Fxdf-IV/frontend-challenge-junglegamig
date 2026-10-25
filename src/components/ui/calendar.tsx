@@ -1,3 +1,4 @@
+// Componente Calendar (shadcn/ui baseado em react-day-picker) adaptado com as cores e cantos arredondados do Figma.
 "use client";
 
 import * as React from "react";

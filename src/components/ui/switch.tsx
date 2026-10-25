@@ -1,3 +1,4 @@
+// Alternador Switch (shadcn/ui baseado em Radix UI) adaptado com estados ativo/inativo e foco do Figma.
 import * as React from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
 

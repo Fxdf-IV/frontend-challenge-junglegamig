@@ -1,3 +1,4 @@
+// Rodapé principal da aplicação com destaques institucionais, newsletter simulada, links de navegação e redes sociais.
 import { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ const FEATURES = [
   },
 ];
 
+/** Rodapé global com formulário informativo de newsletter e links do marketplace. */
 export function Footer() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");

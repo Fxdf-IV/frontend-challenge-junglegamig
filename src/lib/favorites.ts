@@ -1,9 +1,11 @@
+// Hooks para consulta e mutação otimista de favoritos com rollback automático em falhas.
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { api } from "@/api/endpoints";
 import { qk } from "@/api/queries";
 import { useSession } from "./session";
 
+/** Retorna a lista de IDs de NFTs favoritados pelo usuário ativo. */
 export function useFavorites() {
   const { user } = useSession();
   return useQuery({
@@ -14,7 +16,7 @@ export function useFavorites() {
   });
 }
 
-/** Optimistic toggle with rollback on failure. */
+/** Alternância otimista de favorito com reversão de estado local caso a API falhe. */
 export function useToggleFavorite() {
   const qc = useQueryClient();
   const { user } = useSession();

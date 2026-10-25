@@ -1,3 +1,4 @@
+// Primitivas de gráficos Chart (shadcn/ui baseadas em Recharts) adaptadas aos tokens de paleta e tooltips do Figma.
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
 

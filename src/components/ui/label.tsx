@@ -1,3 +1,4 @@
+// Rótulo Label (shadcn/ui baseado em Radix UI) adaptado para a hierarquia tipográfica e peso do Figma.
 "use client";
 
 import * as React from "react";

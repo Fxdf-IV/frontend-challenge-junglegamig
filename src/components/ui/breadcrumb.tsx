@@ -1,3 +1,4 @@
+// Componente Breadcrumb (shadcn/ui) adaptado para navegação estrutural e tokens de texto do Figma.
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";

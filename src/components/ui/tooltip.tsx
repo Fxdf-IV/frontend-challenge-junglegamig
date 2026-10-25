@@ -1,3 +1,4 @@
+// Dica flutuante Tooltip (shadcn/ui baseada em Radix UI) adaptada aos tokens de contraste e tipografia do Figma.
 "use client";
 
 import * as React from "react";

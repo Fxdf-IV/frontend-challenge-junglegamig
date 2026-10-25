@@ -1,8 +1,10 @@
+// Configuração do roteador TanStack Router com TanStack Query integrado e política de retries.
 import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import type { ApiError } from "./api/client";
 
+/** Cria e retorna a instância do roteador com cache, restauração de rolagem e query client. */
 export const getRouter = () => {
   const queryClient = new QueryClient({
     defaultOptions: {

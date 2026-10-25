@@ -10,17 +10,21 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, useState, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { ensureMocksReady } from "@/api/client";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "@/lib/session";
 import { RealtimeProvider } from "@/lib/realtime";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { MockPanel } from "@/components/MockPanel";
 import { AuthBackdrop } from "@/components/layout/AuthBackdrop";
 import { cn } from "@/lib/utils";
+
+const LazyMockPanel = lazy(() =>
+  import("@/components/MockPanel").then((m) => ({ default: m.MockPanel })),
+);
 
 /** Apresenta uma saída simples quando a URL não corresponde a uma rota. */
 function NotFoundComponent() {
@@ -114,19 +118,11 @@ const MOCKS = import.meta.env.VITE_ENABLE_MOCKS !== "false";
 // O painel de cenários só aparece quando solicitado para não cobrir o design.
 const SHOW_MOCK_PANEL = import.meta.env.VITE_SHOW_MOCK_PANEL === "true";
 
-/** Aguarda o worker de mocks antes de exibir telas que dependem da API. */
+/** Dispara a inicialização do worker de mocks sem bloquear o SSR da casca e do hero. */
 function MocksGate({ children }: { children: ReactNode }) {
-  const [ready, setReady] = useState(!MOCKS);
   useEffect(() => {
-    if (!MOCKS) return;
-    import("@/mocks/browser").then((m) => m.startMocks()).then(() => setReady(true));
+    void ensureMocksReady();
   }, []);
-  if (!ready)
-    return (
-      <div className="container-page py-10" aria-busy="true" aria-label="Carregando">
-        <div className="shimmer h-80 rounded-lg" />
-      </div>
-    );
   return <>{children}</>;
 }
 
@@ -155,7 +151,11 @@ function RootComponent() {
             <div className={cn(hideFooterOnMobile && "max-md:hidden")}>
               <Footer />
             </div>
-            {MOCKS && SHOW_MOCK_PANEL && <MockPanel />}
+            {MOCKS && SHOW_MOCK_PANEL && (
+              <Suspense fallback={null}>
+                <LazyMockPanel />
+              </Suspense>
+            )}
             <Toaster position="top-center" richColors closeButton />
           </RealtimeProvider>
         </SessionProvider>

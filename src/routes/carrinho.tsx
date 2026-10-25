@@ -5,8 +5,10 @@ import { useEffect, useState, type FormEvent } from "react";
 import { AlertTriangle, ArrowLeft, ArrowRight, Minus, Plus } from "lucide-react";
 import { api } from "@/api/endpoints";
 import { toApiError, type ApiError } from "@/api/client";
+import { nftListQuery } from "@/api/queries";
 import { Button } from "@/components/ui/button";
 import { TrashFigmaIcon } from "@/components/icons/TrashFigmaIcon";
+import { NftCard } from "@/components/nft/NftCard";
 import { useCart, useCartMutations } from "@/lib/cart";
 import { useSession } from "@/lib/session";
 import { ethMul, formatEth, formatEthSmart } from "@/lib/eth";
@@ -62,6 +64,11 @@ function CartPage() {
     staleTime: 5_000,
     placeholderData: (p) => p,
   });
+
+  const suggestions = useQuery(nftListQuery({ page: 1, pageSize: 12 }));
+  const cartIds = items.map((i) => i.nftId);
+  const suggestedItems =
+    suggestions.data?.items.filter((nft) => !cartIds.includes(nft.id)).slice(0, 5) ?? [];
 
   // Se um cupom salvo anteriormente na sessão falhar ao abrir o carrinho, preserva o erro e volta à cotação sem cupom.
   useEffect(() => {
@@ -361,6 +368,32 @@ function CartPage() {
           )}
         </aside>
       </div>
+
+      {suggestedItems.length > 0 && (
+        <section aria-labelledby="also-viewed-title" className="mt-16 md:mt-24">
+          <h2
+            id="also-viewed-title"
+            className="border-b border-border pb-2 text-sm font-bold font-mono text-primary"
+          >
+            Colecionadores também viram
+          </h2>
+          <ul
+            aria-label="Colecionadores também viram"
+            className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5"
+          >
+            {suggestedItems.map((nft) => (
+              <li key={nft.id}>
+                <NftCard nft={nft} />
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex justify-center gap-2" aria-hidden="true">
+            <span className="size-2 rounded-full border border-primary/60 bg-transparent" />
+            <span className="size-2 rounded-full bg-primary" />
+            <span className="size-2 rounded-full border border-primary/60 bg-transparent" />
+          </div>
+        </section>
+      )}
     </div>
   );
 }

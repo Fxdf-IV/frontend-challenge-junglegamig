@@ -1,3 +1,4 @@
+// Componente de paginação Pagination (shadcn/ui) adaptado para controle numérico e botões do Figma.
 import * as React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
 

@@ -1,12 +1,12 @@
-// Componente de campo de entrada com rótulo acessível, hint e indicação de erro.
+// Componente de campo de formulário com rótulo acessível, asterisco em destaque e ARIA de erro.
 import { useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/** Estilo compartilhado de campos de entrada do sistema. */
+/** Classes base de estilização para campos de entrada de texto. */
 export const inputClass =
   "h-10 w-full rounded-md border border-input bg-card px-3 text-sm placeholder:text-muted-foreground aria-[invalid=true]:border-destructive focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
 
-/** Campo de formulário acessível com associação de rótulo e mensagens de erro via aria-describedby. */
+/** Campo com label, suporte a ícone/conteúdo embutido e associação de erro via aria-describedby. */
 export function Field({
   label,
   error,
@@ -75,7 +75,7 @@ export function Field({
   );
 }
 
-/** Exibe alerta com erro geral de submissão do formulário. */
+/** Caixa de alerta para mensagens de erro gerais de formulário com role="alert". */
 export function FormError({ message }: { message?: string }) {
   if (!message) return null;
   return (

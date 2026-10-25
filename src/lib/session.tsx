@@ -1,4 +1,5 @@
-// Provedor e hook de sessão: gerencia usuário autenticado, expiração de token e fusão do carrinho visitante.
+// Provedor de contexto de autenticação de sessão do usuário no marketplace.
+// Coordena token JWT, unificação de carrinho convidado após login, expiração e logout.
 import {
   createContext,
   useCallback,
@@ -27,7 +28,7 @@ interface SessionCtx {
 }
 const Ctx = createContext<SessionCtx | null>(null);
 
-/** Mantém o estado de autenticação e limpa caches privados ao sair ou expirar a sessão. */
+/** Provedor de estado de sessão global da aplicação. */
 export function SessionProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-/** Retorna o contexto de sessão do usuário autenticado. */
+/** Hook para consumir a sessão atual, usuário autenticado e ações de login/logout. */
 export function useSession() {
   const c = useContext(Ctx);
   if (!c) throw new Error("useSession outside SessionProvider");

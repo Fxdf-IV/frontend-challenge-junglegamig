@@ -1,3 +1,4 @@
+// Menu flutuante DropdownMenu (shadcn/ui) adaptado para os tokens de painel e seleção do Figma.
 "use client";
 
 import * as React from "react";

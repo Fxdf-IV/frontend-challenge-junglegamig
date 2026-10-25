@@ -1,3 +1,4 @@
+// Notificações flutuantes Toaster (shadcn/ui baseado em Sonner) adaptadas para os temas e alertas do Figma.
 import { Toaster as Sonner } from "sonner";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;

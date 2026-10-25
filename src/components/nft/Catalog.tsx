@@ -203,7 +203,7 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
             >
               <Grid>
                 {data.items.map((n, i) => (
-                  <NftCard key={n.id} nft={n} priority={i < 3} />
+                  <NftCard key={n.id} nft={n} priority={from === "/mercado" && i === 0} />
                 ))}
               </Grid>
               {query.isError && (

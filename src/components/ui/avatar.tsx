@@ -1,3 +1,4 @@
+// Componente Avatar (shadcn/ui) com imagem e fallback adaptado para os tokens de borda e tamanho do Figma.
 "use client";
 
 import * as React from "react";

@@ -1,3 +1,4 @@
+// Entrada de código numérico InputOTP (shadcn/ui baseada em input-otp) adaptada para os slots de digitação do Figma.
 import * as React from "react";
 import { OTPInput, OTPInputContext } from "input-otp";
 import { Minus } from "lucide-react";

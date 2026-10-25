@@ -1,3 +1,4 @@
+// Painéis redimensionáveis Resizable (shadcn/ui baseado em react-resizable-panels) adaptados para divisórias do Figma.
 import { GripVertical } from "lucide-react";
 import { Group, Panel, Separator } from "react-resizable-panels";
 

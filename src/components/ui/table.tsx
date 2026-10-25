@@ -1,3 +1,4 @@
+// Tabela semântica Table (shadcn/ui) adaptada para listagens tabulares e linhas zebradas do Figma.
 import * as React from "react";
 
 import { cn } from "@/lib/utils";

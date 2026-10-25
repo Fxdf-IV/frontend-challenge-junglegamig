@@ -58,12 +58,22 @@ function Checkout() {
     queryFn: api.wallets,
     select: (d) => d.items,
   });
-  const [draft, setDraft] = useState({
-    name: user!.displayName,
-    email: user!.email,
-    note: "",
-    walletId: "",
-    network: "ethereum" as Network,
+  const [draft, setDraft] = useState(() => {
+    const base = {
+      name: user!.displayName,
+      email: user!.email,
+      note: "",
+      walletId: "",
+      network: "ethereum" as Network,
+    };
+    if (typeof window === "undefined") return base;
+    const raw = sessionStorage.getItem(DRAFT_KEY);
+    if (!raw) return base;
+    try {
+      return { ...base, ...(JSON.parse(raw) as Partial<typeof base>) };
+    } catch {
+      return base;
+    }
   });
   const [coupon, setCoupon] = useState<string | undefined>();
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -75,18 +85,12 @@ function Checkout() {
   const [changed, setChanged] = useState<string | null>(null);
   const [pending, setPending] = useState<string | null>(null);
   const inflight = useRef(false);
+  const connectBtnRef = useRef<HTMLButtonElement>(null);
+  const reviewBtnRef = useRef<HTMLButtonElement>(null);
 
-  // Restaura rascunho (expiração de sessão / refresh) e pedido pendente com proteção contra JSON inválido.
+  // Restaura cupom e pedido pendente na montagem; o rascunho já inicia do sessionStorage
+  // para que o StrictMode não sobrescreva o storage com estado vazio no primeiro efeito.
   useEffect(() => {
-    const raw = sessionStorage.getItem(DRAFT_KEY);
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw) as Partial<typeof draft>;
-        setDraft((d) => ({ ...d, ...parsed }));
-      } catch {
-        sessionStorage.removeItem(DRAFT_KEY);
-      }
-    }
     setCoupon(sessionStorage.getItem(COUPON_KEY) ?? undefined);
     setPending(localStorage.getItem(PENDING_ORDER_KEY));
   }, []);
@@ -409,6 +413,7 @@ function Checkout() {
                   </>
                 ) : (
                   <Button
+                    ref={connectBtnRef}
                     type="button"
                     variant="line"
                     className="w-full"
@@ -463,6 +468,7 @@ function Checkout() {
             </p>
           ))}
           <Button
+            ref={reviewBtnRef}
             variant="brand"
             className="mt-5 w-full max-md:fixed max-md:inset-x-4 max-md:bottom-4 max-md:z-40 max-md:mt-0 max-md:w-[calc(100%-2rem)]"
             disabled={!q || !!q.issues.length || quote.isFetching}
@@ -481,7 +487,16 @@ function Checkout() {
           }
         }}
       >
-        <DialogContent>
+        <DialogContent
+          onCloseAutoFocus={(e) => {
+            // O botão fica desabilitado enquanto `conn === "connecting"`, perdendo o foco ativo;
+            // devolvemos o foco explicitamente ao gatilho quando o modal controlado fecha sem aprovar.
+            if (connectBtnRef.current) {
+              e.preventDefault();
+              connectBtnRef.current.focus();
+            }
+          }}
+        >
           <DialogHeader>
             <DialogTitle>
               {wallet ? PROVIDER_LABELS[wallet.provider] : "Carteira"} (simulação)
@@ -517,7 +532,16 @@ function Checkout() {
       </Dialog>
 
       <Dialog open={review} onOpenChange={(o) => !submitting && setReview(o)}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogContent
+          className="max-h-[90vh] overflow-y-auto"
+          onCloseAutoFocus={(e) => {
+            // Restaura o foco ao botão "Revisar pedido" ao fechar o diálogo controlado de revisão.
+            if (reviewBtnRef.current) {
+              e.preventDefault();
+              reviewBtnRef.current.focus();
+            }
+          }}
+        >
           <DialogHeader>
             <DialogTitle>Revise seu pedido</DialogTitle>
             <DialogDescription>

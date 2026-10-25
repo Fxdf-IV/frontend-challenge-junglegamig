@@ -1,3 +1,4 @@
+// Grupo de alternadores ToggleGroup (shadcn/ui baseado em Radix UI) adaptado para seleções em grupo do Figma.
 "use client";
 
 import * as React from "react";

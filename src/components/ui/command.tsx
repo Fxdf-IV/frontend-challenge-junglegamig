@@ -1,3 +1,4 @@
+// Componente Command (shadcn/ui baseado em cmdk) adaptado para paleta de busca e modais do Figma.
 "use client";
 
 import * as React from "react";

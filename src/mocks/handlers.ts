@@ -15,7 +15,8 @@ import type {
   User,
   Wallet,
 } from "@/api/types";
-import { ethAdd, ethBps, ethCmp, ethMul, ethSub } from "@/lib/eth";
+import { ethAdd, ethCmp, ethMul } from "@/lib/eth";
+import { calculateQuoteTotals, resolveCoupon } from "@/lib/coupon";
 import { validateProfileMetadata } from "@/lib/profile-metadata";
 import {
   COLLECTION_LABELS,
@@ -53,7 +54,7 @@ function withScenario<P extends Record<string, string>, B extends DefaultBodyTyp
     const sc = s.scenario;
     if (sc === "slow") await delay(1800);
     else if (sc === "jitter") await delay(100 + ((n * 7919) % 1400));
-    else await delay(120 + ((n * 31) % 180));
+    else await delay(4);
     if (sc === "offline") return HttpResponse.error();
     if (sc === "flaky" && n % 3 === 0)
       return err(503, "UNAVAILABLE", "Serviço temporariamente indisponível");
@@ -152,20 +153,15 @@ async function buildQuote(
     };
   });
   const subtotal = lines.length ? ethAdd(...lines.map((l) => l.lineTotal)) : "0";
-  let coupon: Quote["coupon"];
-  if (couponCode) {
-    const c = COUPONS[couponCode.trim().toUpperCase()];
-    if (!c)
-      return err(422, "COUPON_INVALID", "Cupom inválido", { fields: { coupon: "Cupom inválido" } });
-    if (c.expired)
-      return err(422, "COUPON_EXPIRED", "Este cupom expirou", {
-        fields: { coupon: "Este cupom expirou" },
-      });
-    coupon = { code: couponCode.trim().toUpperCase(), bps: c.bps, label: c.label };
+  const couponRes = resolveCoupon(couponCode, COUPONS);
+  if (!couponRes.ok) {
+    return err(422, couponRes.code, couponRes.message, {
+      fields: { coupon: couponRes.message },
+    });
   }
-  const discount = coupon ? ethBps(subtotal, coupon.bps) : "0";
+  const coupon = couponRes.coupon;
   const networkFee = lines.length ? NETWORK_FEES[network] : "0";
-  const total = ethAdd(ethSub(subtotal, discount), networkFee);
+  const { discount, total } = calculateQuoteTotals(subtotal, coupon?.bps, networkFee);
   const fingerprint = JSON.stringify({
     lines: lines.map((l) => [l.nftId, l.edition, l.quantity, l.unitPrice]),
     coupon: coupon?.code,
@@ -620,7 +616,13 @@ export const handlers = [
               "IDEMPOTENCY_CONFLICT",
               "Chave de idempotência reutilizada com outro conteúdo",
             );
-          return HttpResponse.json(publicOrder(s.orders[prior.orderId]), { status: 200 });
+          const existing = s.orders[prior.orderId];
+          if (existing && existing.status === "pending") {
+            existing.resolveAt = Date.now() + 1500;
+            save();
+            setTimeout(() => resolveOrder(existing.id), 1510);
+          }
+          return HttpResponse.json(publicOrder(existing), { status: 200 });
         }
         const fields: Record<string, string> = {};
         if (!body.collector?.name || body.collector.name.trim().length < 2)
@@ -659,6 +661,8 @@ export const handlers = [
             quote,
           });
         }
+        const isTimeout = s.scenario === "order-timeout";
+        const resolveDelay = isTimeout ? 15000 : 2500;
         const now = new Date().toISOString();
         const order: DbOrder = {
           id: `ord_${crypto.randomUUID().slice(0, 8)}`,
@@ -676,14 +680,14 @@ export const handlers = [
           wallet: { label: wallet!.label, address: wallet!.address, provider: wallet!.provider },
           collector: body.collector,
           userId: a.userId,
-          resolveAt: Date.now() + 2500,
+          resolveAt: Date.now() + resolveDelay,
           outcome: s.scenario === "payment-declined" ? "declined" : "confirmed",
         };
         s.orders[order.id] = order;
         s.idempotency[key] = { userId: a.userId, hash, orderId: order.id };
         save();
-        setTimeout(() => resolveOrder(order.id), 2510);
-        if (s.scenario === "order-timeout") await delay(12000); // client times out; order exists
+        setTimeout(() => resolveOrder(order.id), resolveDelay + 10);
+        if (isTimeout) await delay(12000); // client times out; order exists
         return HttpResponse.json(publicOrder(order), { status: 201 });
       },
       { kind: "write" },

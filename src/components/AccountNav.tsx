@@ -1,4 +1,4 @@
-// Navegação lateral da área autenticada do usuário (Meu perfil).
+// Navegação lateral da área autenticada do usuário (Meu perfil) alinhada aos frames do Figma.
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   AlertTriangle,

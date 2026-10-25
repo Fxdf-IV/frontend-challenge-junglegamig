@@ -1,4 +1,4 @@
-// Componente de botão reutilizável adaptado aos tokens do Figma, incluindo variant="explore".
+// Componente Button (shadcn/ui) adaptado aos tokens do Figma, incluindo variantes brand, line e explore.
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";

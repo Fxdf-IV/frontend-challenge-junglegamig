@@ -1,3 +1,4 @@
+// Separador visual Separator (shadcn/ui baseado em Radix UI) adaptado com as bordas e cores do Figma.
 import * as React from "react";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 

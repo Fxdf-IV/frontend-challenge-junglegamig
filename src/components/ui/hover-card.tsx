@@ -1,3 +1,4 @@
+// Cartão suspenso HoverCard (shadcn/ui baseado em Radix UI) adaptado aos tokens de sombras e superfícies do Figma.
 import * as React from "react";
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
 

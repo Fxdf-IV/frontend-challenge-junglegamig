@@ -76,7 +76,7 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   );
 }
 
-/** Exibe esqueleto do card durante o carregamento do catálogo. */
+/** Esqueleto de carregamento com shimmer nas mesmas proporções do cartão. */
 export function NftCardSkeleton() {
   return (
     <div aria-hidden>
