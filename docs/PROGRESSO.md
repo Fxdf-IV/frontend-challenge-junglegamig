@@ -14,6 +14,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Substituição das letras W, C e D por ícones temáticos nos cards do rodapé (`src/components/layout/Footer.tsx`, FD-35):**
+  - Atendido o comentário #17 do Figma e solicitação do usuário substituindo as letras placeholder 'W', 'C' e 'D' por ícones vetoriais de alto padrão visual:
+    - **Segurança da carteira:** `ShieldCheck` (ícone de escudo com verificação, representando segurança e proteção da carteira).
+    - **Criadores em destaque:** `Palette` (ícone de paleta artística, representando arte digital e criadores da rede).
+    - **Alertas de lançamentos:** `Bell` (ícone de sino, representando notificações e calendários de cunhagem).
+  - Preservados os círculos originais do Figma (`size-14 rounded-full bg-primary text-primary-foreground`) com traço refinado `strokeWidth={2.2}`.
+  - Testes unitários (32/32) e suíte visual do Playwright (4/4) revalidados com 100% de sucesso.
+
 - **Remoção de tags de raridade dos cards de NFT para fidelidade 100% ao Figma (`src/components/nft/NftCard.tsx`, FD-34):**
   - Removidas as abas triangulares de raridade ("RARO", "ÉPICO", "LENDÁRIO") que ficavam sobrepostas no canto superior esquerdo da imagem dos cards de NFT.
   - Como validado com o usuário, tais tags não fazem parte de nenhum requisito do enunciado (`REQUISITOS.md`) e não existem no Figma.

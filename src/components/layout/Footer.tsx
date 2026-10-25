@@ -2,22 +2,36 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
+import {
+  Bell,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Palette,
+  ShieldCheck,
+  Twitter,
+  Youtube,
+  type LucideIcon,
+} from "lucide-react";
 
-/** Destaques institucionais das três colunas superiores do rodapé. */
-const FEATURES = [
+/** Destaques institucionais das três colunas superiores do rodapé com ícones temáticos ilustrativos (FD-35 / Comentário Figma #17). */
+const FEATURES: {
+  icon: LucideIcon;
+  t: string;
+  d: string;
+}[] = [
   {
-    l: "W",
+    icon: ShieldCheck,
     t: "Segurança da carteira",
     d: "Proteja sua carteira e colecione arte digital verificada com confiança.",
   },
   {
-    l: "C",
+    icon: Palette,
     t: "Criadores em destaque",
     d: "Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.",
   },
   {
-    l: "D",
+    icon: Bell,
     t: "Alertas de lançamentos",
     d: "Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.",
   },
@@ -56,18 +70,21 @@ export function Footer() {
     <footer className="container-page mt-20 pb-24 md:pb-10">
       {/* Bloco superior: 3 cards institucionais e formulário de newsletter */}
       <div className="grid gap-8 rounded-t-lg bg-card p-6 md:grid-cols-4 md:p-8">
-        {FEATURES.map((f) => (
-          <div key={f.l} className="md:border-r md:border-primary/50 md:pr-6">
-            <div
-              aria-hidden
-              className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-primary text-xl font-bold text-primary-foreground"
-            >
-              {f.l}
+        {FEATURES.map((f) => {
+          const Icon = f.icon;
+          return (
+            <div key={f.t} className="md:border-r md:border-primary/50 md:pr-6">
+              <div
+                aria-hidden="true"
+                className="mb-4 grid size-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-sm"
+              >
+                <Icon className="size-6 text-primary-foreground" strokeWidth={2.2} />
+              </div>
+              <h2 className="mb-2 text-sm font-bold">{f.t}</h2>
+              <p className="text-xs leading-relaxed text-muted-foreground">{f.d}</p>
             </div>
-            <h2 className="mb-2 text-sm font-bold">{f.t}</h2>
-            <p className="text-xs leading-relaxed text-muted-foreground">{f.d}</p>
-          </div>
-        ))}
+          );
+        })}
         <form onSubmit={submit} noValidate>
           <h2 className="mb-3 text-sm font-bold">Antecipe-se ao próximo lançamento</h2>
           <div className="flex">

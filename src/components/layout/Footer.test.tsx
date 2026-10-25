@@ -62,6 +62,11 @@ describe("Footer", () => {
     expect(screen.getByText("METAMASK")).toBeInTheDocument();
     expect(screen.getByText("WALLETCONNECT")).toBeInTheDocument();
     expect(screen.getByText("COINBASE")).toBeInTheDocument();
+
+    // Cards institucionais superiores com ícones temáticos
+    expect(screen.getByRole("heading", { name: "Segurança da carteira" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Criadores em destaque" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Alertas de lançamentos" })).toBeInTheDocument();
   });
 
   it("informa adequadamente ao usuário quando itens fora do escopo são acionados", () => {
