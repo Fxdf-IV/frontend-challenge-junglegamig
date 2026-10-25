@@ -283,3 +283,13 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   3. Expiração de sessão durante o checkout redirecionando para `/login?redirect=%2Fcheckout&expired=true`, aviso `role="status"`, retorno ao `/checkout` com rascunho preservado (corrigida inicialização preguiçosa de `draft` em `src/routes/_authenticated.checkout.tsx` para não perder o `sessionStorage` no `StrictMode`) e isolamento completo de carteiras, favoritos e carrinho ao alternar para a conta de Bruno.
 - Todos os 12 grupos funcionais do Playwright estão agora verificados! Matriz atualizada: Verificado 50, Implementado 32, Em andamento 6, Pendente 21 (109 itens).
 - Próximo passo imediato: Task 13 (`tests/e2e/visual.spec.ts` — baselines de regressão visual em desktop e mobile para início, detalhe, carrinho e pagamento, além de verificação de overflow horizontal em 390, 768 e 1440 px).
+
+## Estado consolidado mais recente — Task 13 e suíte E2E completa concluídas (25/10/2026)
+
+- `tests/e2e/visual.spec.ts` criado e validado:
+  1. Ausência de overflow horizontal (`scrollWidth <= clientWidth`) em `390`, `768` e `1440` px para `/`, `/nft/golden-beat-207`, `/carrinho`, `/checkout`, `/perfil` e `/carteiras`.
+  2. Regressão visual estável (`home.png`, `nft-detail.png`, `cart.png`, `checkout.png`) em `desktop-chromium` (1440×1000) e `mobile-chromium` (390×844), com snapshots versionados em `tests/e2e/visual.spec.ts-snapshots/` (`99043ab`).
+- Corrigidos em `79f198c`: liquidação do cenário `order-timeout` em `src/mocks/handlers.ts` (evitando emissão prematura de `order.updated` aos 2,5 s antes do timeout HTTP de 8 s do cliente) e posição mobile do botão `Cenários` em `src/components/MockPanel.tsx` (`bottom-28 right-3` para não cobrir o controle de quantidade em `/nft/$id`).
+- Suíte Playwright completa (`bun run test:e2e`, 90 testes em 13 arquivos): **88 aprovados, 2 skips mobile intencionais, 0 falhas**. `bun run build` também passou sem avisos de chunk > 500 kB.
+- Matriz atualizada: Verificado 93, Implementado 0, Em andamento 3, Pendente 13 (109 itens).
+- Próximos lotes: testes unitários Vitest adicionais (cupom e versão de evento), fontes locais (`public/fonts/`), comentários de código e limpeza de avisos de lint, `README.md` + `ARCHITECTURE.md` e auditoria Lighthouse.

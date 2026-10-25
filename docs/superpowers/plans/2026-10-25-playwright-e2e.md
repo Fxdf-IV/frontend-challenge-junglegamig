@@ -125,9 +125,9 @@
 
 **Files:** `playwright.config.ts`, `tests/e2e/visual.spec.ts`, `tests/e2e/*.spec.ts`, progress and coverage docs.
 
-- [ ] Add stable desktop/mobile baselines for home, detail, cart and checkout using fixed mock data and fonts.
-- [ ] Run the full E2E suite, typecheck, lint, unit tests and production build; document any baseline/environment limitations.
-- [ ] Commit `test: add responsive visual regression coverage`.
+- [x] Add stable desktop/mobile baselines for home, detail, cart and checkout using fixed mock data and fonts (`99043ab`).
+- [x] Run the full E2E suite (88 passed, 2 intentional mobile skips), typecheck, lint, unit tests (18/18) and production build; verify zero horizontal overflow at 390, 768 and 1440 px.
+- [x] Commit `test: add responsive visual regression coverage`.
 
 ## Coverage notes
 

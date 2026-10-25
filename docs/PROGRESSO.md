@@ -12,13 +12,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 3. Auditar contratos e cenários dos mocks contra o enunciado; completar o painel de dev e o reset.
 4. Revisar tempo real (deduplicação, versão, reconexão, reconciliação) e o checkout
    (revalidação, duplo clique, timeout com idempotência).
-5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
-6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: grupos 1–12 verificados; falta regressão visual (Task 13).
-8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
-9. `README.md` e `ARCHITECTURE.md` completos.
-10. Formatar o código com Prettier para zerar o lint.
-11. Configuração de deploy (fallback de SPA) e publicação.
+5. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
+6. Testes unitários adicionais (Vitest) para regras puras de cupom/cotação e versão de evento.
+7. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
+8. `README.md` e `ARCHITECTURE.md` completos.
+9. Comentar todo o código (`AGENTS.md`, seção 12), pasta por pasta, em commits separados, e zerar avisos de lint.
+10. Configuração de deploy (fallback de SPA) e publicação.
 
 ### Bloqueios e decisões do usuário
 
@@ -128,6 +127,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 - Geradas e validadas as baselines de regressão visual (`home`, `nft-detail`, `cart` e `checkout`) em
   `tests/e2e/visual.spec.ts-snapshots/` para `desktop-chromium` (1440×1000) e `mobile-chromium`
   (390×844).
+- Task 13 concluída com `tests/e2e/visual.spec.ts` e `playwright.config.ts` (`workers: 1`,
+  `fullyParallel: false`): verificação de zero overflow horizontal em 390, 768 e 1440 px nas 6 rotas
+  principais e comparação visual em desktop e mobile. A suíte Playwright completa rodou de ponta a
+  ponta e passou com **88 aprovados, 2 skips mobile intencionais e 0 falhas**; `bun run build` também
+  compilou em 316 ms sem aviso de chunk > 500 kB.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
@@ -197,3 +201,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `7820f86` | Testes E2E de teclado, foco e validação acessível| Cobrir salto de conteúdo, focus trap/restauração em dialogs e atributos ARIA em desktop e mobile                                    |
 | 25/10/2026 | `a81ae5b` | Testes E2E de skeletons, falha e recuperação     | Cobrir `.shimmer` com `prefers-reduced-motion`, recuperação de 500, expiração de sessão preservando rascunho e isolamento de contas |
 | 25/10/2026 | `79f198c` | Liquidação `order-timeout` e gatilho mobile MSW  | Aguardar retomada idempotente antes de liquidar o pedido em timeout e evitar sobreposição da barra de compra mobile em `/nft/$id`    |
+| 25/10/2026 | `99043ab` | Baselines PNG de regressão visual                | Versionar capturas de referência para início, detalhe, carrinho e pagamento em desktop (1440×1000) e mobile (390×844)                |
