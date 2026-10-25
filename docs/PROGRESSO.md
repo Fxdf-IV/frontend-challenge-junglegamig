@@ -30,6 +30,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Alinhado o carrinho mobile ao Figma (FD-19): criado ícone vetorial `TrashFigmaIcon` com tampa reta, alça em arco e sem ranhuras internas em cor primária, reorganizada a linha de itens mobile com stepper e exclusão alinhados, input de cupom em pílula integrado com botão 'Aplicar' interno, cópia corrigida ('Desconto do lançamento', 'Taxa estimada') e botão full-width de checkout arredondado em pílula (`carrinho.tsx`).
 - Atualizada a tipografia global para Roboto Mono com carregamento 100% local (`@fontsource/roboto-mono`), alinhando ao design do Figma e eliminando requisições externas ao Google Fonts em `styles.css` e `__root.tsx` (FD-18). Adicionado utilitário `bg-hero-circles` para os anéis de gradiente do hero mobile.
 - Alinhado o modal de autenticação (`AuthShell.tsx`, `AuthForms.tsx`, `login.tsx`) ao frame do Figma
   (FD-17): cabeçalho inline `Entrar | Criar conta` com divisor vertical, barra laranja inferior no
@@ -101,9 +102,9 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 24/10/2026 | `4e37686` | `AGENTS.md` com as regras de trabalho            | Padronizar prioridades, stack, estado, testes e commits                                                                                 |
 | 24/10/2026 | `de58a37` | Correção de 3 erros de tipo e script `typecheck` | `onUnhandledRequest` virou `onUnhandledFrame` no MSW 3; unsubscribe devia retornar `void`; handler de favoritos sem retorno consistente |
 | 25/10/2026 | `292d8dd` | Nota de retomada com contexto da auditoria       | Preservar fontes, decisões, limitações, testes e próximos passos entre sessões                                                          |
-| 25/10/2026 | `d32144a` | Copy da campanha da home alinhada ao frame       | Remover “cultura”, ausente no frame visível; ação de cópia segue sem especificação                                                     |
-| 25/10/2026 | `9347fa3` | Bloqueio da captura visual documentado          | Captura simples no navegador controlado também travou; evitar alegar verificação visual inexistente                                    |
-| 25/10/2026 | `ed60376` | Lista de commits na nota de retomada formatada   | Corrigir whitespace em Markdown e ordenar a lista do mais recente para o mais antigo                                                   |
-| 25/10/2026 | `13d301d` | Diário e nota de retomada atualizados            | Registrar lotes da retomada e deixar explícita a referência ao histórico Git                                                           |
+| 25/10/2026 | `d32144a` | Copy da campanha da home alinhada ao frame       | Remover “cultura”, ausente no frame visível; ação de cópia segue sem especificação                                                      |
+| 25/10/2026 | `9347fa3` | Bloqueio da captura visual documentado           | Captura simples no navegador controlado também travou; evitar alegar verificação visual inexistente                                     |
+| 25/10/2026 | `ed60376` | Lista de commits na nota de retomada formatada   | Corrigir whitespace em Markdown e ordenar a lista do mais recente para o mais antigo                                                    |
+| 25/10/2026 | `13d301d` | Diário e nota de retomada atualizados            | Registrar lotes da retomada e deixar explícita a referência ao histórico Git                                                            |
 | 25/10/2026 | `c96ef6f` | Correção de crash de navegação e fluxo de compra | Corrigir bypass de navegação no MSW, regex de Socket.IO, validação de cupom no carrinho e chaves React duplicadas                       |
-| 25/10/2026 | `d30eb00` | Organização dos testes unitários do carrinho     | Mover teste do carrinho para `src/test/` para isolar da árvore de rotas do TanStack Router                                             |
+| 25/10/2026 | `d30eb00` | Organização dos testes unitários do carrinho     | Mover teste do carrinho para `src/test/` para isolar da árvore de rotas do TanStack Router                                              |

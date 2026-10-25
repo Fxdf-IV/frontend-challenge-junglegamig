@@ -2,14 +2,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
-import { AlertTriangle, ArrowLeft, Minus, Plus, Trash2 } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Minus, Plus } from "lucide-react";
 import { api } from "@/api/endpoints";
 import { toApiError, type ApiError } from "@/api/client";
 import { Button } from "@/components/ui/button";
+import { TrashFigmaIcon } from "@/components/icons/TrashFigmaIcon";
 import { useCart, useCartMutations } from "@/lib/cart";
 import { useSession } from "@/lib/session";
 import { ethMul, formatEth, formatEthSmart } from "@/lib/eth";
-import { inputClass } from "@/components/Field";
 import { NETWORK_LABELS } from "@/lib/labels";
 import { cn } from "@/lib/utils";
 
@@ -160,83 +160,70 @@ function CartPage() {
                 return (
                   <li
                     key={`${it.nftId}-${it.edition}`}
-                    className="relative grid grid-cols-1 gap-3 p-3 md:grid-cols-[1fr_6rem_8rem_6rem_2rem] md:items-center md:p-4"
+                    className="relative grid grid-cols-[auto_1fr_auto] items-center gap-3 p-3 md:grid-cols-[1fr_6rem_8rem_6rem_2rem] md:p-4"
                     aria-busy={busy}
                   >
-                    <div className="flex items-center gap-3 md:col-span-1">
-                      <img
-                        src={it.image}
-                        alt=""
-                        width={96}
-                        height={96}
-                        className="h-24 w-24 rounded-md object-cover md:h-14 md:w-14"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className="pr-7 md:pr-0">
-                          <Link
-                            to="/nft/$id"
-                            params={{ id: it.nftId }}
-                            search={{ edition: it.edition }}
-                            className="block truncate text-sm font-semibold hover:text-primary"
-                          >
-                            {it.name}
-                          </Link>
-                          <p className="text-[11px] text-muted-foreground">
-                            Edição {it.edition}
-                            <span className="hidden md:inline">
-                              {` · ${NETWORK_LABELS[it.network]} · ${it.available} disp.`}
-                            </span>
-                          </p>
-                          {it.notice && (
-                            <p
-                              role="status"
-                              className="mt-1 flex items-center gap-1 text-[11px] text-primary"
-                            >
-                              <AlertTriangle className="h-3 w-3" aria-hidden /> {it.notice}
-                            </p>
-                          )}
-                        </div>
-                        <div className="mt-2 flex items-center justify-between gap-2 md:hidden">
-                          <p className="text-sm font-bold text-primary">
-                            {formatEth(it.unitPrice)}
-                          </p>
-                          <QuantityControl
-                            name={it.name}
-                            quantity={it.quantity}
-                            limit={limit}
-                            busy={busy}
-                            onChange={(quantity) =>
-                              update.mutate({ nftId: it.nftId, edition: it.edition, quantity })
-                            }
-                          />
-                        </div>
+                    <img
+                      src={it.image}
+                      alt=""
+                      width={96}
+                      height={96}
+                      className="h-20 w-20 rounded-xl object-cover md:h-14 md:w-14"
+                    />
+                    <div className="min-w-0 pr-2">
+                      <Link
+                        to="/nft/$id"
+                        params={{ id: it.nftId }}
+                        search={{ edition: it.edition }}
+                        className="block truncate text-sm font-semibold hover:text-primary"
+                      >
+                        {it.name}
+                      </Link>
+                      <p className="text-[11px] text-muted-foreground">
+                        Edição {it.edition}
+                        <span className="hidden md:inline">
+                          {` · ${NETWORK_LABELS[it.network]} · ${it.available} disp.`}
+                        </span>
+                      </p>
+                      {it.notice && (
+                        <p
+                          role="status"
+                          className="mt-1 flex items-center gap-1 text-[11px] text-primary"
+                        >
+                          <AlertTriangle className="h-3 w-3" aria-hidden /> {it.notice}
+                        </p>
+                      )}
+                      <p className="mt-1 text-sm font-bold text-primary md:hidden">
+                        {formatEth(it.unitPrice)}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 md:contents">
+                      <p className="hidden text-sm md:block">{formatEth(it.unitPrice)}</p>
+                      <div className="flex items-center gap-2">
+                        <QuantityControl
+                          name={it.name}
+                          quantity={it.quantity}
+                          limit={limit}
+                          busy={busy}
+                          onChange={(quantity) =>
+                            update.mutate({ nftId: it.nftId, edition: it.edition, quantity })
+                          }
+                        />
                       </div>
+                      <p className="hidden text-sm font-bold text-primary md:block">
+                        {formatEthSmart(ethMul(it.unitPrice, it.quantity))}
+                      </p>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-primary hover:text-primary/80 hover:bg-primary/10"
+                        aria-label={`Remover ${it.name}`}
+                        disabled={busy}
+                        onClick={() => remove.mutate({ nftId: it.nftId, edition: it.edition })}
+                      >
+                        <TrashFigmaIcon className="h-5 w-5" />
+                      </Button>
                     </div>
-                    <p className="hidden text-sm md:block">{formatEth(it.unitPrice)}</p>
-                    <div className="hidden md:block">
-                      <QuantityControl
-                        name={it.name}
-                        quantity={it.quantity}
-                        limit={limit}
-                        busy={busy}
-                        onChange={(quantity) =>
-                          update.mutate({ nftId: it.nftId, edition: it.edition, quantity })
-                        }
-                      />
-                    </div>
-                    <p className="hidden text-sm font-bold text-primary md:block">
-                      {formatEthSmart(ethMul(it.unitPrice, it.quantity))}
-                    </p>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-2 top-2 md:static"
-                      aria-label={`Remover ${it.name}`}
-                      disabled={busy}
-                      onClick={() => remove.mutate({ nftId: it.nftId, edition: it.edition })}
-                    >
-                      <Trash2 />
-                    </Button>
                   </li>
                 );
               })}
@@ -247,19 +234,19 @@ function CartPage() {
         <aside
           aria-labelledby="summary-title"
           className={cn(
-            "h-fit rounded-lg bg-card p-5",
+            "h-fit rounded-2xl bg-card p-5 border border-border/50",
             items.length > 0 &&
-              "max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:max-h-[55vh] max-md:overflow-y-auto max-md:rounded-t-2xl max-md:border max-md:border-border max-md:pb-[max(1rem,env(safe-area-inset-bottom))]",
+              "max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:max-h-[60vh] max-md:overflow-y-auto max-md:rounded-t-3xl max-md:border-t max-md:border-border max-md:pb-[max(1.5rem,env(safe-area-inset-bottom))] max-md:shadow-[0_-8px_30px_rgba(0,0,0,0.6)]",
           )}
         >
-          <h2 id="summary-title" className="mb-4 font-bold">
+          <h2 id="summary-title" className="mb-4 text-sm font-bold max-md:hidden">
             Resumo da carteira
           </h2>
           <form onSubmit={applyCoupon} noValidate>
-            <label htmlFor="coupon" className="mb-1.5 block text-xs font-semibold">
+            <label htmlFor="coupon" className="mb-1.5 block text-xs font-semibold max-md:sr-only">
               Código promocional
             </label>
-            <div className="flex gap-2">
+            <div className="relative flex items-center">
               <input
                 id="coupon"
                 value={code}
@@ -270,11 +257,12 @@ function CartPage() {
                 placeholder="Digite o código promocional..."
                 aria-invalid={!!couponFailed}
                 aria-describedby={couponFailed ? "coupon-err" : "coupon-hint"}
-                className={inputClass}
+                className="h-10 w-full rounded-full border border-border bg-card/80 pl-4 pr-24 text-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               />
               <Button
+                type="submit"
                 variant="brand"
-                className="normal-case"
+                className="absolute right-1 h-8 rounded-full px-5 text-xs font-semibold normal-case bg-primary text-primary-foreground hover:bg-primary/90"
                 disabled={!code.trim() || items.length === 0 || applyingCoupon}
               >
                 {applyingCoupon ? "Validando…" : "Aplicar"}
@@ -305,19 +293,39 @@ function CartPage() {
               </button>
             </p>
           )}
-          <dl className="mt-5 space-y-2 text-sm" aria-live="polite" aria-busy={quote.isFetching}>
+          <dl
+            className="mt-4 space-y-2.5 text-xs md:text-sm"
+            aria-live="polite"
+            aria-busy={quote.isFetching}
+          >
             {!q && items.length > 0 && !couponFailed ? (
               Array.from({ length: 4 }, (_, i) => <div key={i} className="shimmer h-5 rounded" />)
             ) : (
               <>
-                <Row label="Subtotal" value={formatEthSmart(q?.subtotal ?? "0")} />
-                <Row
-                  label="Desconto de lançamento"
-                  value={`- ${formatEthSmart(q?.discount ?? "0")}`}
-                />
-                <Row label="Taxa de rede" value={formatEthSmart(q?.networkFee ?? "0")} />
-                <div className="border-t border-border pt-2">
-                  <Row label="Total" value={formatEthSmart(q?.total ?? "0")} strong />
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Subtotal</dt>
+                  <dd className="font-medium">{formatEthSmart(q?.subtotal ?? "0")}</dd>
+                </div>
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Desconto do lançamento</dt>
+                  <dd className="font-medium">
+                    {q?.discount && q.discount !== "0"
+                      ? `(-) ${formatEthSmart(q.discount)}`
+                      : "(-) 00.00"}
+                  </dd>
+                </div>
+                <div>
+                  <div className="flex justify-between">
+                    <dt className="text-muted-foreground">Taxa de rede</dt>
+                    <dd className="font-medium">{formatEthSmart(q?.networkFee ?? "0")}</dd>
+                  </div>
+                  <p className="text-right text-[10px] text-primary">Taxa estimada</p>
+                </div>
+                <div className="flex items-center justify-between border-t border-border pt-3">
+                  <dt className="text-base font-bold">Total</dt>
+                  <dd className="text-base font-bold text-primary">
+                    {formatEthSmart(q?.total ?? "0")}
+                  </dd>
                 </div>
               </>
             )}
@@ -329,7 +337,7 @@ function CartPage() {
           ))}
           <Button
             variant="brand"
-            className="mt-5 w-full"
+            className="mt-6 h-12 w-full rounded-full bg-primary text-base font-bold text-primary-foreground hover:bg-primary/90 shadow-md"
             disabled={
               !items.length || !q || !!q.issues.length || quote.isFetching || applyingCoupon
             }
@@ -337,7 +345,11 @@ function CartPage() {
           >
             {user ? "Concluir e finalizar" : "Conectar e finalizar"}
           </Button>
-          <Button variant="link" className="mt-1 w-full" asChild>
+          <Button
+            variant="link"
+            className="mt-1 w-full text-xs text-muted-foreground hover:text-primary max-md:hidden"
+            asChild
+          >
             <Link to="/mercado">Continuar explorando</Link>
           </Button>
           {!user && items.length > 0 && (
@@ -389,16 +401,6 @@ function QuantityControl({
       >
         <Plus />
       </Button>
-    </div>
-  );
-}
-
-/** Mostra uma linha do resumo financeiro da cotação. */
-function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
-  return (
-    <div className={strong ? "flex justify-between font-bold" : "flex justify-between"}>
-      <dt>{label}</dt>
-      <dd className={strong ? "text-primary" : undefined}>{value}</dd>
     </div>
   );
 }
