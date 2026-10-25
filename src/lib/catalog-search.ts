@@ -1,6 +1,7 @@
+// Esquema de validação dos parâmetros de busca, filtros e ordenação do catálogo na URL.
 import { z } from "zod";
 
-/** Catalog URL state: survives refresh and history navigation. */
+/** Estado de busca do catálogo refletido na URL; preservado ao navegar e recarregar a página. */
 export const catalogSearchSchema = z.object({
   q: z.string().optional().catch(undefined),
   collections: z.array(z.string()).optional().catch(undefined),
@@ -11,7 +12,11 @@ export const catalogSearchSchema = z.object({
   tab: z.string().optional().catch(undefined),
   page: z.number().int().optional().catch(undefined),
 });
+
+/** Tipo inferido dos parâmetros de pesquisa e paginação do catálogo. */
 export type CatalogSearch = z.infer<typeof catalogSearchSchema>;
+
+/** Opções de ordenação disponíveis com rótulos em português. */
 export const SORTS = [
   ["recent", "Listados recentemente"],
   ["price-asc", "Menor preço"],

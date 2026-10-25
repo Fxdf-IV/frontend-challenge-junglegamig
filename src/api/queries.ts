@@ -1,10 +1,11 @@
+// Fábrica de query keys e opções do TanStack Query para catálogo e detalhe de NFTs.
 import { queryOptions } from "@tanstack/react-query";
 import { api } from "./endpoints";
 import type { NftListParams } from "./types";
 
 /**
- * Query keys. Private data is namespaced under ["u", userId] so logout /
- * user switch can drop it with one removeQueries call.
+ * Chaves de consulta do cache. Dados privados são prefixados por ["u", userId]
+ * permitindo descarte imediato ao realizar logout ou troca de usuário.
  */
 export const qk = {
   nfts: (p: NftListParams) => ["nfts", "list", p] as const,
@@ -16,6 +17,7 @@ export const qk = {
   order: (uid: string, id: string) => ["u", uid, "order", id] as const,
 };
 
+/** Opções de consulta para lista paginada e filtrada de NFTs no catálogo. */
 export const nftListQuery = (p: NftListParams) =>
   queryOptions({
     queryKey: qk.nfts(p),
@@ -23,6 +25,8 @@ export const nftListQuery = (p: NftListParams) =>
     placeholderData: (prev) => prev,
     staleTime: 30_000,
   });
+
+/** Opções de consulta para os detalhes e edições de um NFT específico pelo seu slug ou ID. */
 export const nftQuery = (id: string) =>
   queryOptions({
     queryKey: qk.nft(id),

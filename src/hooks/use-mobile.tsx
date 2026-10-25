@@ -1,7 +1,9 @@
+// Hook reativo para detecção de viewport mobile baseado no breakpoint de 768px.
 import * as React from "react";
 
 const MOBILE_BREAKPOINT = 768;
 
+/** Retorna verdadeiro quando a largura da janela do navegador é inferior a 768px. */
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined);
 

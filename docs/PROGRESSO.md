@@ -19,6 +19,9 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote api/lib):**
+  - Adicionados comentários de topo em pt-BR e JSDoc em `src/api/endpoints.ts`, `src/api/queries.ts`, `src/lib/cart.ts`, `src/lib/catalog-search.ts`, `src/lib/error-page.ts`, `src/lib/favorites.ts`, `src/lib/labels.ts`, `src/lib/utils.ts` e `src/hooks/use-mobile.tsx`.
+  - Configurado `eslint.config.js` para ignorar o binário gerado do MSW e autorizar exportação legítima de variantes/hooks em shadcn/ui e contextos, zerando todos os avisos de lint (0 erros e 0 avisos).
 - **Suíte Oficial do Lighthouse com 12 execuções e relatórios versionados:**
   - Configurado `lighthouserc.json` com limites obrigatórios (Performance ≥ 90, A11y ≥ 95, BP ≥ 95, SEO ≥ 90) e metas de auditoria em Início e Detalhe (Mobile e Desktop).
   - Desenvolvido `scripts/lighthouse.mjs` com 3 medições completas por alvo e cálculo automático de mediana para cada categoria e métrica (LCP, CLS, TBT).

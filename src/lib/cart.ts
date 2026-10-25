@@ -1,3 +1,4 @@
+// Hooks para leitura e mutações reativas do carrinho de compras autenticado ou anônimo.
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { api } from "@/api/endpoints";
@@ -5,6 +6,7 @@ import { qk } from "@/api/queries";
 import type { Cart, EditionKind } from "@/api/types";
 import { useSession } from "./session";
 
+/** Retorna a query com o estado atual do carrinho do visitante ou do usuário logado. */
 export function useCart() {
   const { user, status } = useSession();
   const owner = user?.id ?? "guest";
@@ -16,6 +18,7 @@ export function useCart() {
   });
 }
 
+/** Retorna mutations otimizadas para adicionar, atualizar quantidade ou remover itens do carrinho. */
 export function useCartMutations() {
   const qc = useQueryClient();
   const { user } = useSession();
