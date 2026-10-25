@@ -1,3 +1,4 @@
+// Componente Badge (shadcn/ui) adaptado com as variantes de cores e espaçamentos do Figma.
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 

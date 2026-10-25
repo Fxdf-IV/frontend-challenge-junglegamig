@@ -1,3 +1,4 @@
+// Primitiva Accordion (shadcn/ui baseada em Radix UI) adaptada para os tokens de tipografia e bordas do Figma.
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";

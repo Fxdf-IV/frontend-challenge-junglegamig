@@ -1,3 +1,4 @@
+// Componente de alerta e notificação de status Alert (shadcn/ui) adaptado para as cores semânticas do Figma.
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
