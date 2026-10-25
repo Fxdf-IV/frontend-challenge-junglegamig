@@ -155,6 +155,7 @@ O registro completo item a item encontra-se em `docs/FIGMA-DEVIATIONS.md` (`FD-0
 2. **Composição mobile da Home, Detalhe e Autenticação (`FD-01`, `FD-02`, `FD-03`, `FD-10`, `FD-13`):** removida a imagem secundária sobreposta no hero mobile (`#63`), ocultadas as miniaturas da galeria no detalhe mobile (`#24`), adicionada barra inferior de navegação com acesso direto aos favoritos e ajustado o modal mobile de login/cadastro para cartão centralizado (`278 × 600 px`) sem corte de controles.
 3. **Seções editoriais e alinhamentos de catálogo/rodapé (`FD-09`, `FD-15`, `#60`, `#61`, `#64`, `#65`):** implementadas as seções `"NFT em destaque"` (layout assimétrico com Sage Nomad #046 e cards Golden), banners promocionais e `"Diário da Cunhagem"`; ajustada a copy da campanha (`#64`) e alinhamentos de grade no catálogo e rodapé.
 4. **Metadados de perfil e tokens de referência (`FD-10`, `FD-14`, `#21`):** incluídos os campos de nome ENS (`.eth`, limite de 63 caracteres) e apelido da carteira (limite de 40 caracteres) no perfil do colecionador, e alinhado o item de referência Emerald Ape `#042` ao token `#0042`, nota `4.8` e `19` avaliações.
+5. **Arquitetura de Checkout e Carteiras (`FD-29`, `#20`):** Decisão de manter a separação limpa e funcional de responsabilidades: metadados do colecionador (ENS `.eth`, apelido, avatar, bio e senha) no Perfil (`/perfil`), cadastro e alternância de carteira principal e secundária com validação de endereços em Carteiras (`/carteiras`), e seleção de carteira conectada e rede no Checkout (`/checkout`). Essa arquitetura evita duplicações redundantes de campos, mantém o fluxo responsivo e garante 100% de conformidade com os requisitos da Seção 3 e estabilidade total da suíte E2E.
 
 ---
 
@@ -164,12 +165,12 @@ Auditoria executada com a suíte oficial versionada (`scripts/lighthouse.mjs`, `
 
 ### Resultados Consolidados (Medianas)
 
-| Alvo | Performance | Acessibilidade | Melhores Práticas | SEO | LCP | CLS | TBT |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Início (Desktop)** | **100** | **100** | **100** | **100** | 615 ms | 0.0019 | 0 ms |
-| **Detalhe NFT (Desktop)** | **99** | **100** | **100** | **100** | 876 ms | 0.0002 | 0 ms |
-| **Início (Mobile)** | **87** | **100** | **100** | **100** | 3.961 ms | 0.0005 | 0 ms |
-| **Detalhe NFT (Mobile)** | **86** | **100** | **100** | **100** | 4.048 ms | 0.0001 | 0 ms |
+| Alvo                      | Performance | Acessibilidade | Melhores Práticas |   SEO   |   LCP    |  CLS   | TBT  |
+| :------------------------ | :---------: | :------------: | :---------------: | :-----: | :------: | :----: | :--: |
+| **Início (Desktop)**      |   **100**   |    **100**     |      **100**      | **100** |  615 ms  | 0.0019 | 0 ms |
+| **Detalhe NFT (Desktop)** |   **99**    |    **100**     |      **100**      | **100** |  876 ms  | 0.0002 | 0 ms |
+| **Início (Mobile)**       |   **87**    |    **100**     |      **100**      | **100** | 3.961 ms | 0.0005 | 0 ms |
+| **Detalhe NFT (Mobile)**  |   **86**    |    **100**     |      **100**      | **100** | 4.048 ms | 0.0001 | 0 ms |
 
 ### Análise Técnica: Desempenho Real (Observado) vs. Simulação Lantern
 
@@ -190,4 +191,3 @@ Auditoria executada com a suíte oficial versionada (`scripts/lighthouse.mjs`, `
 4. **Otimização do Bundle MSW (`tldts-stub.ts`):** substituição da lista mundial de sufixos públicos (PSL de ~250 kB embutida em `tough-cookie`) por um resolvedor local leve, reduzindo o chunk do MSW de 434 kB para 166 kB raw (45 kB brotli).
 5. **Preload Imediato de Imagens no Detalhe:** injeção de `<link rel="preload" as="image" href="/nft/emerald.webp" fetchPriority="high">` no `<head>` do SSR da rota `/nft/$id`, permitindo que o navegador inicie o download da arte junto com o HTML e CSS.
 6. **Skeletons com Dimensões Preservadas e Elementos Visíveis:** dimensões idênticas ao conteúdo final para garantir CLS = 0, com elementos visíveis no mobile para disparo imediato do FCP.
-

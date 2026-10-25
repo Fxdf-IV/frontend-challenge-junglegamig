@@ -173,21 +173,21 @@ Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
 
 ## 10. Performance e Lighthouse
 
-| Item                                                                       | Status     | Onde / prova                                                                                                                                                   |
-| -------------------------------------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Auditoria de início e detalhe, mobile e desktop, 3 medições, mediana       | Verificado | `scripts/lighthouse.mjs`, `lighthouserc.json`, `reports/lighthouse/summary.json` (12 medições executadas)                                                      |
+| Item                                                                       | Status     | Onde / prova                                                                                                                                                 |
+| -------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Auditoria de início e detalhe, mobile e desktop, 3 medições, mediana       | Verificado | `scripts/lighthouse.mjs`, `lighthouserc.json`, `reports/lighthouse/summary.json` (12 medições executadas)                                                    |
 | Metas: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90 | Verificado | Desktop: Perf 100/99, A11y 100, BP 100, SEO 100; Mobile: A11y 100, BP 100, SEO 100, Perf 87/86 com justificativa de Lantern documentada em `ARCHITECTURE.md` |
-| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `reports/lighthouse/*.report.html`, `reports/lighthouse/*.report.json`, `reports/lighthouse/summary.json`                                                     |
+| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `lighthouse/RESULTS.md`, `lighthouse/reports/*.report.*`, `reports/lighthouse/summary.json`                                                                  |
 
 ## 12. Entrega
 
-| Item                                                                            | Status     | Onde / prova                                                                                     |
-| ------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| Código, lockfile, assets, mocks, fixtures                                       | Verificado | `bun.lock`, `src/mocks`, `bun run build`                                                         |
-| Testes e configuração de auditoria                                              | Verificado | `playwright.config.ts`, `lighthouserc.json`, `scripts/lighthouse.mjs`, relatórios versionados      |
-| Deploy público com mocks e tempo real                                           | Pendente   | Depende de credenciais de publicação do usuário                                                 |
-| Acesso direto e refresh em qualquer rota                                        | Verificado | `public/_redirects`, `vercel.json`, `tests/e2e/nft-detail.spec.ts`, `tests/e2e/account.spec.ts`    |
-| `README.md` completo                                                            | Verificado | `README.md` (setup, env vars, credenciais, cenários, comandos e falhas)                          |
-| `ARCHITECTURE.md` completo                                                      | Verificado | `ARCHITECTURE.md` (REST, Socket.IO, sessão, carrinho, cache, MSW, UX e Lighthouse)               |
-| Scripts: dev com mocks, build, preview, typecheck, lint, Playwright, Lighthouse | Verificado | `package.json` (`dev`, `build`, `preview`, `typecheck`, `lint`, `test`, `test:e2e`, `lighthouse`) |
+| Item                                                                            | Status     | Onde / prova                                                                                            |
+| ------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------- |
+| Código, lockfile, assets, mocks, fixtures                                       | Verificado | `bun.lock`, `src/mocks`, `bun run build`                                                                |
+| Testes e configuração de auditoria                                              | Verificado | `playwright.config.ts`, `lighthouserc.json`, `scripts/lighthouse.mjs`, relatórios versionados           |
+| Deploy público com mocks e tempo real                                           | Pendente   | Depende de credenciais de publicação do usuário                                                         |
+| Acesso direto e refresh em qualquer rota                                        | Verificado | `public/_redirects`, `vercel.json`, `tests/e2e/nft-detail.spec.ts`, `tests/e2e/account.spec.ts`         |
+| `README.md` completo                                                            | Verificado | `README.md` (setup, env vars, credenciais, cenários, comandos e falhas)                                 |
+| `ARCHITECTURE.md` completo                                                      | Verificado | `ARCHITECTURE.md` (REST, Socket.IO, sessão, carrinho, cache, MSW, UX e Lighthouse)                      |
+| Scripts: dev com mocks, build, preview, typecheck, lint, Playwright, Lighthouse | Verificado | `package.json` (`dev`, `build`, `preview`, `typecheck`, `lint`, `test`, `test:e2e`, `lighthouse`)       |
 | Execução a partir de checkout limpo                                             | Verificado | Validado via `bun run build`, `bun run test`, `bun run test:e2e` e `bun run typecheck`/`lint` sem erros |

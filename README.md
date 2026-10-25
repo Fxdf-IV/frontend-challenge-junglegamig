@@ -136,4 +136,3 @@ A aplicação é configurada para deploy estático ou SSR com fallback de rotas 
 - **Vercel:** configuração em `vercel.json` com reescrita para `/`.
 - **Cloudflare Pages / Netlify:** arquivo `public/_redirects` com regra `/* /index.html 200`.
 - Os mocks do MSW e a simulação de tempo real via `@mswjs/socket.io-binding` operam 100% no cliente em qualquer ambiente estático público.
-

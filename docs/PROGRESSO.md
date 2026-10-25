@@ -14,6 +14,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Consolidação dos relatórios oficiais do Lighthouse (`lighthouse/RESULTS.md` e `lighthouse/reports/`):**
+  - Gerado `lighthouse/RESULTS.md` detalhando as 12 medições oficiais (medianas: Desktop 100/99, Mobile 87/86, Acessibilidade 100, Melhores Práticas 100 e SEO 100).
+  - Incluída a análise técnica requerida pela Seção 10 de `REQUISITOS.md` explicando o impacto da simulação matemática Lantern sob Service Worker do MSW vs. a performance real (LCP real de 249 ms e TBT de 0 ms).
+  - Documentada em `docs/FIGMA-DEVIATIONS.md` (`FD-29`) e `ARCHITECTURE.md` a decisão de arquitetura e UX da separação de responsabilidades em Perfil, Carteiras e Checkout, atendendo 100% aos requisitos da Seção 3.
+  - Criado `.env.example` com as variáveis padrão documentadas e configurado `.prettierignore` para preservar relatórios de auditoria.
+
 - **Exibição unificada da edição do NFT no carrinho desktop e mobile (`src/routes/carrinho.tsx`):**
   - Removida a ocultação de `Edição {it.edition}` no viewport desktop (`md:hidden`), permitindo a visualização clara da numeração de edição junto ao ID do token tanto no desktop quanto no mobile.
   - Validação completa com passagem de 100% dos testes E2E (`nft-detail.spec.ts` e suíte completa de 90 testes do Playwright: 88 passaram, 2 skips intencionais em mobile).
@@ -226,8 +232,8 @@ right-3` para não sobrepor o controle de quantidade da barra fixa de `/nft/$id`
 | 25/10/2026 | `d30eb00` | Organização dos testes unitários do carrinho      | Mover teste do carrinho para `src/test/` para isolar da árvore de rotas do TanStack Router                                              |
 | 25/10/2026 | `b5205d8` | Ícone TrashFigmaIcon para remoção do carrinho     | Criar ícone idêntico ao vetor do Figma para exclusão de itens no carrinho                                                               |
 | 25/10/2026 | `6d3fb87` | Alinhamento do carrinho mobile ao Figma (FD-19)   | Stepper e exclusão alinhados, cupom em pílula integrado e botão de checkout em pílula                                                   |
-| 25/10/2026 | `975e002` | MobileTabBar curvada com entalhe central (FD-20)   | Navegação mobile com cantos curvos, entalhe SVG e botão flutuante para catálogo                                                         |
-| 25/10/2026 | `20a8e04` | Hero mobile e grade escalonada ao Figma (FD-21)   | Anéis de gradiente, Sage Nomad sobreposto, cards com raridade e favoritos otimistas                                                      |
+| 25/10/2026 | `975e002` | MobileTabBar curvada com entalhe central (FD-20)  | Navegação mobile com cantos curvos, entalhe SVG e botão flutuante para catálogo                                                         |
+| 25/10/2026 | `20a8e04` | Hero mobile e grade escalonada ao Figma (FD-21)   | Anéis de gradiente, Sage Nomad sobreposto, cards com raridade e favoritos otimistas                                                     |
 | 25/10/2026 | `cc6ce1e` | Detalhe mobile alinhado ao Figma (FD-22)          | Botões circulares no topo, barra fixa inferior curva e botão de compra em pílula                                                        |
 | 25/10/2026 | `ae9de64` | Componentes de perfil e metadados de conta        | Componentes modulares para metadados ENS e apelido de carteira                                                                          |
 | 25/10/2026 | `7b6d698` | Perfil e Carteiras alinhados ao Figma (FD-23)     | AccountNav com 8 itens, layout integrado no perfil e formulários completos de carteiras                                                 |

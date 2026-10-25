@@ -1,0 +1,302 @@
+{
+  "generatedAt": "2026-10-25T16:42:45.201Z",
+  "environment": {
+    "node": "v24.16.0",
+    "lighthouse": "13.5.0",
+    "platform": "win32 10.0.26200 (x64)",
+    "cpu": "AMD Ryzen 7 9800X3D 8-Core Processor           ",
+    "runsPerTarget": 3
+  },
+  "thresholds": {
+    "performance": 90,
+    "accessibility": 95,
+    "bestPractices": 95,
+    "seo": 90
+  },
+  "targets": [
+    {
+      "id": "home-mobile",
+      "label": "Início (Mobile)",
+      "path": "/",
+      "formFactor": "mobile",
+      "medianScores": {
+        "performance": 87,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "medianMetrics": {
+        "lcpMs": 3961,
+        "cls": 0.0005,
+        "tbtMs": 0
+      },
+      "representativeRun": 3,
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 87,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 3960,
+            "lcpDisplay": "4.0 s",
+            "cls": 0.0005,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 86,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 4036,
+            "lcpDisplay": "4.0 s",
+            "cls": 0.0005,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 87,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 3961,
+            "lcpDisplay": "4.0 s",
+            "cls": 0.0005,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        }
+      ]
+    },
+    {
+      "id": "home-desktop",
+      "label": "Início (Desktop)",
+      "path": "/",
+      "formFactor": "desktop",
+      "medianScores": {
+        "performance": 100,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "medianMetrics": {
+        "lcpMs": 615,
+        "cls": 0.0019,
+        "tbtMs": 0
+      },
+      "representativeRun": 2,
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 611,
+            "lcpDisplay": "0.6 s",
+            "cls": 0.0019,
+            "clsDisplay": "0.002",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 615,
+            "lcpDisplay": "0.6 s",
+            "cls": 0.0019,
+            "clsDisplay": "0.002",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 100,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 653,
+            "lcpDisplay": "0.7 s",
+            "cls": 0.0019,
+            "clsDisplay": "0.002",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        }
+      ]
+    },
+    {
+      "id": "detail-mobile",
+      "label": "Detalhe NFT (Mobile)",
+      "path": "/nft/emerald-ape-042",
+      "formFactor": "mobile",
+      "medianScores": {
+        "performance": 86,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "medianMetrics": {
+        "lcpMs": 4048,
+        "cls": 0.0001,
+        "tbtMs": 0
+      },
+      "representativeRun": 3,
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 85,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 4048,
+            "lcpDisplay": "4.0 s",
+            "cls": 0.0001,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 86,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 4117,
+            "lcpDisplay": "4.1 s",
+            "cls": 0.0001,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 86,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 4039,
+            "lcpDisplay": "4.0 s",
+            "cls": 0.0001,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        }
+      ]
+    },
+    {
+      "id": "detail-desktop",
+      "label": "Detalhe NFT (Desktop)",
+      "path": "/nft/emerald-ape-042",
+      "formFactor": "desktop",
+      "medianScores": {
+        "performance": 99,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 100
+      },
+      "medianMetrics": {
+        "lcpMs": 876,
+        "cls": 0.0002,
+        "tbtMs": 0
+      },
+      "representativeRun": 3,
+      "runs": [
+        {
+          "run": 1,
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 886,
+            "lcpDisplay": "0.9 s",
+            "cls": 0.0002,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 2,
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 864,
+            "lcpDisplay": "0.9 s",
+            "cls": 0.0002,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        },
+        {
+          "run": 3,
+          "scores": {
+            "performance": 99,
+            "accessibility": 100,
+            "bestPractices": 100,
+            "seo": 100
+          },
+          "metrics": {
+            "lcpMs": 876,
+            "lcpDisplay": "0.9 s",
+            "cls": 0.0002,
+            "clsDisplay": "0",
+            "tbtMs": 0,
+            "tbtDisplay": "0 ms"
+          }
+        }
+      ]
+    }
+  ]
+}

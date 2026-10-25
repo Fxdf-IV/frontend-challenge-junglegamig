@@ -7,3 +7,5 @@ package-lock.json
 bun.lock
 routeTree.gen.ts
 public/mockServiceWorker.js
+reports/lighthouse
+lighthouse/reports
