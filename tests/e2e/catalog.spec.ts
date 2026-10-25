@@ -87,3 +87,48 @@ test("mantém os resultados da última aba durante respostas com latência vari�
   );
   await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();
 });
+
+test("filtra catálogo por faixa de preço digitada nos inputs e limpa o filtro", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/mercado?scenario=default");
+  await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();
+
+  if (isMobile) {
+    const trigger = page.getByRole("button", { name: /Filtros/ });
+    await trigger.click();
+  }
+
+  const container = isMobile ? page.getByRole("dialog") : page.locator("aside");
+  const minInput = container.getByLabel("Preço mínimo em ETH");
+  const maxInput = container.getByLabel("Preço máximo em ETH");
+
+  await expect(minInput).toBeVisible();
+  await expect(maxInput).toBeVisible();
+
+  await minInput.fill("0.50");
+  await maxInput.fill("1.50");
+  await container.getByRole("button", { name: "Aplicar" }).click();
+
+  if (isMobile) {
+    await page.keyboard.press("Escape");
+  }
+
+  await expect.poll(() => new URL(page.url()).searchParams.get("min")).toBe(JSON.stringify("0.50"));
+  await expect.poll(() => new URL(page.url()).searchParams.get("max")).toBe(JSON.stringify("1.50"));
+
+  if (isMobile) {
+    const trigger = page.getByRole("button", { name: /Filtros/ });
+    await trigger.click();
+  }
+
+  await container.getByRole("button", { name: "Limpar" }).click();
+
+  if (isMobile) {
+    await page.keyboard.press("Escape");
+  }
+
+  await expect.poll(() => new URL(page.url()).searchParams.has("min")).toBe(false);
+  await expect.poll(() => new URL(page.url()).searchParams.has("max")).toBe(false);
+});

@@ -14,6 +14,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Inputs numéricos de preço sincronizados com o slider no catálogo (`src/components/nft/Catalog.tsx`, `slider.tsx`, FD-39):**
+  - Implementados campos de entrada de texto/numéricos ("Mínimo" e "Máximo") para digitação direta de valores de preço em ETH no filtro "Faixa de preço" do catálogo, atendendo à solicitação do usuário.
+  - Atualizado o componente `Slider` em `src/components/ui/slider.tsx` para suportar renderização de alças duplas independentes (`thumbsCount` baseado no array de valores), permitindo arrastar tanto o limite inferior quanto o superior.
+  - Sincronização bidirecional em tempo real entre inputs e slider: arrastar o slider atualiza os inputs numéricos instantaneamente; digitar valores numéricos ajusta o slider visualmente.
+  - Suporte a decimais com ponto ou vírgula (`0,50` ou `0.50`), normalização automática no blur, atalho com tecla `Enter` para aplicar imediatamente e botão "Limpar" para restaurar os limites padrão.
+  - Estilização 100% aderente ao design do projeto: campos com fundo escuro `#19110a`, borda `#3d2c20`, sufixo "ETH", tipografia mono e foco com anel âmbar primário.
+  - Novo teste E2E implementado em `tests/e2e/catalog.spec.ts` validando digitação, aplicação de parâmetros na URL e limpeza do filtro em desktop e mobile (11/11 testes aprovados).
+
 - **Alinhamento do recibo e modal de confirmação de compra ao Figma (`src/routes/_authenticated.pedido.$id.tsx`, FD-38):**
   - Implementado o ícone oficial de envelope com carta 'THANK YOU' (`/nft/thank-you.png`) no topo do recibo confirmado, substituindo o ícone genérico `message.svg`.
   - Adicionada moldura superior e inferior laranja (`border-y border-primary`) na grade de 4 metadados com divisores verticais e destaque primário no valor total.

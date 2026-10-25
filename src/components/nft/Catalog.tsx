@@ -141,7 +141,9 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
                   from === "/" && "max-md:hidden",
                 )}
               >
-                <span className="whitespace-nowrap">Ordenar por:</span>
+                <label htmlFor="catalog-sort-select" className="whitespace-nowrap">
+                  Ordenar por:
+                </label>
                 <div className="relative">
                   <select
                     id="catalog-sort-select"
@@ -149,7 +151,7 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
                     onChange={(e) =>
                       set({ sort: e.target.value === "recent" ? undefined : e.target.value })
                     }
-                    aria-label="Ordenar por"
+                    aria-label="Ordenar por:"
                     className="h-9 cursor-pointer appearance-none rounded-md border border-[#3d2c20] bg-[#19110a] pl-3 pr-8 font-mono text-xs text-foreground transition-colors focus-visible:border-primary focus-visible:outline-none"
                   >
                     {SORTS.map(([v, l]) => (
@@ -279,12 +281,101 @@ function Filters({
   const toggle = (key: "collections" | "networks", v: string) => {
     const cur = search[key] ?? [];
     const next = cur.includes(v) ? cur.filter((x) => x !== v) : [...cur, v];
-    set({ [key]: next.length ? next : undefined });
+    set({ [key]: next.length ? next : undefined, page: undefined });
   };
   const lo = Number(search.min ?? "0.02");
   const hi = Number(search.max ?? "12.30");
   const [range, setRange] = useState<[number, number]>([lo, hi]);
-  useEffect(() => setRange([lo, hi]), [lo, hi]);
+  const [minInput, setMinInput] = useState<string>(
+    search.min ? Number(search.min).toFixed(2) : "0.02",
+  );
+  const [maxInput, setMaxInput] = useState<string>(
+    search.max ? Number(search.max).toFixed(2) : "12.30",
+  );
+
+  useEffect(() => {
+    setRange([lo, hi]);
+    setMinInput(search.min ? Number(search.min).toFixed(2) : "0.02");
+    setMaxInput(search.max ? Number(search.max).toFixed(2) : "12.30");
+  }, [lo, hi, search.min, search.max]);
+
+  /** Atualiza o slider e reflete os novos valores nos inputs de texto em tempo real. */
+  const handleSliderChange = (v: number[]) => {
+    const next: [number, number] = [v[0], v[1]];
+    setRange(next);
+    setMinInput(next[0].toFixed(2));
+    setMaxInput(next[1].toFixed(2));
+  };
+
+  /** Atualiza o input de preço mínimo e sincroniza o slider se for um número válido. */
+  const handleMinChange = (val: string) => {
+    setMinInput(val);
+    const parsed = parseFloat(val.replace(",", "."));
+    if (!isNaN(parsed) && parsed >= 0) {
+      setRange((prev) => [Math.min(parsed, prev[1]), prev[1]]);
+    }
+  };
+
+  /** Atualiza o input de preço máximo e sincroniza o slider se for um número válido. */
+  const handleMaxChange = (val: string) => {
+    setMaxInput(val);
+    const parsed = parseFloat(val.replace(",", "."));
+    if (!isNaN(parsed) && parsed >= 0) {
+      setRange((prev) => [prev[0], Math.max(parsed, prev[0])]);
+    }
+  };
+
+  /** Normaliza a exibição de preço mínimo ao perder o foco. */
+  const handleMinBlur = () => {
+    const parsed = parseFloat(minInput.replace(",", "."));
+    if (isNaN(parsed) || parsed < 0) {
+      setMinInput(range[0].toFixed(2));
+    } else {
+      setMinInput(parsed.toFixed(2));
+    }
+  };
+
+  /** Normaliza a exibição de preço máximo ao perder o foco. */
+  const handleMaxBlur = () => {
+    const parsed = parseFloat(maxInput.replace(",", "."));
+    if (isNaN(parsed) || parsed < 0) {
+      setMaxInput(range[1].toFixed(2));
+    } else {
+      setMaxInput(parsed.toFixed(2));
+    }
+  };
+
+  /** Aplica o filtro de faixa de preço convertendo os inputs para números decimais. */
+  const handleApply = () => {
+    const parsedMin = parseFloat(minInput.replace(",", "."));
+    const parsedMax = parseFloat(maxInput.replace(",", "."));
+    let finalLo = !isNaN(parsedMin) && parsedMin >= 0 ? parsedMin : range[0];
+    let finalHi = !isNaN(parsedMax) && parsedMax >= 0 ? parsedMax : range[1];
+
+    if (finalLo > finalHi) {
+      const tmp = finalLo;
+      finalLo = finalHi;
+      finalHi = tmp;
+    }
+
+    setRange([finalLo, finalHi]);
+    setMinInput(finalLo.toFixed(2));
+    setMaxInput(finalHi.toFixed(2));
+
+    set({
+      min: finalLo > 0.02 ? finalLo.toFixed(2) : undefined,
+      max: finalHi < 12.3 ? finalHi.toFixed(2) : undefined,
+      page: undefined,
+    });
+  };
+
+  /** Limpa os filtros de preço e restaura os valores de limite padrão. */
+  const handleClear = () => {
+    setRange([0.02, 12.3]);
+    setMinInput("0.02");
+    setMaxInput("12.30");
+    set({ min: undefined, max: undefined, page: undefined });
+  };
 
   return (
     <div className="space-y-6 rounded-lg bg-card p-4">
@@ -311,34 +402,86 @@ function Filters({
           max={12.3}
           step={0.01}
           value={range}
-          onValueChange={(v) => setRange([v[0], v[1]])}
+          onValueChange={handleSliderChange}
           aria-label="Faixa de preço em ETH"
           className="px-1"
         />
-        <p className="mt-3 text-xs">
+
+        {/* Inputs numéricos de Mínimo e Máximo sincronizados bidirecionalmente com o slider */}
+        <div className="mt-3 flex items-center gap-2">
+          <div className="relative flex-1">
+            <label
+              htmlFor="price-min-input"
+              className="mb-1 block font-mono text-[10px] text-muted-foreground"
+            >
+              Mínimo
+            </label>
+            <div className="relative">
+              <input
+                id="price-min-input"
+                type="text"
+                inputMode="decimal"
+                value={minInput}
+                onChange={(e) => handleMinChange(e.target.value)}
+                onBlur={handleMinBlur}
+                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleApply())}
+                placeholder="0.02"
+                aria-label="Preço mínimo em ETH"
+                className="h-8 w-full rounded-md border border-[#3d2c20] bg-[#19110a] pl-2.5 pr-8 font-mono text-xs text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-primary focus-visible:outline-none"
+              />
+              <span
+                className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 font-mono text-[10px] text-muted-foreground"
+                aria-hidden="true"
+              >
+                ETH
+              </span>
+            </div>
+          </div>
+
+          <span className="mt-4 font-mono text-xs text-muted-foreground" aria-hidden="true">
+            —
+          </span>
+
+          <div className="relative flex-1">
+            <label
+              htmlFor="price-max-input"
+              className="mb-1 block font-mono text-[10px] text-muted-foreground"
+            >
+              Máximo
+            </label>
+            <div className="relative">
+              <input
+                id="price-max-input"
+                type="text"
+                inputMode="decimal"
+                value={maxInput}
+                onChange={(e) => handleMaxChange(e.target.value)}
+                onBlur={handleMaxBlur}
+                onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleApply())}
+                placeholder="12.30"
+                aria-label="Preço máximo em ETH"
+                className="h-8 w-full rounded-md border border-[#3d2c20] bg-[#19110a] pl-2.5 pr-8 font-mono text-xs text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-primary focus-visible:outline-none"
+              />
+              <span
+                className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 font-mono text-[10px] text-muted-foreground"
+                aria-hidden="true"
+              >
+                ETH
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-2.5 font-mono text-xs text-muted-foreground">
           Preço: {range[0].toFixed(2).replace(".", ",")} - {range[1].toFixed(2).replace(".", ",")}{" "}
           ETH
         </p>
-        <div className="mt-2 flex gap-2">
-          <Button
-            size="sm"
-            variant="brand"
-            className="normal-case"
-            onClick={() =>
-              set({
-                min: range[0] > 0.02 ? range[0].toFixed(2) : undefined,
-                max: range[1] < 12.3 ? range[1].toFixed(2) : undefined,
-              })
-            }
-          >
+        <div className="mt-3 flex gap-2">
+          <Button size="sm" variant="brand" className="normal-case" onClick={handleApply}>
             Aplicar
           </Button>
           {(search.min || search.max) && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => set({ min: undefined, max: undefined })}
-            >
+            <Button size="sm" variant="ghost" onClick={handleClear}>
               Limpar
             </Button>
           )}
