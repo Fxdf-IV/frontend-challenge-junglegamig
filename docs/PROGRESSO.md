@@ -53,6 +53,9 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   ações de avatar/senha sem remover os dados de bio já editáveis.
 - Limitados os campos de metadados do perfil a 63 caracteres para ENS e 40 para o apelido da
   carteira, com regressão unitária para valores acima do limite.
+- Revisado o comentário #20: o checkout mobile mantém os dados do colecionador exigidos pelo fluxo;
+  o frame mobile fornecido mostra apenas a etapa/seção de carteiras. A regra de ENS no checkout
+  (#18) segue em aberto porque o próprio comentário pergunta qual comportamento desejam.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra
