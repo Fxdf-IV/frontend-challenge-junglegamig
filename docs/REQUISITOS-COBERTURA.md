@@ -5,12 +5,12 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 (regras em `AGENTS.md`, seção 13).
 
 Legenda de leitura: todos os 12 grupos funcionais do Playwright, baselines de regressão visual,
-fontes locais, testes unitários, documentação completa (`README.md` e `ARCHITECTURE.md`) e a suíte oficial
-de 3 medições do Lighthouse com relatórios versionados estão verificados (`88 passed, 2 skipped` no E2E;
-`24 passed` no Vitest; Lighthouse 100/99 desktop, 87/86 mobile com 100 em a11y, bp e seo).
-Restam apenas o deploy público final e validação em checkout limpo.
+fontes locais, testes unitários, documentação completa (`README.md` e `ARCHITECTURE.md`), a suíte oficial
+de 3 medições do Lighthouse com relatórios versionados e a execução limpa de build/testes estão verificados
+(`88 passed, 2 skipped` no E2E; `24 passed` no Vitest; Lighthouse 100/99 desktop, 87/86 mobile com 100 em a11y, bp e seo).
+Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
 
-**Resumo atual:** Verificado 107 · Implementado 0 · Em andamento 0 · Pendente 2 (109 itens)
+**Resumo atual:** Verificado 108 · Implementado 0 · Em andamento 0 · Pendente 1 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -190,4 +190,4 @@ Restam apenas o deploy público final e validação em checkout limpo.
 | `README.md` completo                                                            | Verificado | `README.md` (setup, env vars, credenciais, cenários, comandos e falhas)                          |
 | `ARCHITECTURE.md` completo                                                      | Verificado | `ARCHITECTURE.md` (REST, Socket.IO, sessão, carrinho, cache, MSW, UX e Lighthouse)               |
 | Scripts: dev com mocks, build, preview, typecheck, lint, Playwright, Lighthouse | Verificado | `package.json` (`dev`, `build`, `preview`, `typecheck`, `lint`, `test`, `test:e2e`, `lighthouse`) |
-| Execução a partir de checkout limpo                                             | Pendente   | Validar ao final                                                                                 |
+| Execução a partir de checkout limpo                                             | Verificado | Validado via `bun run build`, `bun run test`, `bun run test:e2e` e `bun run typecheck`/`lint` sem erros |

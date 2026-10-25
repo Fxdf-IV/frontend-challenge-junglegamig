@@ -5,11 +5,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Próximos passos (ordem de prioridade)
 
-1. **Validação final de execução em checkout limpo (`AGENTS.md`, seção 11):**
-   - Executar build limpo (`bun run build`), lint, testes unitários e suíte E2E sem artefatos temporários em checkout limpo.
-   - Atualizar a matriz `docs/REQUISITOS-COBERTURA.md` comprovando o requisito de checkout limpo.
-2. **Deploy público:**
-   - Realizar o deploy na Vercel/Netlify/Cloudflare Pages mediante credenciais ou comando do usuário.
+1. **Deploy público (`AGENTS.md`, seção 11):**
+   - Realizar o deploy na Vercel/Netlify/Cloudflare Pages mediante indicação de credenciais ou autorização de publicação pelo usuário (projeto com `vercel.json` e `public/_redirects` prontos).
 
 ### Bloqueios e decisões do usuário
 
@@ -17,6 +14,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Validação de execução limpa e ajuste na reconciliação de tempo real:**
+  - Invalidação automática de `queryKey: ["quote"]` na reconexão do socket em `src/lib/realtime.tsx`.
+  - Incremento de versão do carrinho (`cart.version`) em `src/mocks/db.ts` quando preços ou disponibilidade são atualizados dinamicamente pelo catálogo ou eventos.
+  - Ajuste no SSR de `src/routes/__root.tsx` restaurando a renderização síncrona de `AuthBackdrop` para eliminar aviso de hidratação no cliente.
+  - Sincronização explícita de carregamento antes de ordenar catálogo no teste E2E `tests/e2e/catalog.spec.ts`.
+  - Execução completa com sucesso da suíte de 90 testes E2E do Playwright (`88 passed, 2 skipped` intencionais no mobile), build de produção Nitro/Vite e Vitest (24/24 testes). Requisito "Execução a partir de checkout limpo" marcado como Verificado na matriz.
 - **Documentação e Código Comentado (Lote 8 final de componentes UI shadcn/ui):**
   - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `toggle-group.tsx`, `toggle.tsx` e `tooltip.tsx`, completando 100% de cobertura de código comentado no projeto.
 - **Documentação e Código Comentado (Lote 7 de componentes UI shadcn/ui):**

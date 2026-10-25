@@ -41,6 +41,7 @@ test("ordena o catálogo por preço crescente", async ({ page, isMobile }) => {
   test.skip(isMobile, "O seletor de ordenação não aparece no frame mobile fornecido.");
 
   await page.goto("/mercado?scenario=default");
+  await expect(page.getByText("40 NFTs encontrados")).toBeVisible();
   await page.getByLabel("Ordenar por:").selectOption("price-asc");
 
   await expect.poll(() => new URL(page.url()).searchParams.get("sort")).toBe("price-asc");

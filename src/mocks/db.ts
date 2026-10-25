@@ -96,15 +96,23 @@ export function cartFor(key: string): Cart {
 /** Re-sync cart line prices/availability with the catalog, flagging changes. */
 export function refreshCart(cart: Cart): Cart {
   const s = db();
+  let changed = false;
   cart.items = cart.items.map((it): CartItem => {
     const nft = s.nfts.find((n) => n.id === it.nftId);
     const ed = nft?.editions.find((e) => e.kind === it.edition);
-    if (!nft || !ed) return { ...it, available: 0, notice: "Item indisponível" };
+    if (!nft || !ed) {
+      if (it.available !== 0 || it.notice !== "Item indisponível") changed = true;
+      return { ...it, available: 0, notice: "Item indisponível" };
+    }
     let notice = it.notice;
-    if (ed.price !== it.unitPrice)
+    if (ed.price !== it.unitPrice) {
       notice = `Preço atualizado de ${it.unitPrice} para ${ed.price} ETH`;
-    if (ed.available < it.quantity)
+      changed = true;
+    }
+    if (ed.available < it.quantity) {
       notice = ed.available === 0 ? "Edição esgotada" : `Apenas ${ed.available} disponível(is)`;
+      changed = true;
+    }
     return {
       ...it,
       unitPrice: ed.price,
@@ -113,5 +121,8 @@ export function refreshCart(cart: Cart): Cart {
       notice,
     };
   });
+  if (changed) {
+    cart.version += 1;
+  }
   return cart;
 }

@@ -19,13 +19,11 @@ import { SessionProvider } from "@/lib/session";
 import { RealtimeProvider } from "@/lib/realtime";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { AuthBackdrop } from "@/components/layout/AuthBackdrop";
 import { cn } from "@/lib/utils";
 
 const LazyMockPanel = lazy(() =>
   import("@/components/MockPanel").then((m) => ({ default: m.MockPanel })),
-);
-const LazyAuthBackdrop = lazy(() =>
-  import("@/components/layout/AuthBackdrop").then((m) => ({ default: m.AuthBackdrop })),
 );
 
 /** Apresenta uma saída simples quando a URL não corresponde a uma rota. */
@@ -147,11 +145,7 @@ function RootComponent() {
           <RealtimeProvider>
             <Header />
             <main id="conteudo">
-              {isAuthRoute && (
-                <Suspense fallback={null}>
-                  <LazyAuthBackdrop />
-                </Suspense>
-              )}
+              {isAuthRoute && <AuthBackdrop />}
               <Outlet />
             </main>
             <div className={cn(hideFooterOnMobile && "max-md:hidden")}>

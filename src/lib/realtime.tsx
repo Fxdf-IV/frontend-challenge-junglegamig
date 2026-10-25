@@ -62,6 +62,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
           if (connectedOnce) {
             qc.invalidateQueries({ queryKey: ["nfts"] });
             qc.invalidateQueries({ queryKey: ["cart"] });
+            qc.invalidateQueries({ queryKey: ["quote"] });
             qc.invalidateQueries({ queryKey: ["u"], predicate: (q) => q.queryKey[2] === "order" });
             setAnnounce("Conexão em tempo real restabelecida");
           }
