@@ -2,7 +2,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { zodValidator } from "@tanstack/zod-adapter";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { ArrowRight, Search, SlidersHorizontal } from "lucide-react";
 import { Catalog } from "@/components/nft/Catalog";
 import { HomeEditorialSections } from "@/components/home/HomeEditorialSections";
 import { catalogSearchSchema } from "@/lib/catalog-search";
@@ -41,9 +41,9 @@ function Home() {
     });
   };
   return (
-    <>
+    <div className="pb-28 md:pb-0">
       <div className="container-page pt-4 md:hidden">
-        <form onSubmit={submit} role="search" className="flex gap-2">
+        <form onSubmit={submit} role="search" className="flex gap-2.5">
           <label htmlFor="home-search" className="sr-only">
             Explorar coleções
           </label>
@@ -58,7 +58,7 @@ function Home() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Explorar coleções"
-              className="h-11 w-full rounded-xl border border-input bg-card pl-11 pr-4 text-sm"
+              className="h-11 w-full rounded-2xl border border-input/50 bg-card pl-11 pr-4 text-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             />
           </div>
           <Button
@@ -66,20 +66,25 @@ function Home() {
             variant="brand"
             size="icon"
             aria-label="Ir para os filtros"
+            className="h-11 w-11 rounded-2xl shadow-sm"
             onClick={() => window.dispatchEvent(new Event("kurio:open-catalog-filters"))}
           >
-            <SlidersHorizontal />
+            <SlidersHorizontal className="h-5 w-5" />
           </Button>
         </form>
       </div>
-      <section className="container-page grid grid-cols-[minmax(0,1fr)_8rem] items-center gap-4 py-5 max-md:rounded-2xl max-md:bg-card max-md:!px-4 max-md:py-4 md:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] md:gap-8 md:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]">
+      <section className="container-page my-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4 max-md:rounded-3xl max-md:bg-hero-circles max-md:px-5 max-md:py-6 md:my-0 md:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] md:gap-8 md:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]">
         <div className="md:pl-8">
-          <p className="text-[10px] md:text-sm">Bem-vindo à Kurio</p>
-          <h1 className="mt-2 text-base font-extrabold uppercase leading-tight md:mt-4 md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.3]">
-            <span className="md:hidden">Seja dono da cultura digital</span>
+          <p className="text-[11px] text-foreground/80 md:text-sm">Bem-vindo à Kurio</p>
+          <h1 className="mt-2 text-base font-extrabold uppercase leading-snug tracking-wide md:mt-4 md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.3]">
+            <span className="md:hidden">
+              Seja dono da
+              <br />
+              cultura digital
+            </span>
             <span className="hidden md:inline">Seja dono do futuro da arte digital</span>
           </h1>
-          <p className="mt-2 line-clamp-3 text-[10px] leading-relaxed text-muted-foreground md:mt-4 md:max-w-xl md:text-sm">
+          <p className="mt-2 line-clamp-3 text-[11px] leading-relaxed text-muted-foreground md:mt-4 md:max-w-xl md:text-sm">
             <span className="md:hidden">
               Descubra NFTs selecionados de criadores do mundo todo.
             </span>
@@ -88,23 +93,48 @@ function Home() {
               digital rara, apoie artistas e tenha uma parte da cultura da internet.
             </span>
           </p>
-          <Button variant="brand" size="sm" className="mt-3 md:mt-6" asChild>
-            <Link to="/" hash="catalogo">
-              Explorar
+          <div className="mt-3 md:mt-6">
+            <Link
+              to="/"
+              hash="catalogo"
+              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary transition-colors hover:text-primary/80 md:hidden"
+            >
+              Explorar <ArrowRight className="h-3.5 w-3.5" aria-hidden />
             </Link>
-          </Button>
+            <Button variant="brand" size="sm" className="hidden md:inline-flex" asChild>
+              <Link to="/" hash="catalogo">
+                Explorar
+              </Link>
+            </Button>
+          </div>
         </div>
-        <img
-          src="/nft/emerald.webp"
-          alt="Emerald Ape #042, macaco ilustrado de óculos e jaqueta verde"
-          width={480}
-          height={480}
-          fetchPriority="high"
-          className="aspect-square w-full rounded-xl object-cover md:rounded-2xl"
-        />
+        <div className="relative self-center">
+          <img
+            src="/nft/emerald.webp"
+            alt="Emerald Ape #042, macaco ilustrado de óculos e jaqueta verde"
+            width={480}
+            height={480}
+            fetchPriority="high"
+            className="aspect-square w-28 rounded-2xl object-cover shadow-md md:w-full md:rounded-2xl"
+          />
+          <img
+            src="/nft/sage.webp"
+            alt=""
+            aria-hidden="true"
+            width={96}
+            height={96}
+            loading="lazy"
+            className="absolute -bottom-3 -left-3 size-14 rounded-2xl border-2 border-card object-cover shadow-lg md:hidden"
+          />
+        </div>
+        <div className="col-span-2 mt-2 flex justify-center gap-2 md:hidden" aria-hidden="true">
+          <span className="h-2 w-2 rounded-full bg-primary" />
+          <span className="h-2 w-2 rounded-full bg-[#55321f]" />
+          <span className="h-2 w-2 rounded-full bg-[#55321f]" />
+        </div>
       </section>
       <Catalog search={search} from="/" />
       <HomeEditorialSections />
-    </>
+    </div>
   );
 }

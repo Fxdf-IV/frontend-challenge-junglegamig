@@ -227,11 +227,10 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
   );
 }
 
-/** Mantém os intervalos de linha amplos o bastante para separar os cartões. */
+/** Mantém os intervalos de linha amplos o bastante para separar os cartões com deslocamento escalonado mobile. */
 function Grid({ children }: { children: React.ReactNode }) {
-  // O espaçamento vertical atende à observação #61 sem aumentar o intervalo horizontal.
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-4 max-md:pb-14 max-md:*:even:translate-y-7 md:grid-cols-3 md:gap-x-6 md:gap-y-10">
       {children}
     </div>
   );

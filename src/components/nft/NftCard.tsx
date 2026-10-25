@@ -1,17 +1,30 @@
+// Card de NFT para grades de catálogo: apresenta arte, raridade, preço e atalho de favoritos.
 import { Link } from "@tanstack/react-router";
+import { Heart } from "lucide-react";
 import type { Nft } from "@/api/types";
 import { formatEth } from "@/lib/eth";
+import { useFavorites, useToggleFavorite } from "@/lib/favorites";
+import { cn } from "@/lib/utils";
 
+/**
+ * Renderiza o card individual com imagem recortada, selo de raridade opcional,
+ * preço em ETH e botão de favoritar otimista no canto superior.
+ */
 export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   const soldOut = nft.editions.every((e) => e.available === 0);
+  const rarity = nft.attributes?.find((a) => a === "Raro" || a === "Épico" || a === "Lendário");
+  const { data: favIds } = useFavorites();
+  const toggle = useToggleFavorite();
+  const isFav = favIds?.includes(nft.id) ?? false;
+
   return (
-    <article className="group">
+    <article className="group relative">
       <Link
         to="/nft/$id"
         params={{ id: nft.id }}
-        className="block rounded-lg focus-visible:outline-offset-4"
+        className="block rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
-        <div className="aspect-square overflow-hidden rounded-lg bg-card p-2">
+        <div className="relative aspect-square overflow-hidden rounded-2xl bg-card">
           <img
             src={nft.image}
             alt={`Arte do NFT ${nft.name}`}
@@ -20,24 +33,42 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
             loading={priority ? "eager" : "lazy"}
             fetchPriority={priority ? "high" : undefined}
             decoding="async"
-            className="h-full w-full rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="h-full w-full rounded-2xl object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
+          {rarity && (
+            <span className="absolute top-0 left-0 rounded-tl-2xl rounded-br-md bg-primary px-3 py-1 text-[10px] font-bold uppercase text-primary-foreground shadow-sm">
+              {rarity}
+            </span>
+          )}
+          <button
+            type="button"
+            aria-label={
+              isFav ? `Remover dos favoritos: ${nft.name}` : `Adicionar aos favoritos: ${nft.name}`
+            }
+            aria-pressed={isFav}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggle.mutate({ id: nft.id, on: !isFav });
+            }}
+            className="absolute top-2 right-2 flex size-8 cursor-pointer items-center justify-center rounded-full bg-background/60 text-foreground backdrop-blur-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <Heart className={cn("size-4", isFav && "fill-red-500 text-red-500")} />
+          </button>
         </div>
-        <h3 className="mt-3 truncate text-sm">{nft.name}</h3>
-        <p className="mt-1 text-sm">
+        <h3 className="mt-2.5 truncate text-xs font-semibold text-foreground">{nft.name}</h3>
+        <p className="mt-1 flex items-baseline gap-2 text-xs">
           <span className="font-bold text-primary">{formatEth(nft.price)}</span>
           {nft.compareAt && (
             <s
-              className="ml-2 text-muted-foreground"
+              className="text-muted-foreground"
               aria-label={`preço anterior ${formatEth(nft.compareAt)}`}
             >
               {formatEth(nft.compareAt)}
             </s>
           )}
           {soldOut && (
-            <span className="ml-2 rounded bg-panel px-1.5 py-0.5 text-[10px] uppercase">
-              Esgotado
-            </span>
+            <span className="rounded bg-panel px-1.5 py-0.5 text-[10px] uppercase">Esgotado</span>
           )}
         </p>
       </Link>
@@ -45,10 +76,11 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   );
 }
 
+/** Exibe esqueleto do card durante o carregamento do catálogo. */
 export function NftCardSkeleton() {
   return (
     <div aria-hidden>
-      <div className="shimmer aspect-square rounded-lg" />
+      <div className="shimmer aspect-square rounded-2xl" />
       <div className="shimmer mt-3 h-4 w-3/4 rounded" />
       <div className="shimmer mt-2 h-4 w-1/3 rounded" />
     </div>
