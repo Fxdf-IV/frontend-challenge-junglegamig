@@ -14,6 +14,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Refinamento visual da barra de ferramentas e abas do catálogo (`src/components/nft/Catalog.tsx`, `src/styles.css`, FD-33):**
+  - Adicionado utilitário `@utility no-scrollbar` em `src/styles.css` eliminando qualquer barra de rolagem horizontal cinza nativa do navegador em Windows/macOS/Linux.
+  - Adicionado `shrink-0` nas abas de navegação do catálogo ("Todos os NFTs", "Novos lançamentos", "Em alta") e borda de base horizontal `border-b border-[#3d2c20]/60`, garantindo que o texto nunca mais seja truncado (ex.: "Em al").
+  - Estilizado o campo de busca "Explorar coleções" com ícone embutido `Search` da Lucide, superfície escura `#19110a`, borda fina `#3d2c20` e tipografia `font-mono text-xs`.
+  - Estilizado o seletor "Ordenar por:" com `appearance-none`, fundo `#19110a`, borda `#3d2c20` e seta customizada `ChevronDown` em tom bronze (`#CFB28C`).
+  - Alinhamento responsivo fluido com `xl:flex-row xl:items-center xl:justify-between`, evitando empilhamento assimétrico entre busca e ordenação.
+  - Suíte de testes (Vitest 32/32 e Playwright 4/4) 100% aprovada sem overflow horizontal em 390, 768 e 1440 px.
+
 - **Alinhamento do rodapé às opções e estilos oficiais do Figma (`src/components/layout/Footer.tsx`, FD-32):**
   - Atualizadas as três colunas de navegação do rodapé com exatamente as 5 opções do design do Figma:
     - Coluna 1 ("Meu perfil"): "Meu perfil" (link `/perfil`), "Minha coleção" (aviso de escopo), "Atividade" (aviso de escopo), "Estúdio do criador" (link `/criadores`) e "Lista de interesse" (link `/favoritos`).

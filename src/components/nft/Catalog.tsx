@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, Search, SlidersHorizontal, X } from "lucide-react";
 import { nftListQuery } from "@/api/queries";
 import type { NftListResponse, NftSort } from "@/api/types";
 import { Slider } from "@/components/ui/slider";
@@ -82,11 +82,13 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
           <FeaturedOffer />
         </aside>
         <div className="min-w-0">
-          <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          {/* Cabeçalho da barra de ferramentas do catálogo: abas, busca e ordenação alinhados ao Figma */}
+          <div className="mb-6 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            {/* Abas de navegação de seção: sem barra de rolagem cinza nativa e sem quebra de texto */}
             <div
               role="tablist"
               aria-label="Seções do catálogo"
-              className="flex gap-5 overflow-x-auto text-sm"
+              className="no-scrollbar flex items-center gap-6 overflow-x-auto border-b border-[#3d2c20]/60 font-mono text-xs md:text-sm"
             >
               {TABS.map(([id, label]) => (
                 <button
@@ -95,50 +97,75 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
                   aria-selected={params.tab === id}
                   onClick={() => set({ tab: id === "all" ? undefined : id })}
                   className={cn(
-                    "whitespace-nowrap border-b-2 pb-1",
+                    "-mb-px shrink-0 cursor-pointer whitespace-nowrap border-b-2 pb-2.5 transition-colors",
                     params.tab === id
-                      ? "border-primary text-primary"
-                      : "border-transparent hover:text-primary",
+                      ? "border-primary font-bold text-primary"
+                      : "border-transparent text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {label}
                 </button>
               ))}
             </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <label
+
+            {/* Controles de busca, ordenação e acionamento de filtros móveis */}
+            <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-start md:justify-end">
+              {/* Campo de busca no catálogo exclusivo da rota do mercado */}
+              <div
                 className={cn(
-                  "relative min-w-0 flex-1 lg:w-56 lg:flex-none",
+                  "relative min-w-[13rem] max-w-full flex-1 sm:flex-none",
                   from === "/" && "hidden",
                 )}
               >
-                <span className="sr-only">Buscar no catálogo</span>
+                <Search
+                  className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <label htmlFor="catalog-search-input" className="sr-only">
+                  Buscar no catálogo
+                </label>
                 <input
+                  id="catalog-search-input"
                   type="search"
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                   placeholder="Explorar coleções"
-                  className="h-9 w-full rounded-md border border-input bg-card px-3 text-sm placeholder:text-muted-foreground"
+                  className="h-9 w-full rounded-md border border-[#3d2c20] bg-[#19110a] pl-9 pr-3 font-mono text-xs text-foreground placeholder:text-muted-foreground transition-colors focus-visible:border-primary focus-visible:outline-none"
                 />
-              </label>
-              <label
-                className={cn("flex items-center gap-2 text-sm", from === "/" && "max-md:hidden")}
+              </div>
+
+              {/* Seletor estilizado de ordenação de itens */}
+              <div
+                className={cn(
+                  "flex shrink-0 items-center gap-2 font-mono text-xs text-muted-foreground",
+                  from === "/" && "max-md:hidden",
+                )}
               >
                 <span className="whitespace-nowrap">Ordenar por:</span>
-                <select
-                  value={params.sort}
-                  onChange={(e) =>
-                    set({ sort: e.target.value === "recent" ? undefined : e.target.value })
-                  }
-                  className="h-9 rounded-md border border-input bg-card px-2 text-sm"
-                >
-                  {SORTS.map(([v, l]) => (
-                    <option key={v} value={v}>
-                      {l}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <div className="relative">
+                  <select
+                    id="catalog-sort-select"
+                    value={params.sort}
+                    onChange={(e) =>
+                      set({ sort: e.target.value === "recent" ? undefined : e.target.value })
+                    }
+                    aria-label="Ordenar por"
+                    className="h-9 cursor-pointer appearance-none rounded-md border border-[#3d2c20] bg-[#19110a] pl-3 pr-8 font-mono text-xs text-foreground transition-colors focus-visible:border-primary focus-visible:outline-none"
+                  >
+                    {SORTS.map(([v, l]) => (
+                      <option key={v} value={v} className="bg-[#19110a] text-foreground">
+                        {l}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    className="pointer-events-none absolute right-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[#CFB28C]"
+                    aria-hidden="true"
+                  />
+                </div>
+              </div>
+
+              {/* Botão de acionamento do drawer de filtros em telas móveis */}
               <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
                 <SheetTrigger asChild>
                   <Button
