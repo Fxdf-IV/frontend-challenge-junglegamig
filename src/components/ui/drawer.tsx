@@ -1,3 +1,4 @@
+// Gaveta móvel Drawer (shadcn/ui baseada em Vaul) adaptada para painéis retráteis no layout mobile do Figma.
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 

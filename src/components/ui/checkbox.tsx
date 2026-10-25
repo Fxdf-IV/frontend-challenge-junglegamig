@@ -1,3 +1,4 @@
+// Componente Checkbox (shadcn/ui baseado em Radix UI) adaptado para os tokens de seleção e bordas do Figma.
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { Check } from "lucide-react";

@@ -1,3 +1,4 @@
+// Menu de contexto ContextMenu (shadcn/ui baseado em Radix UI) adaptado aos tokens de elevação e foco do Figma.
 import * as React from "react";
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 import { Check, ChevronRight, Circle } from "lucide-react";
