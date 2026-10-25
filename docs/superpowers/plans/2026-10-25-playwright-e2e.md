@@ -68,7 +68,7 @@
 **Files:** `tests/e2e/favorites.spec.ts`, `tests/e2e/cart.spec.ts`, progress and coverage docs.
 
 - [x] Group 4: cover visitor CTA, empty state, favorite persistence across refresh, optimistic rollback on `favorite-fail`, and successful retry. Focused E2E passed 8/8 across desktop/mobile.
-- [ ] Commit favorites separately from cart as `test: cover favorites with failure recovery`.
+- [x] Commit favorites separately from cart as `5e00e02 test: cover favorites with failure recovery`.
 - [ ] Group 5: cover add/update/remove cart, guest migration, coupon and totals in `cart.spec.ts`.
 - [ ] Run focused E2E and pre-commit checks; commit `test: cover cart persistence and totals`.
 

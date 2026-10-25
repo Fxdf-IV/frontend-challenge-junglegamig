@@ -186,7 +186,7 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   pela API local de controle somente para verificar a recuperação.
 - O carrinho foi separado deste grupo e deve ser implementado como próximo lote/commit (`cart.spec.ts`);
   não misturar com os testes de favoritos.
-- Arquivos do grupo 4 ainda estão sem commit: `tests/e2e/favorites.spec.ts`, `docs/PROGRESSO.md`,
-  `docs/REQUISITOS-COBERTURA.md`, `docs/superpowers/plans/2026-10-25-playwright-e2e.md` e este handoff.
-  Antes do commit executar typecheck, lint e Vitest; depois commit coeso `test: cover favorites with
-  failure recovery` e registrar seu hash aqui.
+- O lote foi commitado como `5e00e02 test: cover favorites with failure recovery`; typecheck passou,
+  lint sem erros/com 9 avisos conhecidos e Vitest 18/18. O focused E2E passou 8/8 com um worker.
+- Próximo trabalho: grupo 5 carrinho, criar `tests/e2e/cart.spec.ts` e cobrir add/update/remove, migração
+  do visitante no login, cupom e totais. Fazer commit separado e atualizar o progresso e este handoff.
