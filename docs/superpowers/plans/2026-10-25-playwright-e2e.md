@@ -83,8 +83,8 @@
 
 **Files:** `tests/e2e/checkout-failures.spec.ts`, progress and coverage docs.
 
-- [ ] Cover declined payment, stale price, sold-out edition, invalid/expired coupon, timeout recovery, double-click blocking and same-key retry.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover checkout failures and idempotency`.
+- [x] Cover declined payment, stale price, sold-out edition, timeout recovery, double-click blocking and same-key retry; invalid/expired coupons were already covered in Task 5.
+- [x] Focused E2E passed 10/10 across desktop/mobile; typecheck, lint (0 errors, 9 existing warnings) and Vitest (18/18) passed. Commit `test: cover checkout failures and idempotency` is the next action.
 
 ### Task 8: Profile and wallets
 
