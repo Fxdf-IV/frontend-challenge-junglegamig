@@ -143,5 +143,7 @@ test("reconecta o socket e reconcilia carrinho e cotação pela API", async ({ p
   expect(updated).toBe(200);
   await expectRealtimeStatus(page, "connected");
   await expect.poll(() => cartReads.length).toBeGreaterThan(baselineCartReads);
-  await expect(page.getByText("1.04 ETH", { exact: true }).first()).toBeVisible();
+  await expect(
+    page.getByRole("complementary").getByText("1.04 ETH", { exact: true }),
+  ).toBeVisible();
 });

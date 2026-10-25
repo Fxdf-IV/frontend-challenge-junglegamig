@@ -5,10 +5,10 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 (regras em `AGENTS.md`, seção 13).
 
 Legenda de leitura: "Implementado" significa que o código existe, mas o requisito ainda não tem prova
-automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–8 estão verificados;
+automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–9 estão verificados;
 o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 20 · Implementado 55 · Em andamento 8 · Pendente 26 (109 itens)
+**Resumo atual:** Verificado 28 · Implementado 48 · Em andamento 8 · Pendente 25 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -19,11 +19,11 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | TanStack Query     | Implementado | `src/api/queries.ts`, hooks em `src/lib`                    |
 | Axios              | Implementado | `src/api/client.ts`                                         |
 | REST APIs          | Implementado | `src/api/endpoints.ts`, handlers em `src/mocks/handlers.ts` |
-| Socket.IO          | Implementado | `src/lib/realtime.tsx`, `src/mocks/realtime.ts`             |
+| Socket.IO          | Verificado   | `src/lib/realtime.tsx`, `src/mocks/realtime.ts`, `tests/e2e/checkout-realtime.spec.ts` |
 | Tailwind CSS       | Implementado | `src/styles.css`                                            |
 | shadcn/ui          | Implementado | `src/components/ui` (adaptar aos tokens do Figma)           |
 | MSW                | Implementado | `src/mocks`                                                 |
-| Playwright         | Em andamento | Grupos 1–8 verificados; grupo 3 parcial; grupos 9–12 e regressão visual pendentes |
+| Playwright         | Em andamento | Grupos 1–9 verificados; grupo 3 parcial; grupos 10–12 e regressão visual pendentes |
 | Lighthouse         | Pendente     | Sem configuração nem relatórios                             |
 
 ## 3. Telas e fluxos
@@ -62,7 +62,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Carrinho persiste e itens do visitante migram no login  | Verificado   | `tests/e2e/cart.spec.ts` (migração no login) |
 | Cupom: aplicar, remover, inválido, expirado             | Verificado   | `tests/e2e/cart.spec.ts` (válido, inválido, expirado) |
 | Subtotal, desconto, taxa e total vindos da API          | Verificado   | `tests/e2e/cart.spec.ts` (subtotal e total via cotação) |
-| Reflete preço e disponibilidade em tempo real           | Implementado | `lib/realtime.tsx` (`nft.updated`)     |
+| Reflete preço e disponibilidade em tempo real           | Verificado   | `tests/e2e/checkout-realtime.spec.ts` (`nft.updated`)   |
 | ETH como string decimal; quantidades inteiras           | Implementado | `lib/eth.ts`, `eth.test.ts` (unitário) |
 
 ## Pagamento e confirmação
@@ -119,8 +119,8 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Lentidão, jitter, timeout, offline, 4xx/5xx                                         | Implementado | `withScenario` (`slow`, `jitter`, `flaky`, `offline`, `server-error`) |
 | Fixtures variadas e dois usuários                                                   | Implementado | `mocks/fixtures.ts`; revisar variedade para paginação                 |
 | Cenários: sucesso, vazio, expirada, cupom, preço, esgotado, timeout, pago, recusado | Implementado | `ScenarioId` em `api/types.ts`                                        |
-| Socket.IO via `@mswjs/socket.io-binding`                                            | Implementado | `mocks/realtime.ts`                                                   |
-| Mudanças refletem em REST e eventos                                                 | Implementado | `bumpNft`, `resolveOrder`                                             |
+| Socket.IO via `@mswjs/socket.io-binding`                                            | Verificado   | `mocks/realtime.ts`, `tests/e2e/checkout-realtime.spec.ts`            |
+| Mudanças refletem em REST e eventos                                                 | Verificado   | `bumpNft`, `resolveOrder`, `tests/e2e/checkout-realtime.spec.ts`      |
 | Mock ativado por variável de ambiente e no build de demo                            | Em andamento | `VITE_ENABLE_MOCKS`; confirmar no build                               |
 | Limitações do transporte documentadas                                               | Pendente     | `ARCHITECTURE.md`                                                     |
 
@@ -128,12 +128,12 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 
 | Item                                                              | Status       | Onde / prova                      |
 | ----------------------------------------------------------------- | ------------ | --------------------------------- |
-| `nft.updated` e `order.updated`                                   | Implementado | `lib/realtime.tsx`                |
+| `nft.updated` e `order.updated`                                   | Verificado   | `tests/e2e/checkout-realtime.spec.ts` |
 | Identidade estável, recurso e versão; tolera duplicatas e antigos | Implementado | `fresh()` em `realtime.tsx`       |
-| Reconexão reconcilia com REST                                     | Implementado | `connect` com `invalidateQueries` |
+| Reconexão reconcilia com REST                                     | Verificado   | `tests/e2e/checkout-realtime.spec.ts` |
 | Eventos de outra sessão ignorados                                 | Implementado | Filtro por `userId`               |
 | Listeners liberados no cleanup                                    | Implementado | `removeAllListeners`              |
-| Cenário carrinho, mudança, aviso, checkout bloqueado              | Implementado | Cenário `price-change`            |
+| Cenário carrinho, mudança, aviso, checkout bloqueado              | Verificado   | `tests/e2e/checkout-realtime.spec.ts`, `tests/e2e/checkout-failures.spec.ts` |
 | Interrupção com pedido pendente sem nova compra                   | Implementado | Cenário `order-timeout`           |
 
 ## 8. Interface, responsividade e acessibilidade
@@ -163,7 +163,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 6. Compra completa até o recibo                                         | Verificado (`tests/e2e/checkout-success.spec.ts`; 2/2, desktop/mobile) |
 | 7. Falha de pagamento, clique repetido, timeout e idempotência          | Verificado (`tests/e2e/checkout-failures.spec.ts`; 10/10, desktop/mobile) |
 | 8. Perfil, avatar, senha e carteiras com erros                          | Verificado (`tests/e2e/profile-wallets.spec.ts`; 8/8, desktop/mobile) |
-| 9. Preço/disponibilidade via Socket.IO no checkout                      | Pendente |
+| 9. Preço/disponibilidade via Socket.IO no checkout                      | Verificado (`tests/e2e/checkout-realtime.spec.ts`; 6/6, desktop/mobile) |
 | 10. Eventos duplicados/antigos, desconexão, retomada                    | Pendente |
 | 11. Teclado, foco de dialogs, validação                                 | Pendente |
 | 12. Skeletons, falha e recuperação                                      | Pendente |

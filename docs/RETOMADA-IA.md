@@ -250,14 +250,11 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 - Próxima ação obrigatória: reproduzir o handshake com instrumentação que diferencie o contexto da página do Service Worker, confirmar se `socketHandler` recebe `connection`, inspecionar URL/path/protocolo normalizados e o par `WebSocketClientHandle`/`WebSocketServerHandle` do MSW. Ler `@mswjs/socket.io-binding/src/index.ts` e `node_modules/msw/lib/_chunks/attach-sibling-handlers.js`; não inferir pelos quadros HMR. Resolver por teste RED→GREEN antes de mudar a implementação. Se o binding MSW não suportar o fluxo no browser, documentar precisamente a limitação e escolher correção compatível com os requisitos, sem falsificar eventos pela UI.
 - Quando Task 9 passar: atualizar `docs/REQUISITOS-COBERTURA.md`, `docs/PROGRESSO.md`, este handoff e o plano; precommit sequencial `bun run typecheck`, `bun run lint`, `bun run test`; focused E2E desktop/mobile e `git diff --check`; commits separados e coesos, cada um atualizando `docs/PROGRESSO.md`. Depois seguir Tasks 10–13.
 
-## Pausa rápida — causa raiz do Socket.IO resolvida no grupo 9 (25/10/2026)
+## Estado consolidado mais recente — grupo 9 Socket.IO concluído (25/10/2026)
 
 - Causa raiz de `Eventos Socket.IO (connecting)` identificada e corrigida:
   1. `engine.io-client/build/esm/transports/websocket.js` capturava `const WebSocketCtor = globalThis.WebSocket` na avaliação estática do módulo, **antes** de `MocksGate` concluir `await worker.start()` do MSW. Em `src/lib/realtime.tsx`, `socket.io-client` passou a ser importado dinamicamente (`import("socket.io-client")`) dentro do `useEffect` do `RealtimeProvider` (que só monta depois do `MocksGate`).
-  2. Em `src/mocks/realtime.ts`, `ws.link(socketUrl.href)` usa a raiz `ws://`/`wss://` compatível com o `parse()` do MSW que remove `/^\/socket.io\//`.
-  3. Com isso, o Cenário 1 de `tests/e2e/checkout-realtime.spec.ts` (`confirma o pedido pendente pelo evento Socket.IO antes do polling`) **passou em desktop e mobile**!
-- Em `src/mocks/realtime.ts`, ajustou-se também o bloqueio durante `Date.now() < refuseUntil` para disparar `new Event("error")` no socket interceptado antes de `connection.client.close()`, evitando que o `Manager.open()` do `socket.io-client` aguarde timeout de 20s sem agendar reconexão; e adicionou-se o Cenário 2 (`atualiza cotação no checkout via Socket.IO quando preço muda ou edição esgota`) em `tests/e2e/checkout-realtime.spec.ts`.
-- **Ao retomar**:
-  1. Rodar `bun run test:e2e -- tests/e2e/checkout-realtime.spec.ts --workers=1` para validar os 3 cenários do Grupo 9 em desktop e mobile.
-  2. Rodar `bun run typecheck`, `bun run lint` e `bun run test` em sequência, atualizar `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md` e o plano, e commitar o lote do Grupo 9.
-  3. Prosseguir para os Grupos 10, 11, 12 e regressão visual (Task 13).
+  2. Em `src/mocks/realtime.ts`, `ws.link(socketUrl.href)` usa a raiz `ws://`/`wss://` compatível com o `parse()` do MSW que remove `/^\/socket.io\//`, e durante `Date.now() < refuseUntil` dispara `new Event("error")` no socket interceptado antes de `connection.client.close()` para agendar reconexão imediata.
+- `tests/e2e/checkout-realtime.spec.ts` passou **6/6** em Chromium desktop e mobile (`--workers=1`), cobrindo confirmação do pedido via `order.updated` antes do polling (`orderReads <= 1`), mudança de preço e bloqueio por esgotamento via `nft.updated` na revisão do checkout e queda/reconexão do socket com reconciliação de `/api/cart` e cotação.
+- Matriz atualizada: Verificado 28, Implementado 48, Em andamento 8, Pendente 25 (109 itens).
+- Próximo passo imediato: Task 10 (`tests/e2e/event-versioning.spec.ts` — deduplicação, versões antigas e retomada sem compra duplicada), seguido por Tasks 11, 12 e 13.

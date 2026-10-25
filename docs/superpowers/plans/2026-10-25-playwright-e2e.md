@@ -97,8 +97,8 @@
 
 **Files:** `tests/e2e/checkout-realtime.spec.ts`, progress and coverage docs.
 
-- [ ] Verify a pending checkout updates through the Socket.IO client and receipt; test disconnect/reconnect and REST reconciliation.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover checkout realtime reconciliation`.
+- [x] Verify a pending checkout updates through the Socket.IO client and receipt; test live price/availability change in checkout review, disconnect/reconnect and REST reconciliation. Focused E2E passed 6/6 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover checkout realtime reconciliation`.
 
 ### Task 10: Event versioning
 
