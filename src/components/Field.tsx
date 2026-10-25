@@ -1,10 +1,12 @@
+// Componente de campo de entrada com rótulo acessível, hint e indicação de erro.
 import { useId, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
+/** Estilo compartilhado de campos de entrada do sistema. */
 export const inputClass =
-  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm placeholder:text-muted-foreground aria-[invalid=true]:border-destructive";
+  "h-10 w-full rounded-md border border-input bg-card px-3 text-sm placeholder:text-muted-foreground aria-[invalid=true]:border-destructive focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary";
 
-/** Labelled input with associated error/hint (aria-describedby). */
+/** Campo de formulário acessível com associação de rótulo e mensagens de erro via aria-describedby. */
 export function Field({
   label,
   error,
@@ -13,7 +15,7 @@ export function Field({
   children,
   ...props
 }: InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label: ReactNode;
   error?: string;
   hint?: ReactNode;
   children?: ReactNode;
@@ -21,10 +23,33 @@ export function Field({
   const id = useId();
   const errId = `${id}-err`;
   const hintId = `${id}-hint`;
+
+  /** Formata o asterisco obrigatório em laranja conforme o design do Figma. */
+  const renderLabel = () => {
+    if (typeof label !== "string") return label;
+    if (label.endsWith(" *")) {
+      return (
+        <>
+          {label.slice(0, -1)}
+          <span className="text-primary">*</span>
+        </>
+      );
+    }
+    if (label.endsWith("*")) {
+      return (
+        <>
+          {label.slice(0, -1)}
+          <span className="text-primary">*</span>
+        </>
+      );
+    }
+    return label;
+  };
+
   return (
     <div className={className}>
-      <label htmlFor={id} className="mb-1.5 block text-xs font-semibold">
-        {label}
+      <label htmlFor={id} className="mb-1.5 block text-xs font-semibold font-mono text-foreground">
+        {renderLabel()}
       </label>
       <div className="relative">
         <input
@@ -42,7 +67,7 @@ export function Field({
         </p>
       )}
       {error && (
-        <p id={errId} className="mt-1 text-[11px] text-destructive">
+        <p id={errId} role="alert" className="mt-1 text-[11px] text-destructive">
           {error}
         </p>
       )}
@@ -50,6 +75,7 @@ export function Field({
   );
 }
 
+/** Exibe alerta com erro geral de submissão do formulário. */
 export function FormError({ message }: { message?: string }) {
   if (!message) return null;
   return (
