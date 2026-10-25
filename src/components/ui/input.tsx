@@ -1,3 +1,4 @@
+// Campo de texto Input (shadcn/ui) adaptado para os tokens de bordas, background bg-card e foco do Figma.
 import * as React from "react";
 
 import { cn } from "@/lib/utils";

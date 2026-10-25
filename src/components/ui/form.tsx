@@ -1,3 +1,4 @@
+// Primitivas de formulário Form (shadcn/ui baseadas em react-hook-form) adaptadas com tratamento de erros do Figma.
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";

@@ -1,3 +1,4 @@
+// Barra de menus Menubar (shadcn/ui baseada em Radix UI) adaptada para navegação horizontal e tokens do Figma.
 import * as React from "react";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
 import { Check, ChevronRight, Circle } from "lucide-react";

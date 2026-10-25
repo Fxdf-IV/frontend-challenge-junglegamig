@@ -19,6 +19,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote 4 de componentes UI shadcn/ui):**
+  - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `form.tsx`, `hover-card.tsx`, `input-otp.tsx`, `input.tsx`, `label.tsx` e `menubar.tsx`.
 - **Documentação e Código Comentado (Lote 3 de componentes UI shadcn/ui):**
   - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `checkbox.tsx`, `collapsible.tsx`, `command.tsx`, `context-menu.tsx`, `drawer.tsx` e `dropdown-menu.tsx`.
 - **Documentação e Código Comentado (Lote 2 de componentes UI shadcn/ui):**
