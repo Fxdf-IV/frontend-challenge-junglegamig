@@ -7,8 +7,6 @@ import {
   User as UserIcon,
   Wallet,
   LogOut,
-  Home,
-  Heart,
 } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +20,7 @@ import {
 import { useSession } from "@/lib/session";
 import { useCart } from "@/lib/cart";
 import { cn } from "@/lib/utils";
+import { MobileTabBar } from "./MobileTabBar";
 
 const NAV = [
   { to: "/", label: "Início", exact: true },
