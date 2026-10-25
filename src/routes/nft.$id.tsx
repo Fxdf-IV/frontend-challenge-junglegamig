@@ -120,6 +120,14 @@ function NftDetail() {
       { nftId: nft.id, edition: edition.kind, quantity },
       { onSuccess: () => navigate({ to: "/carrinho" }) },
     );
+  const onAddToCart = () =>
+    add.mutate(
+      { nftId: nft.id, edition: edition.kind, quantity },
+      {
+        onSuccess: () => toast.success("NFT adicionado ao carrinho"),
+        onError: (err) => toast.error(err.message),
+      },
+    );
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/nft/${nft.id}` : "";
 
   return (
@@ -296,17 +304,29 @@ function NftDetail() {
                   <Plus />
                 </Button>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <Button variant="brand" disabled={unavailable || add.isPending} onClick={onBuy}>
                   {add.isPending ? "Adicionando…" : "Comprar"}
                 </Button>
                 <Button
+                  type="button"
+                  variant="line"
+                  disabled={unavailable || add.isPending}
+                  onClick={onAddToCart}
+                  className="gap-2 font-mono text-xs font-semibold"
+                >
+                  <ShoppingCart className="size-4 text-primary" />
+                  {add.isPending ? "Adicionando…" : "Adicionar ao carrinho"}
+                </Button>
+                <Button
+                  type="button"
                   variant="line"
                   onClick={onFav}
                   aria-pressed={isFav}
                   disabled={toggleFav.isPending}
+                  className="gap-2 font-mono text-xs font-semibold"
                 >
-                  <Heart className={cn(isFav && "fill-primary text-primary")} />{" "}
+                  <Heart className={cn("size-4", isFav && "fill-primary text-primary")} />{" "}
                   {isFav ? "Favoritado" : "Favoritar"}
                 </Button>
               </div>
@@ -449,15 +469,7 @@ function NftDetail() {
             className="size-14 rounded-full border-border bg-[#2f1d15] text-primary hover:bg-[#2f1d15]/80 flex items-center justify-center shrink-0 shadow-md"
             aria-label="Adicionar ao carrinho"
             disabled={unavailable || add.isPending}
-            onClick={() => {
-              add.mutate(
-                { nftId: nft.id, edition: edition.kind, quantity },
-                {
-                  onSuccess: () => toast.success("Adicionado ao carrinho"),
-                  onError: (err) => toast.error(err.message),
-                },
-              );
-            }}
+            onClick={onAddToCart}
           >
             <ShoppingCart className="size-5" />
           </Button>
