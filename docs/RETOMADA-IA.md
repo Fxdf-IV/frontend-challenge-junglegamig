@@ -48,6 +48,9 @@ em português brasileiro.
 Para o HEAD atual, consulte `git log -n 8 --oneline`; a lista abaixo destaca os lotes funcionais.
 
 - `9347fa3 docs: record visual QA capture blocker`
+- `0149b16 docs: record Playwright smoke coverage`
+- `2a30fb6 test: add Playwright home smoke coverage`
+- `688b35c chore: ignore isolated worktrees`
 - `13d301d docs: log resumed Figma audit batches`
 - `ed60376 docs: clean handoff commit list`
 - `d32144a fix: match campaign copy to Figma`
@@ -134,3 +137,8 @@ estado atual antes de editar ou commitar.
   `typecheck` e Vitest (18/18) passaram; lint passou serialmente com 9 avisos. Faltam os outros 12
   grupos completos, regressão visual e build de entrega. Código e README estão commitados em
   `2a30fb6 test: add Playwright home smoke coverage`; há documentação de cobertura pendente de commit.
+- No worktree, `tests/e2e/catalog.spec.ts` cobre pesquisa, filtro, ordenação desktop, paginação,
+  histórico, vazio e aba durante latência variável: 9 passaram e 1 foi pulado (ordenação mobile
+  ausente no frame). A matriz marca apenas o grupo 1 como verificado. A suíte total E2E passou com
+  11 aprovados e 1 skip; Vitest 18/18 e typecheck passaram; lint sem erros e com 9 avisos existentes.
+  Os arquivos do grupo 1 estão validados e prontos para commit.

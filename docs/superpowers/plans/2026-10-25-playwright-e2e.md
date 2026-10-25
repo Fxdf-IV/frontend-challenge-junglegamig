@@ -42,9 +42,10 @@
 
 **Files:** `tests/e2e/catalog.spec.ts`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`.
 
-- [ ] Cover search, combinable filters, sort, pagination, query-string history/back, empty results and delayed/out-of-order responses.
-- [ ] Verify URL and rendered result set after each operation.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover catalog navigation and history`.
+- [x] Cover search, combinable filters, sort, pagination, query-string history/back, empty results and delayed/out-of-order responses.
+- [x] Verify URL and rendered result set after each operation.
+- [x] Run focused E2E and pre-commit checks; full E2E passed with 11 passed / 1 intentionally skipped, Vitest 18/18, typecheck clean, lint 0 errors / 9 existing warnings.
+- [ ] Commit `test: cover catalog navigation and history`.
 
 ### Task 3: NFT detail and not-found
 
@@ -128,3 +129,5 @@
 ## Coverage notes
 
 Only update matrix rows to `Verificado` after their named E2E assertion passes. This plan does not cover Lighthouse, full code comments, missing architecture documentation or deployment; those remain separate workstreams in `docs/PROGRESSO.md`.
+
+Ruling: test sorting only on desktop because the supplied mobile frame does not expose a sort control — this avoids driving an invisible control — risk if wrong: mobile sorting remains untested and unavailable to users.

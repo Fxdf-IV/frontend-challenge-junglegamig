@@ -7,7 +7,7 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 Legenda de leitura: "Implementado" aqui significa que o código existe no repositório, mas ainda não foi
 provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste de roteamento.
 
-**Resumo atual:** Verificado 0 · Implementado 71 · Em andamento 6 · Pendente 32 (109 itens)
+**Resumo atual:** Verificado 1 · Implementado 71 · Em andamento 8 · Pendente 29 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -154,7 +154,7 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 
 | Grupo                                                                   | Status   |
 | ----------------------------------------------------------------------- | -------- |
-| 1. Busca, filtros, ordenação, paginação, histórico                      | Pendente |
+| 1. Busca, filtros, ordenação, paginação, histórico                      | Verificado (`tests/e2e/catalog.spec.ts`; desktop/mobile, sort desktop) |
 | 2. Detalhe direto e recurso inexistente                                 | Pendente |
 | 3. Cadastro, login, expiração, logout, troca de usuário                 | Pendente |
 | 4. Favoritos com falha e recuperação                                    | Pendente |
