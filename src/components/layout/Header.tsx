@@ -1,13 +1,6 @@
 // Cabeçalho e navegação: expõe caminhos principais e ações globais da conta.
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import {
-  LogIn,
-  Search,
-  ShoppingCart,
-  User as UserIcon,
-  Wallet,
-  LogOut,
-} from "lucide-react";
+import { LogIn, Search, ShoppingCart, User as UserIcon, Wallet, LogOut } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -173,43 +166,7 @@ export function Header() {
           </form>
         )}
       </header>
-      {pathname === "/" ? (
-        <MobileTabBar count={count} signedIn={!!user} />
-      ) : (
-        !isStandaloneMobile && <MobileTabBar count={count} signedIn={!!user} />
-      )}
+      <MobileTabBar />
     </>
-  );
-}
-
-/** Renderiza os quatro destinos compactos da navegação inferior mobile. */
-function MobileTabBar({ count, signedIn }: { count: number; signedIn: boolean }) {
-  const items = [
-    { to: "/", label: "Início", icon: Home },
-    { to: signedIn ? "/favoritos" : "/login", label: "Favoritos", icon: Heart },
-    { to: "/carrinho", label: `Carrinho (${count})`, icon: ShoppingCart },
-    { to: signedIn ? "/perfil" : "/login", label: signedIn ? "Perfil" : "Entrar", icon: UserIcon },
-  ] as const;
-  return (
-    <nav
-      aria-label="Navegação inferior"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card md:hidden"
-    >
-      <ul className="grid grid-cols-4">
-        {items.map((it) => (
-          <li key={it.label}>
-            <Link
-              to={it.to}
-              className="flex h-14 items-center justify-center text-[11px] text-muted-foreground"
-              activeProps={{ className: "text-primary" }}
-              activeOptions={{ exact: it.to === "/" }}
-            >
-              <it.icon className="h-5 w-5" aria-hidden />
-              <span className="sr-only">{it.label}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
   );
 }

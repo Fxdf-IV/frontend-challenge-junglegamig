@@ -30,6 +30,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Implementada a barra de navegação inferior mobile fiel ao Figma em `MobileTabBar.tsx` (FD-20): contêiner curvo `rounded-t-[2.5rem]`, entalhe central SVG recortado, botão flutuante com gradiente primário e ícone `ScanLine` para focar busca/catálogo, e 4 atalhos com ícones oficiais e indicação acessível de estado ativo.
 - Alinhado o carrinho mobile ao Figma (FD-19): criado ícone vetorial `TrashFigmaIcon` com tampa reta, alça em arco e sem ranhuras internas em cor primária, reorganizada a linha de itens mobile com stepper e exclusão alinhados, input de cupom em pílula integrado com botão 'Aplicar' interno, cópia corrigida ('Desconto do lançamento', 'Taxa estimada') e botão full-width de checkout arredondado em pílula (`carrinho.tsx`).
 - Atualizada a tipografia global para Roboto Mono com carregamento 100% local (`@fontsource/roboto-mono`), alinhando ao design do Figma e eliminando requisições externas ao Google Fonts em `styles.css` e `__root.tsx` (FD-18). Adicionado utilitário `bg-hero-circles` para os anéis de gradiente do hero mobile.
 - Alinhado o modal de autenticação (`AuthShell.tsx`, `AuthForms.tsx`, `login.tsx`) ao frame do Figma

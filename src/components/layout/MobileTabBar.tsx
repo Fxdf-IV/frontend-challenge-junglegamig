@@ -32,7 +32,8 @@ export function MobileTabBar() {
     if (pathname !== "/") {
       await navigate({ to: "/" });
     }
-    const input = document.getElementById("home-search") || document.getElementById("global-search");
+    const input =
+      document.getElementById("home-search") || document.getElementById("global-search");
     if (input) {
       input.focus();
     } else {
