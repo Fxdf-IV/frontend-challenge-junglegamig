@@ -14,6 +14,20 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Carrossel interativo em "Colecionadores também viram" no carrinho (`src/routes/carrinho.tsx`, FD-26):**
+  - Implementado carrossel interativo com `embla-carousel-react` integrado à grade de recomendações do carrinho.
+  - Adicionadas setas de navegação laterais circulares (`ChevronLeft` e `ChevronRight`) flutuando nas extremidades da grade (`left-1 md:-left-5` e `right-1 md:-right-5`) com estados de foco acessíveis e desabilitação nos limites.
+  - Organizados até 15 NFTs em 3 páginas/slides de 5 itens no desktop (com suporte a arraste/swipe por toque no mobile e tablet).
+  - Transformadas as 3 bolinhas de paginação do Figma em abas interativas e acessíveis (`role="tab"`), clicáveis para saltar diretamente ao slide e sincronizadas em tempo real com o slide ativo (`○ ● ○`).
+  - Adicionado teste automatizado em `src/test/carrinho.test.tsx` e polyfills de observadores em `src/test/setup.ts` (30/30 testes no Vitest e 4/4 no Playwright).
+
+- **Redesign da navegação mobile do Meu perfil e Carteiras com seletor e Bottom Sheet (`src/components/AccountNav.tsx`, FD-31):**
+  - Removida a barra horizontal de pílulas com scroll lateral (`overflow-x-auto -mx-4`), que cortava textos na borda da tela e poluía o topo das páginas autenticadas no mobile.
+  - Implementado card seletor compacto em tema dark/ouro com o ícone da seção ativa, indicação textual clara ("Seção da conta: Dados do perfil / Carteiras") e botão "Opções ↕".
+  - Acoplada gaveta móvel inferior nativa (Bottom Sheet via Radix Dialog/Sheet) acionada pelo seletor, com puxador visual, foco preso acessível (WCAG), páginas ativas identificadas com 'Atual ✓', recursos complementares com selo 'Em breve' e atalho destacado para logout.
+  - Preservada 100% intacta a barra lateral desktop com visual fiel ao Figma.
+  - Criado teste unitário `src/components/AccountNav.test.tsx` (30/30 testes passando no Vitest) e validados os testes E2E do Playwright (`profile-wallets.spec.ts` e `visual.spec.ts` com 0 overflow).
+
 - **Refinamento do Header mobile com ícones oficiais do Figma e botões circulares sem borda (`src/components/layout/Header.tsx`, FD-30):**
   - Refatorado o cabeçalho no mobile para container flex `h-14 items-center justify-between` mantendo a grade desktop `md:grid md:h-16 md:grid-cols-[1fr_auto_1fr]` 100% inalterada.
   - Substituídos os ícones genéricos da Lucide no mobile pelos vetores SVG oficiais do Figma (`Search.svg`, `Shop.svg`, `User.svg`) no tom suave `#CFB28C`.

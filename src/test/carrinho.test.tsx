@@ -5,6 +5,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError } from "@/api/client";
 import type { Cart, Quote } from "@/api/types";
+import { buildNfts } from "@/mocks/fixtures";
 import { Route } from "@/routes/carrinho";
 
 const mocks = vi.hoisted(() => ({
@@ -12,6 +13,7 @@ const mocks = vi.hoisted(() => ({
   navigate: vi.fn(),
   updateMutate: vi.fn(),
   removeMutate: vi.fn(),
+  listNfts: vi.fn(),
 }));
 
 const sampleCart: Cart = {
@@ -63,6 +65,8 @@ const discountQuote: Quote = {
   coupon: { code: "KURIO10", bps: 1000, label: "10% de desconto" },
 };
 
+const mockSuggestedNfts = buildNfts().slice(0, 15);
+
 vi.mock("@tanstack/react-router", async (importOriginal) => {
   const actual = await importOriginal<typeof import("@tanstack/react-router")>();
   return {
@@ -75,7 +79,8 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
 vi.mock("@/api/endpoints", () => ({
   api: {
     quote: mocks.quote,
-    listNfts: vi.fn().mockResolvedValue({ items: [], total: 0 }),
+    listNfts: mocks.listNfts,
+    favorites: vi.fn().mockResolvedValue({ ids: [] }),
   },
 }));
 
@@ -103,8 +108,9 @@ vi.mock("@/lib/session", () => ({
 /** Renderiza a página do carrinho dentro de um QueryClient isolado para cada teste. */
 function renderCart() {
   const qc = new QueryClient({
-    defaultOptions: { queries: { retry: false } },
+    defaultOptions: { queries: { retry: false, queryFn: () => [] } },
   });
+  qc.setQueryData(["u", "u-ana", "favorites"], []);
   const CartComponent = Route.options.component!;
   return render(
     <QueryClientProvider client={qc}>
@@ -118,6 +124,8 @@ describe("CartPage coupon handling", () => {
     sessionStorage.clear();
     mocks.quote.mockReset();
     mocks.navigate.mockReset();
+    mocks.listNfts.mockReset();
+    mocks.listNfts.mockResolvedValue({ items: mockSuggestedNfts, total: 15 });
     mocks.quote.mockImplementation(async ({ coupon }: { coupon?: string }) => {
       if (!coupon) return baseQuote;
       if (coupon === "KURIO10") return discountQuote;
@@ -168,5 +176,23 @@ describe("CartPage coupon handling", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("Este cupom está expirado.");
     await waitFor(() => expect(checkoutBtn).not.toBeDisabled());
     expect(screen.getByText("1.24 ETH")).toBeInTheDocument();
+  });
+
+  it("renders collectors also viewed carousel with navigation arrows and pagination tabs", async () => {
+    renderCart();
+
+    expect(
+      await screen.findByRole("heading", { name: "Colecionadores também viram" }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("Slide anterior de recomendações")).toBeInTheDocument();
+    expect(screen.getByLabelText("Próximo slide de recomendações")).toBeInTheDocument();
+
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs).toHaveLength(3);
+    expect(tabs[0]).toHaveAttribute("aria-selected", "true");
+    expect(tabs[1]).toHaveAttribute("aria-selected", "false");
+    expect(tabs[2]).toHaveAttribute("aria-selected", "false");
+
+    fireEvent.click(tabs[1]);
   });
 });

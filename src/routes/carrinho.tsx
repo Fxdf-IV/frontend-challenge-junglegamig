@@ -2,11 +2,27 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, type FormEvent } from "react";
-import { AlertTriangle, ArrowLeft, ArrowRight, Minus, Plus } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+  Minus,
+  Plus,
+} from "lucide-react";
 import { api } from "@/api/endpoints";
 import { toApiError, type ApiError } from "@/api/client";
 import { nftListQuery } from "@/api/queries";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 import { TrashFigmaIcon } from "@/components/icons/TrashFigmaIcon";
 import { NftCard } from "@/components/nft/NftCard";
 import { useCart, useCartMutations } from "@/lib/cart";
@@ -72,10 +88,32 @@ function CartPage() {
     placeholderData: (p) => p,
   });
 
-  const suggestions = useQuery(nftListQuery({ page: 1, pageSize: 12 }));
+  const suggestions = useQuery(nftListQuery({ page: 1, pageSize: 24 }));
   const cartIds = items.map((i) => i.nftId);
   const suggestedItems =
-    suggestions.data?.items.filter((nft) => !cartIds.includes(nft.id)).slice(0, 5) ?? [];
+    suggestions.data?.items.filter((nft) => !cartIds.includes(nft.id)).slice(0, 15) ?? [];
+
+  const CAROUSEL_PAGE_SIZE = 5;
+  const suggestedSlides = Array.from(
+    { length: Math.ceil(suggestedItems.length / CAROUSEL_PAGE_SIZE) },
+    (_, i) => suggestedItems.slice(i * CAROUSEL_PAGE_SIZE, (i + 1) * CAROUSEL_PAGE_SIZE),
+  ).filter((s) => s.length > 0);
+
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Sincroniza o slide ativo com os indicadores de bolinhas do carrossel.
+  useEffect(() => {
+    if (!carouselApi) return;
+    const update = () => setCurrentSlide(carouselApi.selectedScrollSnap());
+    update();
+    carouselApi.on("select", update);
+    carouselApi.on("reInit", update);
+    return () => {
+      carouselApi.off("select", update);
+      carouselApi.off("reInit", update);
+    };
+  }, [carouselApi]);
 
   // Se um cupom salvo anteriormente na sessão falhar ao abrir o carrinho, preserva o erro e volta à cotação sem cupom.
   useEffect(() => {
@@ -444,7 +482,7 @@ function CartPage() {
         </aside>
       </div>
 
-      {suggestedItems.length > 0 && (
+      {suggestedSlides.length > 0 && (
         <section aria-labelledby="also-viewed-title" className="mt-16 md:mt-24">
           <h2
             id="also-viewed-title"
@@ -452,21 +490,72 @@ function CartPage() {
           >
             Colecionadores também viram
           </h2>
-          <ul
-            aria-label="Colecionadores também viram"
-            className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5"
-          >
-            {suggestedItems.map((nft) => (
-              <li key={nft.id}>
-                <NftCard nft={nft} />
-              </li>
-            ))}
-          </ul>
-          <div className="mt-8 flex justify-center gap-2" aria-hidden="true">
-            <span className="size-2 rounded-full border border-primary/60 bg-transparent" />
-            <span className="size-2 rounded-full bg-primary" />
-            <span className="size-2 rounded-full border border-primary/60 bg-transparent" />
+
+          <div className="relative mt-6">
+            <Carousel
+              opts={{
+                align: "start",
+                loop: false,
+              }}
+              setApi={setCarouselApi}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {suggestedSlides.map((slideNfts, sIdx) => (
+                  <CarouselItem key={sIdx} className="pl-4 basis-full">
+                    <ul
+                      aria-label={`Página ${sIdx + 1} de recomendações`}
+                      className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5"
+                    >
+                      {slideNfts.map((nft) => (
+                        <li key={nft.id}>
+                          <NftCard nft={nft} />
+                        </li>
+                      ))}
+                    </ul>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+
+              <CarouselPrevious
+                aria-label="Slide anterior de recomendações"
+                className="left-1 md:-left-5 top-1/2 -translate-y-1/2 size-9 md:size-10 rounded-full border border-border/80 bg-[#19110a]/90 text-foreground hover:bg-[#251810] hover:text-primary hover:border-primary/60 shadow-lg backdrop-blur disabled:opacity-20 disabled:pointer-events-none z-10 transition-colors"
+              >
+                <ChevronLeft className="size-5" aria-hidden="true" />
+              </CarouselPrevious>
+              <CarouselNext
+                aria-label="Próximo slide de recomendações"
+                className="right-1 md:-right-5 top-1/2 -translate-y-1/2 size-9 md:size-10 rounded-full border border-border/80 bg-[#19110a]/90 text-foreground hover:bg-[#251810] hover:text-primary hover:border-primary/60 shadow-lg backdrop-blur disabled:opacity-20 disabled:pointer-events-none z-10 transition-colors"
+              >
+                <ChevronRight className="size-5" aria-hidden="true" />
+              </CarouselNext>
+            </Carousel>
           </div>
+
+          {suggestedSlides.length > 1 && (
+            <div
+              role="tablist"
+              aria-label="Páginas do carrossel de recomendações"
+              className="mt-8 flex justify-center items-center gap-2"
+            >
+              {suggestedSlides.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  role="tab"
+                  aria-selected={currentSlide === idx}
+                  aria-label={`Ir para a página ${idx + 1} de ${suggestedSlides.length}`}
+                  className={cn(
+                    "size-2.5 rounded-full transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                    currentSlide === idx
+                      ? "bg-primary scale-110"
+                      : "border border-primary/60 bg-transparent hover:border-primary",
+                  )}
+                  onClick={() => carouselApi?.scrollTo(idx)}
+                />
+              ))}
+            </div>
+          )}
         </section>
       )}
     </div>
