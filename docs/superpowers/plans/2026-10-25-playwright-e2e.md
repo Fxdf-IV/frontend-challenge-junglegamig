@@ -77,7 +77,7 @@
 **Files:** `tests/e2e/checkout-success.spec.ts`, progress and coverage docs.
 
 - [x] Cover collector form, saved wallet, simulated connection, quote/review, confirmed order and receipt refresh in `checkout-success.spec.ts`; focused E2E passed 2/2 across desktop/mobile.
-- [ ] Run pre-commit checks and commit separately as `test: cover successful checkout flow`.
+- [x] Pre-commit checks passed; commit `135c951 test: cover successful checkout flow`.
 
 ### Task 7: Checkout failures and idempotency
 

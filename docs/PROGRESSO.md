@@ -139,3 +139,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `b14649d` | Testes E2E de conta e sessão                     | Cobrir autenticação, retorno seguro, cadastro, token inválido e troca de conta; corrigir o guard privado                              |
 | 25/10/2026 | `5e00e02` | Testes E2E de favoritos                          | Cobrir estados de visitante/vazio, persistência, rollback da falha e nova tentativa                                                   |
 | 25/10/2026 | `8be3b9a` | Testes E2E de carrinho                           | Cobrir quantidades, remoção, cupons, totais da cotação e migração do carrinho visitante                                              |
+| 25/10/2026 | `135c951` | Teste E2E de checkout confirmado                 | Cobrir conexão simulada, revisão, confirmação e restauração do recibo                                                               |

@@ -155,8 +155,8 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 - Branch de implementação: `codex/playwright-e2e` no worktree
   `C:\Users\Vi\Projetos\frontend-challenge-junglegamig\.worktrees\playwright-e2e`.
 - Commits E2E desta branch: `2a30fb6` home, `ace6105` catálogo, `e73eae2` detalhe, `b14649d`
-  conta/sessão, `5e00e02` favoritos e `8be3b9a` carrinho. O worktree está limpo após o lote; não
-  fazer merge nem push sem pedido do usuário.
+  conta/sessão, `5e00e02` favoritos, `8be3b9a` carrinho e `135c951` checkout confirmado. O worktree
+  está limpo após o lote; não fazer merge nem push sem pedido do usuário.
 - O grupo 3 criou `tests/e2e/account.spec.ts` (6 cenários em desktop/mobile). Resultado focado mais
   recente: **11 passaram, 1 skip intencional** (troca de conta mobile, pois o menu de sessão não existe
   na navegação mobile). Abrange redirect para login/perfil, refresh, credenciais incorretas, cadastro,
@@ -208,12 +208,9 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   desktop/mobile. Cobre login, inclusão no carrinho, acesso ao checkout, dados preenchidos do perfil,
   aprovação da carteira simulada, revisão de cotação, POST de pedido 201, confirmação final e recibo
   restaurado após refresh (Golden Beat #207, total 0.9942 ETH).
-- O grupo está funcionalmente coberto e não houve alteração de produção. Arquivos sem commit:
-  `tests/e2e/checkout-success.spec.ts`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`,
-  `docs/superpowers/plans/2026-10-25-playwright-e2e.md` e este handoff.
-- Antes do commit `test: cover successful checkout flow`, executar typecheck, lint e Vitest; depois
-  registrar o hash. Matriz atual prevista: Verificado 14, Implementado 59, Em andamento 8,
-  Pendente 28 (109 itens).
+- O grupo foi commitado em `135c951 test: cover successful checkout flow`; typecheck passou, lint sem
+  erros/com 9 avisos conhecidos e Vitest 18/18. O focused E2E passou 2/2 com um worker.
+- Matriz atual: Verificado 14, Implementado 59, Em andamento 8, Pendente 28 (109 itens).
 - Próximo lote: grupo 7, falhas de pagamento, estoque/preço/cupom obsoletos, timeout e idempotência.
   Grupos 3 e 7–12 seguem pendentes/parciais, além da regressão visual, Lighthouse, arquitetura/README,
   auditoria completa, build final e deploy.
