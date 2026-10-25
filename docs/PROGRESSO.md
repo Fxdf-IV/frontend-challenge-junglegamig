@@ -5,12 +5,10 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Próximos passos (ordem de prioridade)
 
-1. **Auditoria de comentários e avisos de lint (`AGENTS.md`, seção 12):**
-   - Garantir comentários de topo em pt-BR em todos os arquivos tocados e JSDoc em exportações públicas.
-   - Zerar os 9 avisos de lint (`react-refresh/only-export-components` e diretiva não utilizada).
-2. **Validação final de execução em checkout limpo (`AGENTS.md`, seção 11):**
-   - Validar build limpo, execução sequencial de lint/testes/E2E sem artefatos temporários.
-3. **Deploy público:**
+1. **Validação final de execução em checkout limpo (`AGENTS.md`, seção 11):**
+   - Executar build limpo (`bun run build`), lint, testes unitários e suíte E2E sem artefatos temporários em checkout limpo.
+   - Atualizar a matriz `docs/REQUISITOS-COBERTURA.md` comprovando o requisito de checkout limpo.
+2. **Deploy público:**
    - Realizar o deploy na Vercel/Netlify/Cloudflare Pages mediante credenciais ou comando do usuário.
 
 ### Bloqueios e decisões do usuário
@@ -19,6 +17,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Documentação e Código Comentado (Lote 8 final de componentes UI shadcn/ui):**
+  - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `toggle-group.tsx`, `toggle.tsx` e `tooltip.tsx`, completando 100% de cobertura de código comentado no projeto.
 - **Documentação e Código Comentado (Lote 7 de componentes UI shadcn/ui):**
   - Adicionados comentários de topo em pt-BR indicando adaptação aos tokens do Figma em `slider.tsx`, `sonner.tsx`, `switch.tsx`, `table.tsx`, `tabs.tsx` e `textarea.tsx`.
 - **Documentação e Código Comentado (Lote 6 de componentes UI shadcn/ui):**

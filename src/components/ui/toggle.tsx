@@ -1,3 +1,4 @@
+// Alternador individual Toggle (shadcn/ui baseado em Radix UI) adaptado com estilos de estado pressionado do Figma.
 import * as React from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
 import { cva, type VariantProps } from "class-variance-authority";
