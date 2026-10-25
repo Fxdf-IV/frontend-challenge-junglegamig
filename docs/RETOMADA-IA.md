@@ -139,6 +139,11 @@ estado atual antes de editar ou commitar.
   `2a30fb6 test: add Playwright home smoke coverage`; há documentação de cobertura pendente de commit.
 - No worktree, `tests/e2e/catalog.spec.ts` cobre pesquisa, filtro, ordenação desktop, paginação,
   histórico, vazio e aba durante latência variável: 9 passaram e 1 foi pulado (ordenação mobile
-  ausente no frame). A matriz marca apenas o grupo 1 como verificado. A suíte total E2E passou com
-  11 aprovados e 1 skip; Vitest 18/18 e typecheck passaram; lint sem erros e com 9 avisos existentes.
-  Os arquivos do grupo 1 estão validados e prontos para commit.
+  ausente no frame). A matriz marca grupo 1 como verificado.
+- `tests/e2e/nft-detail.spec.ts` também passa (8/8 entre os dois viewports): acesso direto, edição,
+  quantidade no carrinho, 404 e login ao favoritar como visitante. O teste RED detectou warnings de
+  key duplicada na galeria; `src/routes/nft.$id.tsx` combina a imagem e índice como key e o teste de
+  console passou GREEN. A matriz marca grupo 2 como verificado.
+- Suíte E2E completa depois dos grupos 1 e 2: 19 aprovados e 1 skip intencional (sort mobile). Vitest
+  18/18, typecheck aprovado, lint sem erros e com 9 avisos existentes; estes lotes seguem commitados
+  individualmente nas branches e histórico do worktree.

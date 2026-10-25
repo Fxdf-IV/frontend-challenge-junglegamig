@@ -51,8 +51,9 @@
 
 **Files:** `tests/e2e/nft-detail.spec.ts`, progress and coverage docs.
 
-- [ ] Cover direct access, gallery, edition selection, quantity limits, favorite toggle, add-to-cart and 404.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover NFT detail and not-found states`.
+- [x] Cover direct access, gallery, edition selection, quantity limits, favorite redirect, add-to-cart and 404.
+- [x] Run focused E2E and pre-commit checks; full suite passed with 19 passed / 1 skipped, Vitest 18/18, typecheck clean, lint 0 errors / 9 warnings.
+- [ ] Commit `test: cover NFT detail and not-found states`.
 
 ### Task 4: Account and session
 

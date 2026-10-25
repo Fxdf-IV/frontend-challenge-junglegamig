@@ -152,7 +152,7 @@ function NftDetail() {
           <div className="flex flex-col-reverse gap-4 sm:flex-row">
             <ul className="hidden gap-3 sm:flex sm:flex-col" aria-label="Galeria">
               {nft.gallery.map((g, i) => (
-                <li key={g}>
+                <li key={`${g}-${i}`}>
                   <button
                     onClick={() => setImg(i)}
                     aria-label={`Ver imagem ${i + 1}`}

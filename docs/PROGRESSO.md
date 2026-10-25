@@ -14,7 +14,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
    (revalidação, duplo clique, timeout com idempotência).
 5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
 6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: grupos 1 (catálogo) e smoke da home passam; faltam grupos 2–12 e regressão visual.
+7. Playwright: grupos 1 (catálogo) e 2 (detalhe) passam; faltam grupos 3–12 e regressão visual.
 8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
 9. `README.md` e `ARCHITECTURE.md` completos.
 10. Formatar o código com Prettier para zerar o lint.
@@ -43,8 +43,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   não aparece no frame mobile disponível; 1 teste fica intencionalmente pulado nesse projeto.
 - Commit inicial Playwright (`2a30fb6`) adicionou configuração, smoke da home e instruções README;
   ajuste de matriz (`0149b16`) registrou a cobertura parcial e ignorou relatórios locais.
-- Suíte atual: 11 E2E passaram e 1 foi pulado; 18 Vitest passaram; typecheck limpo; lint sem erros,
-  com 9 avisos existentes.
+- Suíte atual após os grupos 1 e 2: 19 E2E passaram e 1 foi pulado; 18 Vitest passaram; typecheck
+  limpo; lint sem erros, com 9 avisos existentes.
+- Grupo 2 de E2E: acesso direto, 404, edição, quantidade/carrinho, redirecionamento de visitante e
+  ausência de warning de chave duplicada passam em desktop e mobile. A repetição das quatro imagens
+  da galeria gerava keys React idênticas; cada `<li>` agora combina caminho da imagem e índice.
 - Plano E2E salvo em `docs/superpowers/plans/2026-10-25-playwright-e2e.md`, dividido por grupo de
   requisito para preparar Playwright e avançar em commits pequenos.
 - Preparado `.worktrees/` ignorado para executar a implementação E2E isolada em branch `codex/`,
