@@ -1,6 +1,8 @@
+// Menu de navegação lateral para as páginas protegidas de perfil e carteiras do colecionador.
 import { Link } from "@tanstack/react-router";
 import { User, Wallet } from "lucide-react";
 
+/** Barra de navegação interna da conta do usuário. */
 export function AccountNav() {
   const cls = "flex items-center gap-2 rounded px-3 py-2 text-sm hover:bg-panel";
   return (
