@@ -27,7 +27,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   fornecida permitiu localizar os pins #47–#65; observações genéricas e a interação de cópia #64
   ainda precisam de validação no front-end.
 
-## Trabalho em andamento (24/10/2026)
+## Trabalho em andamento (24–25/10/2026)
 
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
 - Usado o PNG composto do ZIP, o arquivo local de comentários e a gravação com pins para corrigir a composição mobile da
@@ -56,6 +56,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 - Revisado o comentário #20: o checkout mobile mantém os dados do colecionador exigidos pelo fluxo;
   o frame mobile fornecido mostra apenas a etapa/seção de carteiras. A regra de ENS no checkout
   (#18) segue em aberto porque o próprio comentário pergunta qual comportamento desejam.
+- Build de produção executado em 25/10/2026; compilação concluída sem erros. Permanecem 9 avisos
+  de lint preexistentes e o bundle principal acima de 500 kB.
 - O frame completo também confirmou a composição assimétrica da oferta: Sage Nomad #046 em destaque,
   três cards Golden e paginação; a ordem inicial do catálogo foi alinhada aos itens visíveis.
 - Ajustada a oferta para o card vertical e três cards quadrados, paginação clicável, dados de amostra
