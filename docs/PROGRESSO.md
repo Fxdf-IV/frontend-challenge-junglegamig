@@ -30,6 +30,10 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Posicionado o card vertical “NFT em destaque / Oferta limitada” abaixo do menu de filtros na coluna
+  lateral do catálogo (`Catalog.tsx`), removendo a seção e a paginação duplicadas de
+  `HomeEditorialSections.tsx` e alinhando as 3 fileiras iniciais do catálogo (`fixtures.ts`) e as 4
+  páginas ao layout do Figma (FD-16, #26).
 - Plano E2E salvo em `docs/superpowers/plans/2026-10-25-playwright-e2e.md`, dividido por grupo de
   requisito para preparar Playwright e avançar em commits pequenos.
 - Preparado `.worktrees/` ignorado para executar a implementação E2E isolada em branch `codex/`,

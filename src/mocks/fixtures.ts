@@ -30,12 +30,12 @@ const NAMES = [
   "Emerald Ape",
   "Sage Nomad",
   "Neon Vessel",
-  "Golden Beat",
   "Cosmic Bloom",
   "Violet Nomad",
   "Ivory Baron",
-  "Golden Signal",
+  "Golden Beat",
   "Golden Frequency",
+  "Golden Signal",
   "Jade Monarch",
   "Velvet Drifter",
   "Onyx Curator",
@@ -50,24 +50,25 @@ const NETWORKS: Network[] = ["ethereum", "polygon", "solana"];
 const FIGMA_SAMPLE_NUMBERS: Record<number, string> = {
   0: "042",
   1: "009",
-  2: "083",
-  3: "207",
-  4: "118",
-  5: "314",
-  6: "088",
-  7: "160",
+  2: "552",
+  3: "118",
+  4: "314",
+  5: "088",
+  6: "207",
+  7: "305",
+  8: "160",
   17: "046",
 };
 const PRICES = [
   "1.19",
   "1.69",
   "1.99",
-  "0.99",
   "1.29",
   "1.39",
   "1.79",
-  "0.39",
+  "0.99",
   "0.49",
+  "0.39",
   "2.45",
   "3.10",
   "0.02",
@@ -77,7 +78,7 @@ const PRICES = [
   "0.15",
 ];
 
-/** deterministic PRNG so fixtures are stable across resets and tests */
+/** Gerador pseudoaleatório determinístico para manter os dados estáveis entre resets e testes. */
 function rng(seed: number) {
   return () => {
     seed = (seed * 1664525 + 1013904223) % 4294967296;
@@ -89,7 +90,8 @@ function rng(seed: number) {
 export function buildNfts(): Nft[] {
   const r = rng(42);
   const list: Nft[] = [];
-  for (let i = 0; i < 40; i++) {
+  // 36 itens formam exatamente as 4 páginas de 9 cards exibidas no catálogo do Figma.
+  for (let i = 0; i < 36; i++) {
     const name = NAMES[i % NAMES.length];
     const artIdx =
       name.startsWith("Emerald") || name.startsWith("Jade") || name.startsWith("Amber")
@@ -126,7 +128,7 @@ export function buildNfts(): Nft[] {
         maxPerOrder: kind === "1/1" ? 1 : kind === "1/10" ? 3 : 5,
       };
     });
-    // edition "1/50" is the default listing price shown in the catalog
+    // A edição "1/50" define o preço padrão de listagem exibido nos cards do catálogo.
     editions[2].price = price;
     const minPrice = editions.reduce(
       (m, e) => (Number(e.price) < Number(m) ? e.price : m),
@@ -171,7 +173,7 @@ export interface UserRecord {
   ensName?: string;
   /** Identificação da carteira principal no perfil público. */
   walletNickname?: string;
-  /** SHA-256 hex of salt+password; plain passwords are never stored */
+  /** Hash SHA-256 em hexadecimal de salt+senha; senhas em texto puro nunca são armazenadas. */
   passwordHash: string;
   salt: string;
 }

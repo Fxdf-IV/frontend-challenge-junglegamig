@@ -6,24 +6,27 @@ test("mantém os dados e as imagens do NFT de referência alinhados ao Figma", (
   const nfts = buildNfts();
   const emerald = nfts[0];
 
-  expect(nfts.slice(0, 8).map((nft) => nft.name)).toEqual([
+  expect(nfts).toHaveLength(36);
+  expect(nfts.slice(0, 9).map((nft) => nft.name)).toEqual([
     "Emerald Ape #042",
     "Sage Nomad #009",
-    "Neon Vessel #083",
-    "Golden Beat #207",
+    "Neon Vessel #552",
     "Cosmic Bloom #118",
     "Violet Nomad #314",
     "Ivory Baron #088",
+    "Golden Beat #207",
+    "Golden Frequency #305",
     "Golden Signal #160",
   ]);
-  expect(nfts.slice(0, 8).map((nft) => nft.price)).toEqual([
+  expect(nfts.slice(0, 9).map((nft) => nft.price)).toEqual([
     "1.19",
     "1.69",
     "1.99",
-    "0.99",
     "1.29",
     "1.39",
     "1.79",
+    "0.99",
+    "0.49",
     "0.39",
   ]);
   expect(emerald.name).toBe("Emerald Ape #042");

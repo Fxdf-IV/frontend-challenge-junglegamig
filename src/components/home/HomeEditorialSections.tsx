@@ -1,10 +1,6 @@
-// Seções de destaque, campanhas e artigos que completam a página inicial do marketplace.
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+// Seções de campanhas e artigos que completam a página inicial abaixo do catálogo.
 import { Link } from "@tanstack/react-router";
-import { nftListQuery } from "@/api/queries";
 import { Button } from "@/components/ui/button";
-import { formatEth } from "@/lib/eth";
 
 const JOURNAL = [
   {
@@ -40,109 +36,11 @@ const JOURNAL = [
     summary: "Proteja sua carteira, seus ativos e sua identidade.",
   },
 ] as const;
-/** Seleção e ordem dos cards na primeira página do destaque do Figma. */
-const FEATURED_SAMPLE = [
-  "Sage Nomad #046",
-  "Golden Beat #207",
-  "Golden Frequency #305",
-  "Golden Signal #160",
-] as const;
 
-/** Completa a home com a oferta em destaque, campanhas e o diário editorial. */
+/** Completa a home com os banners promocionais e o diário editorial abaixo do catálogo. */
 export function HomeEditorialSections() {
-  const nfts = useQuery(nftListQuery({ page: 1, pageSize: 48 }));
-  const [page, setPage] = useState(1);
-  const allNfts = nfts.data?.items ?? [];
-  const firstPage = FEATURED_SAMPLE.map((name) => allNfts.find((nft) => nft.name === name)).filter(
-    (nft) => nft !== undefined,
-  );
-  // As demais páginas usam quatro itens restantes do catálogo, sem repetir os destaques fixos.
-  const picks =
-    page === 1
-      ? firstPage
-      : allNfts
-          .filter((nft) => !FEATURED_SAMPLE.some((name) => name === nft.name))
-          .slice((page - 2) * 4, (page - 1) * 4);
-
   return (
     <div className="container-page space-y-14 pb-10 md:space-y-20">
-      <section aria-labelledby="limited-title" className="pt-2">
-        <div className="mb-5">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-              NFT em destaque
-            </p>
-            <h2 id="limited-title" className="mt-1 text-lg font-extrabold uppercase md:text-2xl">
-              Oferta limitada
-            </h2>
-          </div>
-        </div>
-        {nfts.isError ? (
-          <p role="status" className="rounded-lg bg-card p-5 text-sm text-muted-foreground">
-            Não foi possível carregar os destaques agora.
-          </p>
-        ) : (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-[1.2fr_1fr_1fr_1fr] sm:gap-5 lg:gap-7">
-            {nfts.isLoading
-              ? Array.from({ length: 4 }, (_, index) => (
-                  <div
-                    key={index}
-                    className={`shimmer rounded-lg ${index === 0 ? "aspect-square sm:aspect-[5/6]" : "aspect-square"}`}
-                  />
-                ))
-              : picks.map((nft) => (
-                  <Link
-                    key={nft.id}
-                    to="/nft/$id"
-                    params={{ id: nft.id }}
-                    className="group min-w-0"
-                  >
-                    <div className="overflow-hidden rounded-lg bg-card p-2">
-                      <img
-                        src={nft.image}
-                        alt={`Arte do NFT ${nft.name}`}
-                        width={480}
-                        height={480}
-                        loading="lazy"
-                        decoding="async"
-                        className={`w-full rounded-md object-cover transition-transform duration-300 group-hover:scale-[1.03] ${nft.name === FEATURED_SAMPLE[0] && page === 1 ? "aspect-square sm:aspect-[5/6]" : "aspect-square"}`}
-                      />
-                    </div>
-                    <h3 className="mt-2 truncate text-[11px] font-medium md:text-sm">{nft.name}</h3>
-                    <p className="mt-0.5 text-xs font-bold text-primary md:text-sm">
-                      {formatEth(nft.price)}
-                    </p>
-                  </Link>
-                ))}
-          </div>
-        )}
-        {!nfts.isError && !nfts.isLoading && (
-          <nav aria-label="Paginação dos NFTs em destaque" className="mt-8 flex justify-end gap-1">
-            {Array.from({ length: 4 }, (_, index) => index + 1).map((number) => (
-              <button
-                key={number}
-                type="button"
-                aria-current={page === number ? "page" : undefined}
-                aria-label={`Página ${number}`}
-                onClick={() => setPage(number)}
-                className={`flex size-8 items-center justify-center rounded-sm border border-border text-xs transition-colors hover:bg-accent ${page === number ? "border-primary bg-primary text-primary-foreground" : ""}`}
-              >
-                {number}
-              </button>
-            ))}
-            <button
-              type="button"
-              aria-label="Próxima página"
-              disabled={page === 4}
-              onClick={() => setPage((current) => Math.min(4, current + 1))}
-              className="flex size-8 items-center justify-center rounded-sm border border-border text-xs transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
-            >
-              <span aria-hidden>›</span>
-            </button>
-          </nav>
-        )}
-      </section>
-
       <section aria-label="Explore lançamentos e artistas" className="grid gap-4 lg:grid-cols-2">
         <Campaign
           image="/nft/emerald.webp"

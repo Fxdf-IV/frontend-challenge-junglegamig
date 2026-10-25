@@ -1,6 +1,6 @@
 // Catálogo: sincroniza busca, filtros, ordenação e paginação com a URL.
 import { useEffect, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight, SlidersHorizontal, X } from "lucide-react";
 import { nftListQuery } from "@/api/queries";
@@ -34,7 +34,7 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
   };
   const query = useQuery(nftListQuery(params));
   const data = query.data;
-  // any filter change resets pagination
+  // Qualquer mudança de filtro ou ordenação reinicia a paginação na URL.
   const set = (patch: Partial<CatalogSearch>) =>
     navigate({
       search: (prev: CatalogSearch) => ({
@@ -58,7 +58,7 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
       if ((q.trim() || undefined) !== search.q) set({ q: q.trim() || undefined });
     }, 350);
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- aplica debounce só sobre o texto digitado para não reexecutar ao navegar na URL.
   }, [q]);
 
   const activeCount =
@@ -79,6 +79,7 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
       <div className="grid gap-8 md:grid-cols-[15rem_1fr]">
         <aside className="hidden md:block" aria-label="Filtros">
           {filters}
+          <FeaturedOffer />
         </aside>
         <div className="min-w-0">
           <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -153,7 +154,10 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
                   <SheetHeader>
                     <SheetTitle>Filtros</SheetTitle>
                   </SheetHeader>
-                  <div className="px-4 pb-6">{filters}</div>
+                  <div className="px-4 pb-6">
+                    {filters}
+                    <FeaturedOffer />
+                  </div>
                 </SheetContent>
               </Sheet>
             </div>
@@ -325,6 +329,41 @@ function Filters({
           ))}
         </ul>
       </fieldset>
+    </div>
+  );
+}
+
+/** Card vertical de oferta limitada posicionado na coluna lateral abaixo dos filtros, como no Figma. */
+function FeaturedOffer() {
+  return (
+    <div aria-labelledby="featured-offer-title" className="mt-5">
+      <div className="rounded-t-lg bg-card px-4 py-3 text-center">
+        <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-primary">
+          NFT em destaque
+        </p>
+        <h3
+          id="featured-offer-title"
+          className="mt-1 text-xs font-extrabold uppercase tracking-wider text-foreground"
+        >
+          Oferta limitada
+        </h3>
+      </div>
+      <Link
+        to="/nft/$id"
+        params={{ id: "sage-nomad-046" }}
+        aria-label="Ver oferta limitada: Sage Nomad #046"
+        className="group block overflow-hidden rounded-2xl bg-card focus-visible:outline-offset-4"
+      >
+        <img
+          src="/nft/sage.webp"
+          alt="Sage Nomad #046 em oferta limitada"
+          width={480}
+          height={640}
+          loading="lazy"
+          decoding="async"
+          className="aspect-[3/4] w-full rounded-2xl object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+        />
+      </Link>
     </div>
   );
 }
