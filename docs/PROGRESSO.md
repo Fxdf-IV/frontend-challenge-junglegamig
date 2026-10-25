@@ -135,6 +135,10 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 - Extraídas as regras puras de cupom/cotação (`src/lib/coupon.ts`) e de deduplicação/versão de eventos
   Socket.IO (`src/lib/event-guard.ts`), com testes unitários dedicados (`src/lib/coupon.test.ts` e
   `src/lib/event-guard.test.ts`), elevando a suíte Vitest para 9 arquivos e 24 testes.
+- Substituído o carregamento externo do Google Fonts por arquivos locais `JetBrains Mono` (`.woff2`
+  em `public/fonts/`) com `@font-face` em `src/styles.css` e `preload` em `src/routes/__root.tsx`,
+  eliminando bloqueio de renderização externo; regressão visual (`visual.spec.ts`) passou 4/4 sem
+  divergência de pixels.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
@@ -206,3 +210,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `79f198c` | Liquidação `order-timeout` e gatilho mobile MSW  | Aguardar retomada idempotente antes de liquidar o pedido em timeout e evitar sobreposição da barra de compra mobile em `/nft/$id`    |
 | 25/10/2026 | `99043ab` | Baselines PNG de regressão visual                | Versionar capturas de referência para início, detalhe, carrinho e pagamento em desktop (1440×1000) e mobile (390×844)                |
 | 25/10/2026 | `08e91dc` | Regressão visual e verificação responsiva E2E    | Validar ausência de overflow horizontal (390/768/1440 px), baselines visuais e suíte E2E completa (88 aprovados, 2 skips)             |
+| 25/10/2026 | `77618e9` | Testes unitários de cupom e versão de eventos    | Extrair e testar `resolveCoupon`, `calculateQuoteTotals` e `createEventGuard` no Vitest (24/24)                                       |

@@ -8,7 +8,7 @@ Legenda de leitura: todos os 12 grupos funcionais do Playwright e os baselines d
 desktop e mobile estão verificados (`88 passed, 2 skipped`). Restam fontes locais, documentação
 (`README.md` e `ARCHITECTURE.md`), auditoria Lighthouse e configuração/deploy final.
 
-**Resumo atual:** Verificado 93 · Implementado 0 · Em andamento 3 · Pendente 13 (109 itens)
+**Resumo atual:** Verificado 94 · Implementado 0 · Em andamento 3 · Pendente 12 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -148,7 +148,7 @@ desktop e mobile estão verificados (`88 passed, 2 skipped`). Restam fontes loca
 | Labels, `aria-invalid`, `aria-describedby`            | Verificado | `tests/e2e/accessibility.spec.ts`, `components/Field.tsx`               |
 | `alt` em imagens relevantes                           | Verificado | `tests/e2e/accessibility.spec.ts`                                       |
 | Feedback acessível de mutations e eventos             | Verificado | `tests/e2e/accessibility.spec.ts`, `tests/e2e/checkout-realtime.spec.ts`|
-| Fontes e imagens locais                               | Pendente   | Hoje as fontes vêm do Google Fonts                                      |
+| Fontes e imagens locais                               | Verificado | `public/fonts/*.woff2`, `public/art/*.svg`, `src/styles.css`, `tests/e2e/visual.spec.ts` |
 | Desvios de asset/a11y documentados                    | Verificado | `docs/FIGMA-DEVIATIONS.md`                                              |
 
 ## 9. Testes com Playwright (12 grupos)
