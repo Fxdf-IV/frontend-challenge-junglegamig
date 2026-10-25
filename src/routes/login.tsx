@@ -33,7 +33,7 @@ function LoginPage() {
   return (
     <AuthShell
       title="Entrar"
-      subtitle="Entre na sua conta para colecionar, favoritar e finalizar compras."
+      subtitle="Entre para gerenciar sua carteira, coleção e perfil de criador."
       activeMode="login"
       redirect={redirect}
     >

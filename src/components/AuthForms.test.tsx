@@ -1,7 +1,7 @@
-// Testes do formulário de cadastro e do contrato enviado à API.
+// Testes dos formulários de login e cadastro e do contrato enviado à API.
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { RegisterForm } from "@/components/AuthForms";
+import { LoginForm, RegisterForm } from "@/components/AuthForms";
 
 const mocks = vi.hoisted(() => ({ register: vi.fn(), signIn: vi.fn() }));
 
@@ -47,7 +47,22 @@ describe("RegisterForm", () => {
       "max-md:space-y-2",
       "max-md:[&_input]:h-9",
     );
-    expect(screen.getByRole("button", { name: "Google" })).toHaveClass("max-md:h-7");
-    expect(screen.getByRole("button", { name: "Facebook" })).toHaveClass("max-md:h-7");
+    expect(screen.getByRole("button", { name: "Continuar com Google" })).toHaveClass("max-md:h-7");
+    expect(screen.getByRole("button", { name: "Continuar com Facebook" })).toHaveClass(
+      "max-md:h-7",
+    );
+  });
+
+  it("renders the Figma login placeholders and social buttons with SVG icons", () => {
+    render(<LoginForm onDone={vi.fn()} />);
+
+    expect(screen.getByPlaceholderText("contato@email.com")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("***********")).toBeInTheDocument();
+    expect(screen.getByText("Ou continue com")).toBeInTheDocument();
+
+    const googleBtn = screen.getByRole("button", { name: "Continuar com Google" });
+    const facebookBtn = screen.getByRole("button", { name: "Continuar com Facebook" });
+    expect(googleBtn.querySelector("svg")).not.toBeNull();
+    expect(facebookBtn.querySelector("svg")).not.toBeNull();
   });
 });

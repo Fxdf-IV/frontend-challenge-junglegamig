@@ -30,6 +30,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Alinhado o modal de autenticação (`AuthShell.tsx`, `AuthForms.tsx`, `login.tsx`) ao frame do Figma
+  (FD-17): cabeçalho inline `Entrar | Criar conta` com divisor vertical, barra laranja inferior no
+  modal desktop, subtítulo e placeholders de login corrigidos (`contato@email.com` e `***********`),
+  botão principal em caixa normal, divisor “Ou continue com” de ponta a ponta e botões sociais
+  “Continuar com Google” e “Continuar com Facebook” com ícones SVG oficiais e borda escura.
 - Posicionado o card vertical “NFT em destaque / Oferta limitada” abaixo do menu de filtros na coluna
   lateral do catálogo (`Catalog.tsx`), removendo a seção e a paginação duplicadas de
   `HomeEditorialSections.tsx` e alinhando as 3 fileiras iniciais do catálogo (`fixtures.ts`) e as 4
