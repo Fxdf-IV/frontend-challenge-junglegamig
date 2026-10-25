@@ -524,7 +524,7 @@ function FeaturedOffer() {
         to="/nft/$id"
         params={{ id: "sage-nomad-046" }}
         aria-label="Ver oferta limitada: Sage Nomad #046"
-        className="group block overflow-hidden rounded-2xl bg-card focus-visible:outline-offset-4"
+        className="group block overflow-hidden rounded-2xl border border-transparent bg-card transition-all duration-300 hover:border-[#d28a4c]/30 hover:shadow-[0_8px_24px_rgba(210,138,76,0.14)] focus-visible:outline-offset-4"
       >
         <img
           src="/nft/sage.webp"
@@ -533,7 +533,7 @@ function FeaturedOffer() {
           height={640}
           loading="lazy"
           decoding="async"
-          className="aspect-[3/4] w-full rounded-2xl object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          className="aspect-[3/4] w-full rounded-2xl object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.05]"
         />
         <h4 className="sr-only">Sage Nomad #046</h4>
       </Link>

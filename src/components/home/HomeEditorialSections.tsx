@@ -69,21 +69,26 @@ export function HomeEditorialSections() {
         </header>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
           {JOURNAL.map((article) => (
-            <article key={article.title} className="min-w-0 overflow-hidden rounded-lg bg-card">
-              <img
-                src={article.image}
-                alt={article.alt}
-                width={480}
-                height={320}
-                loading="lazy"
-                decoding="async"
-                className="aspect-[1.35/1] w-full object-cover"
-              />
+            <article
+              key={article.title}
+              className="group min-w-0 overflow-hidden rounded-lg border border-transparent bg-card transition-all duration-300 hover:-translate-y-1 hover:border-[#d28a4c]/30 hover:shadow-[0_8px_24px_rgba(210,138,76,0.12)]"
+            >
+              <div className="overflow-hidden">
+                <img
+                  src={article.image}
+                  alt={article.alt}
+                  width={480}
+                  height={320}
+                  loading="lazy"
+                  decoding="async"
+                  className="aspect-[1.35/1] w-full object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.05]"
+                />
+              </div>
               <div className="p-3 md:p-4">
                 <p className="text-[8px] text-muted-foreground md:text-[10px]">
                   {article.date} <span aria-hidden> | </span> {article.read}
                 </p>
-                <h3 className="mt-2 text-[10px] font-bold leading-snug md:text-sm">
+                <h3 className="mt-2 text-[10px] font-bold leading-snug transition-colors duration-200 group-hover:text-primary md:text-sm">
                   {article.title}
                 </h3>
                 <p className="mt-1 line-clamp-2 text-[9px] leading-relaxed text-muted-foreground md:text-xs">
@@ -91,10 +96,13 @@ export function HomeEditorialSections() {
                 </p>
                 <Link
                   to="/aprenda"
-                  className="mt-2 inline-flex text-[9px] font-bold text-primary hover:underline md:text-xs"
+                  className="mt-2 inline-flex items-center text-[9px] font-bold text-primary hover:underline md:text-xs"
                 >
                   Ler mais{" "}
-                  <span className="ml-1" aria-hidden>
+                  <span
+                    className="ml-1 transition-transform duration-200 group-hover:translate-x-1"
+                    aria-hidden
+                  >
                     →
                   </span>
                 </Link>
@@ -122,16 +130,18 @@ function Campaign({
   search?: { tab: "new" };
 }) {
   return (
-    <article className="grid grid-cols-[5.5rem_1fr] items-center gap-3 rounded-lg bg-card p-3 sm:grid-cols-[8rem_1fr] sm:gap-5 sm:p-4 md:grid-cols-[minmax(8rem,0.9fr)_1.1fr]">
-      <img
-        src={image}
-        alt={alt}
-        width={320}
-        height={320}
-        loading="lazy"
-        decoding="async"
-        className="aspect-square w-full rounded-md object-cover"
-      />
+    <article className="group grid grid-cols-[5.5rem_1fr] items-center gap-3 rounded-lg border border-transparent bg-card p-3 transition-all duration-300 hover:border-[#d28a4c]/30 hover:shadow-[0_8px_24px_rgba(210,138,76,0.12)] sm:grid-cols-[8rem_1fr] sm:gap-5 sm:p-4 md:grid-cols-[minmax(8rem,0.9fr)_1.1fr]">
+      <div className="overflow-hidden rounded-md">
+        <img
+          src={image}
+          alt={alt}
+          width={320}
+          height={320}
+          loading="lazy"
+          decoding="async"
+          className="aspect-square w-full rounded-md object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.05]"
+        />
+      </div>
       <div className="text-center">
         <h3 className="text-[10px] font-bold leading-snug sm:text-xs md:text-sm">{title}</h3>
         <p className="mt-2 text-[8px] leading-relaxed text-muted-foreground sm:text-[10px] md:text-xs">
@@ -140,11 +150,19 @@ function Campaign({
         <Button variant="explore" size="sm" className="mt-3 text-xs" asChild>
           {search ? (
             <Link to="/mercado" search={search}>
-              Explorar <ArrowRight className="size-3.5" aria-hidden="true" />
+              Explorar{" "}
+              <ArrowRight
+                className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                aria-hidden="true"
+              />
             </Link>
           ) : (
             <Link to="/mercado">
-              Explorar <ArrowRight className="size-3.5" aria-hidden="true" />
+              Explorar{" "}
+              <ArrowRight
+                className="size-3.5 transition-transform duration-300 group-hover:translate-x-1"
+                aria-hidden="true"
+              />
             </Link>
           )}
         </Button>

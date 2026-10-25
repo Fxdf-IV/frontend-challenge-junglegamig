@@ -17,13 +17,13 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   const isFav = favIds?.includes(nft.id) ?? false;
 
   return (
-    <article className="group relative">
+    <article className="group relative transition-all duration-300 hover:-translate-y-1">
       <Link
         to="/nft/$id"
         params={{ id: nft.id }}
         className="block rounded-2xl outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
-        <div className="relative aspect-square overflow-hidden rounded-2xl bg-card">
+        <div className="relative aspect-square overflow-hidden rounded-2xl border border-transparent bg-card transition-all duration-300 group-hover:border-[#d28a4c]/35 group-hover:shadow-[0_10px_25px_-5px_rgba(210,138,76,0.16)]">
           <img
             src={nft.image}
             alt={`Arte do NFT ${nft.name}`}
@@ -32,7 +32,7 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
             loading={priority ? "eager" : "lazy"}
             fetchPriority={priority ? "high" : undefined}
             decoding="async"
-            className="h-full w-full rounded-2xl object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="h-full w-full rounded-2xl object-cover transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.06]"
           />
           <button
             type="button"
@@ -43,12 +43,14 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
               e.stopPropagation();
               toggle.mutate({ id: nft.id, on: !isFav });
             }}
-            className="absolute top-2 right-2 flex size-8 cursor-pointer items-center justify-center rounded-full bg-background/60 text-foreground backdrop-blur-sm transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="absolute top-2 right-2 flex size-8 cursor-pointer items-center justify-center rounded-full bg-background/70 text-foreground backdrop-blur-md transition-all duration-200 hover:scale-110 hover:bg-background/90 hover:text-primary active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Heart className={cn("size-4", isFav && "fill-red-500 text-red-500")} />
           </button>
         </div>
-        <h3 className="mt-2.5 truncate text-xs font-semibold text-foreground">{nft.name}</h3>
+        <h3 className="mt-2.5 truncate text-xs font-semibold text-foreground transition-colors duration-200 group-hover:text-primary">
+          {nft.name}
+        </h3>
         <p className="mt-1 flex items-baseline gap-2 text-xs">
           <span className="font-bold text-primary">{formatEth(nft.price)}</span>
           {nft.compareAt && (

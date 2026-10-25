@@ -73,10 +73,12 @@ function Home() {
           </Button>
         </form>
       </div>
-      <section className="container-page my-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4 max-md:rounded-3xl max-md:bg-hero-circles max-md:px-5 max-md:py-6 md:my-0 md:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] md:gap-8 md:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]">
+      <section className="container-page relative my-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4 max-md:rounded-3xl max-md:bg-hero-circles max-md:px-5 max-md:py-6 md:my-0 md:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] md:gap-8 md:py-12 md:bg-hero-glow lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]">
         <div className="md:pl-8">
-          <p className="text-[11px] text-foreground/80 md:text-sm">Bem-vindo à Kurio</p>
-          <h1 className="mt-2 text-base font-extrabold uppercase leading-snug tracking-wide md:mt-4 md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.3]">
+          <p className="animate-fade-up text-[11px] text-foreground/80 md:text-sm">
+            Bem-vindo à Kurio
+          </p>
+          <h1 className="animate-fade-up anim-delay-100 mt-2 text-base font-extrabold uppercase leading-snug tracking-wide md:mt-4 md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.3]">
             <span className="md:hidden">
               Seja dono da
               <br />
@@ -84,7 +86,7 @@ function Home() {
             </span>
             <span className="hidden md:inline">Seja dono do futuro da arte digital</span>
           </h1>
-          <p className="mt-2 line-clamp-3 text-[11px] leading-relaxed text-muted-foreground md:mt-4 md:max-w-xl md:text-sm">
+          <p className="animate-fade-up anim-delay-200 mt-2 line-clamp-3 text-[11px] leading-relaxed text-muted-foreground md:mt-4 md:max-w-xl md:text-sm">
             <span className="md:hidden">
               Descubra NFTs selecionados de criadores do mundo todo.
             </span>
@@ -93,22 +95,36 @@ function Home() {
               digital rara, apoie artistas e tenha uma parte da cultura da internet.
             </span>
           </p>
-          <div className="mt-4 md:mt-6">
-            <Button variant="explore" size="sm" className="md:h-10 md:px-5 md:text-sm" asChild>
+          <div className="animate-fade-up anim-delay-300 mt-4 md:mt-6">
+            <Button
+              variant="explore"
+              size="sm"
+              className="group md:h-10 md:px-5 md:text-sm"
+              asChild
+            >
               <Link to="/" hash="catalogo">
-                Explorar <ArrowRight className="size-4" aria-hidden="true" />
+                Explorar{" "}
+                <ArrowRight
+                  className="size-4 transition-transform duration-300 group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               </Link>
             </Button>
           </div>
         </div>
-        <div className="relative self-center">
+        <div className="relative self-center animate-fade-up anim-delay-150">
+          {/* Brilho ambiental sutil posicionado atrás da arte em telas desktop */}
+          <div
+            className="pointer-events-none absolute -inset-4 rounded-3xl bg-primary/15 blur-2xl animate-ambient max-md:hidden"
+            aria-hidden="true"
+          />
           <img
             src="/nft/emerald.webp"
             alt="Emerald Ape #042, macaco ilustrado de óculos e jaqueta verde"
             width={480}
             height={480}
             fetchPriority="high"
-            className="aspect-square w-28 rounded-2xl object-cover shadow-md md:w-full md:rounded-2xl"
+            className="relative aspect-square w-28 rounded-2xl object-cover shadow-md transition-transform duration-500 ease-out hover:scale-[1.02] md:w-full md:rounded-2xl"
           />
         </div>
         <div className="col-span-2 mt-2 flex justify-center gap-2 md:hidden" aria-hidden="true">
@@ -117,7 +133,15 @@ function Home() {
           <span className="h-2 w-2 rounded-full bg-[#55321f]" />
         </div>
       </section>
+
+      {/* Linha de transição luminosa sutil entre o Hero e o Catálogo */}
+      <div className="section-divider-glow my-2 md:my-6" aria-hidden="true" />
+
       <Catalog search={search} from="/" />
+
+      {/* Linha de transição luminosa entre o Catálogo e as Seções Editoriais */}
+      <div className="section-divider-glow my-6 md:my-10" aria-hidden="true" />
+
       <HomeEditorialSections />
     </div>
   );

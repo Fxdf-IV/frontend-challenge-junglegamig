@@ -186,11 +186,99 @@
   }
 }
 
+/* Animações e transições inspiradas na identidade visual da Jungle Gaming */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ambient-glow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.03);
+  }
+}
+
+@utility animate-fade-up {
+  animation: fade-up 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+
+@utility animate-ambient {
+  animation: ambient-glow 7s ease-in-out infinite;
+}
+
+@utility anim-delay-75 {
+  animation-delay: 75ms;
+}
+
+@utility anim-delay-100 {
+  animation-delay: 100ms;
+}
+
+@utility anim-delay-150 {
+  animation-delay: 150ms;
+}
+
+@utility anim-delay-200 {
+  animation-delay: 200ms;
+}
+
+@utility anim-delay-300 {
+  animation-delay: 300ms;
+}
+
+@utility section-divider-glow {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(61, 44, 32, 0.8) 20%,
+    rgba(210, 138, 76, 0.35) 50%,
+    rgba(61, 44, 32, 0.8) 80%,
+    transparent 100%
+  );
+}
+
+@utility bg-hero-glow {
+  background: radial-gradient(
+    circle at 75% 35%,
+    rgba(210, 138, 76, 0.12) 0%,
+    rgba(33, 18, 8, 0) 65%
+  );
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
   }
 }
