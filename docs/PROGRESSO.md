@@ -14,6 +14,16 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Ativação e cobertura completa nos viewports desktop e mobile dos testes de ordenação e troca de conta (`tests/e2e/catalog.spec.ts`, `tests/e2e/account.spec.ts`):**
+  - Removido o `test.skip(isMobile)` em `ordena o catálogo por preço crescente`, exercitando o seletor `Ordenar por:` na rota `/mercado` em ambos os viewports (desktop e mobile).
+  - Removido o `test.skip` em `troca de conta remove os dados privados da sessão anterior`, padronizando o fluxo de logout e troca de credenciais a partir da rota de perfil, onde o cabeçalho com menu de usuário e a ação de sair operam com consistência no desktop e no mobile, validando redirecionamento para login e isolamento da sessão.
+  - Suíte Playwright E2E consolidada em 92 testes executados e 100% aprovados (46 desktop + 46 mobile, 0 skips).
+- **Redesign do campo de busca do cabeçalho com expansão inline sem alterar altura (`src/components/layout/Header.tsx`, FD-40):**
+  - Removido o formulário de busca de linha inteira que abria abaixo da navegação ocupando 100% da largura da tela e duplicando a altura do header.
+  - Implementado campo de busca expansível inline (`h-9 w-36 sm:w-48 md:w-60`) embutido na própria barra de ações à direita, mantendo a altura do cabeçalho estritamente fixa (`h-14` / `md:h-16`) sem nenhum layout shift.
+  - Estilização refinada com fundo escuro `#19110a`, borda `#3d2c20`, ícone vetorial `Search` interno, botão `X` de fechar, tipografia mono e foco com anel âmbar primário.
+  - Fechamento inteligente ao clicar fora (`useRef` + `mousedown`), ao pressionar a tecla `Escape` ou ao submeter a busca para a rota `/mercado`.
+  - 100% dos testes unitários (Vitest 33/33) e de regressão visual e catálogo (Playwright 16/16) aprovados com sucesso.
 - **Corrigida e publicada a integração com a Vercel:** removida a publicação incorreta de `.output/public` e a reescrita de todas as rotas para `/`; configurado `tanstack-start` e liberada a detecção automática do preset Nitro. O build com `VERCEL=1` gerou a função SSR e rota catch-all. Após a publicação, Home e `/nft/emerald-ape-042` responderam HTTP 200. Lint, typecheck, build, Vitest (33/33) e Playwright (92/92) passaram.
 - **Inputs numéricos de preço sincronizados com o slider no catálogo (`src/components/nft/Catalog.tsx`, `slider.tsx`, FD-39):**
   - Implementados campos de entrada de texto/numéricos ("Mínimo" e "Máximo") para digitação direta de valores de preço em ETH no filtro "Faixa de preço" do catálogo, atendendo à solicitação do usuário.

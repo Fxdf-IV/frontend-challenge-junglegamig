@@ -36,6 +36,7 @@ test("sincroniza busca, coleção e histórico com a URL", async ({ page }) => {
   );
 });
 
+// Valida que o seletor de ordenação altera a URL e reordena os itens em ambos os viewports.
 test("ordena o catálogo por preço crescente", async ({ page }) => {
   await page.goto("/mercado?scenario=default");
   await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();

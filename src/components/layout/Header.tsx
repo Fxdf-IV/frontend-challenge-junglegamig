@@ -1,7 +1,7 @@
 // Cabeçalho e navegação: expõe caminhos principais e ações globais da conta.
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { LogIn, Search, ShoppingCart, User as UserIcon, Wallet, LogOut } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { LogIn, Search, ShoppingCart, User as UserIcon, Wallet, LogOut, X } from "lucide-react";
+import { useState, useRef, useEffect, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -113,6 +113,19 @@ export function Header() {
   const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
   const [q, setQ] = useState("");
+  const searchRef = useRef<HTMLFormElement>(null);
+
+  // Fecha o campo de busca inline ao clicar fora dele
+  useEffect(() => {
+    if (!searchOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [searchOpen]);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -160,21 +173,56 @@ export function Header() {
             })}
           </nav>
           <div className="flex items-center justify-end gap-1 sm:gap-2 md:gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Buscar NFTs"
-              aria-expanded={searchOpen}
-              onClick={() => setSearchOpen((v) => !v)}
-              className="size-9 rounded-full text-[#CFB28C] hover:text-primary hover:bg-primary/10 md:size-10 md:rounded-md md:text-foreground transition-colors cursor-pointer"
-            >
-              <span className="md:hidden">
-                <FigmaSearchIcon className="size-5 fill-current" />
-              </span>
-              <span className="hidden md:inline-flex">
-                <Search />
-              </span>
-            </Button>
+            {/* Campo de busca expansível inline: não altera a altura do cabeçalho nem causa layout shift */}
+            {searchOpen ? (
+              <form
+                ref={searchRef}
+                role="search"
+                onSubmit={submit}
+                className="relative flex items-center animate-in fade-in-0 zoom-in-95 duration-200"
+              >
+                <label htmlFor="global-search" className="sr-only">
+                  Buscar no catálogo
+                </label>
+                <Search
+                  className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <input
+                  id="global-search"
+                  autoFocus
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  onKeyDown={(e) => e.key === "Escape" && setSearchOpen(false)}
+                  placeholder="Buscar coleções ou NFTs…"
+                  className="h-9 w-36 rounded-md border border-[#3d2c20] bg-[#19110a] pl-8 pr-7 font-mono text-xs text-foreground placeholder:text-muted-foreground transition-all focus-visible:border-primary focus-visible:outline-none sm:w-48 md:w-60"
+                />
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(false)}
+                  aria-label="Fechar busca"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground transition-colors hover:text-foreground cursor-pointer"
+                >
+                  <X className="size-3.5" />
+                </button>
+              </form>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Buscar NFTs"
+                aria-expanded={false}
+                onClick={() => setSearchOpen(true)}
+                className="size-9 rounded-full text-[#CFB28C] hover:bg-primary/10 hover:text-primary md:size-10 md:rounded-md md:text-foreground transition-colors cursor-pointer"
+              >
+                <span className="md:hidden">
+                  <FigmaSearchIcon className="size-5 fill-current" />
+                </span>
+                <span className="hidden md:inline-flex">
+                  <Search />
+                </span>
+              </Button>
+            )}
             <Button
               variant="ghost"
               size="icon"
@@ -272,22 +320,6 @@ export function Header() {
             )}
           </div>
         </div>
-        {searchOpen && (
-          <form role="search" onSubmit={submit} className="container-page pb-3">
-            <label htmlFor="global-search" className="sr-only">
-              Buscar NFTs
-            </label>
-            <input
-              id="global-search"
-              autoFocus
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              onKeyDown={(e) => e.key === "Escape" && setSearchOpen(false)}
-              placeholder="Buscar por nome, criador ou coleção"
-              className="h-10 w-full rounded-md border border-input bg-card px-3 text-sm placeholder:text-muted-foreground"
-            />
-          </form>
-        )}
       </header>
       <MobileTabBar />
     </>

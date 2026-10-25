@@ -72,6 +72,7 @@ test("limpa token expirado e redireciona à tela de login", async ({ page }) => 
   await expect(page).toHaveURL(/\/login\?/);
 });
 
+// Valida alternância entre contas, logout em rota privada e isolamento dos dados em desktop e mobile.
 test("troca de conta remove os dados privados da sessão anterior", async ({ page }) => {
   await page.goto("/login?scenario=default");
   await loginAs(page, "bruno@kurio.dev");
