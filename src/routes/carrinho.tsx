@@ -219,11 +219,11 @@ function CartPage() {
                           >
                             {it.name}
                           </Link>
-                          <p className="text-[11px] text-muted-foreground md:hidden">
-                            Edição {it.edition}
-                          </p>
-                          <p className="hidden md:block text-xs font-mono text-primary mt-1">
-                            ID do token: {formatTokenId(it.name)}
+                          <p className="text-[11px] md:text-xs font-mono text-muted-foreground mt-0.5">
+                            Edição {it.edition} ·{" "}
+                            <span className="text-primary font-bold">
+                              ID: {formatTokenId(it.name)}
+                            </span>
                           </p>
                           {it.notice && (
                             <p

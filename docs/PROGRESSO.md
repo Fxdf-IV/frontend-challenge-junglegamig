@@ -14,6 +14,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Unificação da lista de itens e exibição de edição e token ID no carrinho (`src/routes/carrinho.tsx`):**
+  - Consolidada a listagem de itens do carrinho em uma única grade responsiva sem duplicação de nós no DOM, mantendo a fidelidade visual aos cards do Figma em mobile e desktop.
+  - Exibido o identificador da edição e o token ID em ambas as resoluções (`Edição {edition} · ID: {tokenId}`), atendendo às asserções do Playwright em `nft-detail.spec.ts`.
+  - Cabeçalho "Resumo da carteira" visível em todas as resoluções no resumo lateral/folha inferior.
+  - Execução 100% verde da suíte completa de testes: 88 testes aprovados (2 skips intencionais) no Playwright E2E e 27/27 no Vitest.
+
 - **Remoção do badge sobreposto Sage Nomad no hero mobile (`src/routes/index.tsx`, FD-28 / comentário #63 do Figma):**
   - Atendendo à solicitação do usuário e resolvendo o comentário #63 do Figma ("esta imagem nao deveria estar aqui"), foi removida a imagem secundária de Sage Nomad (`absolute -bottom-3 -left-3 size-14 md:hidden`) sobreposta ao card de Emerald Ape no banner mobile de `src/routes/index.tsx`.
   - A composição mobile agora apresenta exclusivamente o destaque principal Emerald Ape com visual limpo.

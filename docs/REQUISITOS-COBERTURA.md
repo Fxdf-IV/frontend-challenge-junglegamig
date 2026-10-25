@@ -7,7 +7,7 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 Legenda de leitura: todos os 12 grupos funcionais do Playwright, baselines de regressão visual,
 fontes locais, testes unitários, documentação completa (`README.md` e `ARCHITECTURE.md`), a suíte oficial
 de 3 medições do Lighthouse com relatórios versionados e a execução limpa de build/testes estão verificados
-(`88 passed, 2 skipped` no E2E; `24 passed` no Vitest; Lighthouse 100/99 desktop, 87/86 mobile com 100 em a11y, bp e seo).
+(`88 passed, 2 skipped` no E2E; `27 passed` no Vitest; Lighthouse 100/99 desktop, 87/86 mobile com 100 em a11y, bp e seo).
 Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
 
 **Resumo atual:** Verificado 108 · Implementado 0 · Em andamento 0 · Pendente 1 (109 itens)
@@ -16,7 +16,7 @@ Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
 
 | Item               | Status     | Onde / prova                                                                                     |
 | ------------------ | ---------- | ------------------------------------------------------------------------------------------------ |
-| React + TypeScript | Verificado | `src/`, `bun run typecheck`, `bun run test` (24/24) e `bun run test:e2e` (88/88)                 |
+| React + TypeScript | Verificado | `src/`, `bun run typecheck`, `bun run test` (27/27) e `bun run test:e2e` (88/88)                 |
 | TanStack Router    | Verificado | `src/routes`, `src/test/app-routing.test.tsx`, `tests/e2e/catalog.spec.ts`                       |
 | TanStack Query     | Verificado | `src/api/queries.ts`, `tests/e2e/favorites.spec.ts`, `tests/e2e/loading-recovery.spec.ts`        |
 | Axios              | Verificado | `src/api/client.ts`, `tests/e2e/checkout-failures.spec.ts`, `tests/e2e/loading-recovery.spec.ts` |
