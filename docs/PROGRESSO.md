@@ -14,6 +14,16 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Alinhamento do recibo e modal de confirmação de compra ao Figma (`src/routes/_authenticated.pedido.$id.tsx`, FD-38):**
+  - Implementado o ícone oficial de envelope com carta 'THANK YOU' (`/nft/thank-you.png`) no topo do recibo confirmado, substituindo o ícone genérico `message.svg`.
+  - Adicionada moldura superior e inferior laranja (`border-y border-primary`) na grade de 4 metadados com divisores verticais e destaque primário no valor total.
+  - Tabela de itens da transação reformulada com miniaturas ampliadas para 56–64 px (`h-14 w-14 rounded-lg`), nome completo, legenda `ID do token: #0042`, edições centralizadas entre parênteses `(× {quantity})` e subtotal em destaque laranja.
+  - Bloco de totais (`Subtotal`, `Desconto`, `Taxa de rede` e `Total`) deslocado à direita conforme especificação do Comentário #51 do Figma.
+  - Barra de destaque sólida de 8 px em cor primária na base do modal (`border-b-[8px] border-b-primary`) e cantos curvos `rounded-2xl`.
+  - Preservado o botão "Copiar ID" expressamente solicitado pelo usuário, posicionado de forma harmônica ao lado do CTA primário "Ver no Etherscan (simulado)".
+  - Botão de fechar (X) estilizado na cor primária âmbar do Figma (`[&>button]:text-primary`).
+  - Totalmente testado com Vitest (32/32) e Playwright E2E (`checkout-success.spec.ts`, `event-versioning.spec.ts`, `checkout-realtime.spec.ts`, `visual.spec.ts` 16/16 aprovados).
+
 - **Alinhamento completo das telas de login e cadastro mobile aos frames do Figma (`AuthShell.tsx`, `AuthForms.tsx`, `login.tsx`, `cadastro.tsx`, FD-37):**
   - Substituído o diálogo flutuante comprimido de 278 × 600 px por apresentação imersiva em tela cheia no mobile (`bg-[#0c0805]`) sem corte e sem botão "X", fiel aos frames oficiais do Figma.
   - Implementado logotipo "KURIO" em destaque no topo com espaçamento largo (`tracking-[0.25em]`) e títulos centralizados ("Entrar" e "Criar perfil de colecionador").

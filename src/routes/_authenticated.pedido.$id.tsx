@@ -17,8 +17,9 @@ import {
 } from "@/components/ui/dialog";
 import { useSession } from "@/lib/session";
 import { formatEthSmart } from "@/lib/eth";
-import { NETWORK_LABELS, shortAddr } from "@/lib/labels";
+import { shortAddr } from "@/lib/labels";
 import { PENDING_ORDER_KEY } from "@/lib/checkout-storage";
+import { cn } from "@/lib/utils";
 
 /** Metadados e carregamento da rota de pedido autenticada. */
 export const Route = createFileRoute("/_authenticated/pedido/$id")({
@@ -122,21 +123,39 @@ function OrderPage() {
       </section>
     );
 
-  // receipt renders the order snapshot only; later catalog changes never alter it
+  // Renderiza o recibo da compra confirmada com o layout alinhado ao Figma (envelope 'THANK YOU',
+  // tabela de detalhes com edições centralizadas, totais deslocados à direita e botões de ação).
   return (
     <Dialog open onOpenChange={(open) => !open && navigate({ to: "/" })}>
-      <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto border-b-4 border-primary bg-card">
+      <DialogContent className="max-h-[92vh] max-w-xl overflow-y-auto rounded-2xl border border-border/80 border-b-[8px] border-b-primary bg-[#241612] p-5 shadow-2xl sm:p-7 [&>button]:text-primary [&>button]:opacity-100 [&>button]:hover:text-primary/80">
         <DialogHeader className="sr-only">
           <DialogTitle>Pedido confirmado</DialogTitle>
           <DialogDescription>
             Recibo da transação confirmada com resumo dos NFTs e valores pagos.
           </DialogDescription>
         </DialogHeader>
-        <img src="/nft/message.svg" alt="" width={40} height={40} className="mx-auto" />
-        <h1 id="receipt-title" className="mt-3 text-center text-sm font-bold">
+
+        {/* Ícone de envelope com carta 'THANK YOU' idêntico ao Figma */}
+        <div className="pt-2 text-center">
+          <img
+            src="/nft/thank-you.png"
+            alt=""
+            width={66}
+            height={80}
+            className="mx-auto h-20 w-auto"
+          />
+        </div>
+
+        {/* Título de sucesso */}
+        <h1
+          id="receipt-title"
+          className="mt-2 text-center text-base font-bold text-foreground sm:text-lg"
+        >
           Seus NFTs agora estão na sua carteira
         </h1>
-        <dl className="mt-6 grid grid-cols-2 gap-3 text-[11px] sm:grid-cols-4">
+
+        {/* Grade de 4 colunas de metadados delimitada por bordas laranjas (Figma) */}
+        <dl className="mt-5 grid grid-cols-2 gap-y-3 border-y border-primary py-3 sm:grid-cols-4 sm:divide-x sm:divide-border/60">
           <Meta label="ID da transação" value={o.txHash ? shortAddr(o.txHash) : "—"} />
           <Meta
             label="Data"
@@ -146,86 +165,110 @@ function OrderPage() {
               year: "numeric",
             })}
           />
-          <Meta label="Total" value={formatEthSmart(o.total)} />
-          <Meta
-            label="Carteira e rede"
-            value={`${o.wallet.label} · ${NETWORK_LABELS[o.network]}`}
-          />
+          <Meta label="Total" value={formatEthSmart(o.total)} isPrimary />
+          <Meta label="Carteira" value={o.wallet.label} />
         </dl>
-        <h2 className="mt-6 text-xs font-bold">Detalhes da transação</h2>
-        <table className="mt-2 w-full text-xs">
-          <thead className="text-left text-muted-foreground">
-            <tr>
-              <th className="py-1 font-normal">NFTs</th>
-              <th className="py-1 font-normal">Edições</th>
-              <th className="py-1 text-right font-normal">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {o.lines.map((l) => (
-              <tr key={l.nftId + l.edition} className="border-t border-border">
-                <td className="py-2">
-                  <span className="flex items-center gap-2">
-                    <img
-                      src={l.image}
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="h-8 w-8 rounded object-cover"
-                    />
-                    {l.name}
-                  </span>
-                </td>
-                <td className="py-2">
-                  {l.edition} × {l.quantity}
-                </td>
-                <td className="py-2 text-right font-bold text-primary">
-                  {formatEthSmart(l.lineTotal)}
-                </td>
+
+        {/* Cabeçalho da seção de detalhes da transação */}
+        <div className="mt-5">
+          <h2 className="text-sm font-bold text-foreground">Detalhes da transação</h2>
+        </div>
+
+        {/* Tabela de itens adquiridos com thumbnail ampliado, edições entre parênteses e subtotal */}
+        <div className="mt-2 w-full overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead className="border-b border-border/60 text-muted-foreground">
+              <tr>
+                <th className="pb-2 text-left font-normal">NFTs</th>
+                <th className="w-24 pb-2 text-center font-normal">Edições</th>
+                <th className="w-28 pb-2 text-right font-normal">Subtotal</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <dl className="mt-4 space-y-1 border-t border-border pt-3 text-xs">
-          <div className="flex justify-between">
-            <dt>Subtotal</dt>
-            <dd>{formatEthSmart(o.subtotal)}</dd>
-          </div>
-          <div className="flex justify-between">
-            <dt>Desconto{o.coupon ? ` (${o.coupon})` : ""}</dt>
-            <dd>- {formatEthSmart(o.discount)}</dd>
-          </div>
-          <div className="flex justify-between">
-            <dt>Taxa de rede</dt>
-            <dd>{formatEthSmart(o.networkFee)}</dd>
-          </div>
-          <div className="flex justify-between font-bold">
-            <dt>Total</dt>
-            <dd className="text-primary">{formatEthSmart(o.total)}</dd>
-          </div>
-        </dl>
-        <p className="mt-4 text-center text-[11px] text-muted-foreground">
+            </thead>
+            <tbody className="divide-y divide-border/30">
+              {o.lines.map((l) => (
+                <tr key={l.nftId + l.edition}>
+                  <td className="py-3">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={l.image}
+                        alt=""
+                        width={56}
+                        height={56}
+                        className="h-14 w-14 flex-shrink-0 rounded-lg object-cover"
+                      />
+                      <div className="min-w-0">
+                        <div className="truncate text-xs font-bold text-foreground sm:text-sm">
+                          {l.name}
+                        </div>
+                        <div className="font-mono text-[11px] text-muted-foreground">
+                          ID do token: #{String(l.edition).padStart(4, "0")}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-3 text-center font-mono text-xs text-muted-foreground">
+                    (× {l.quantity})
+                  </td>
+                  <td className="py-3 text-right font-mono text-xs font-bold text-primary sm:text-sm">
+                    {formatEthSmart(l.lineTotal)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Bloco de totais alinhado à direita conforme Comentário #51 do Figma */}
+        <div className="mt-3 flex justify-end border-t border-border/60 pt-3">
+          <dl className="w-full max-w-xs space-y-1.5 font-mono text-xs">
+            {o.subtotal !== o.total && (
+              <div className="flex justify-between text-muted-foreground">
+                <dt>Subtotal</dt>
+                <dd className="font-medium text-foreground">{formatEthSmart(o.subtotal)}</dd>
+              </div>
+            )}
+            {o.coupon && (
+              <div className="flex justify-between text-muted-foreground">
+                <dt>Desconto ({o.coupon})</dt>
+                <dd className="font-medium text-primary">- {formatEthSmart(o.discount)}</dd>
+              </div>
+            )}
+            <div className="flex justify-between text-muted-foreground">
+              <dt>Taxa de rede</dt>
+              <dd className="font-medium text-foreground">{formatEthSmart(o.networkFee)}</dd>
+            </div>
+            <div className="flex justify-between pt-1 font-bold">
+              <dt className="text-foreground">Total</dt>
+              <dd className="text-base text-primary">{formatEthSmart(o.total)}</dd>
+            </div>
+          </dl>
+        </div>
+
+        {/* Nota de confirmação centralizada */}
+        <p className="mt-3 border-t border-border/60 pt-4 text-center font-mono text-xs leading-relaxed text-muted-foreground">
           Transação confirmada (simulação). A propriedade foi transferida para sua carteira
           conectada.
         </p>
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
+
+        {/* Botões de ação: 'Copiar ID' preservado conforme pedido do usuário e 'Ver no Etherscan' */}
+        <div className="mt-4 flex flex-wrap justify-center gap-3">
           {o.txHash && (
             <Button
               variant="line"
-              size="sm"
+              size="default"
               onClick={() =>
                 navigator.clipboard
                   .writeText(o.txHash!)
                   .then(() => toast.success("ID da transação copiado"))
               }
             >
-              <Copy /> Copiar ID
+              <Copy className="mr-1.5 size-4" /> Copiar ID
             </Button>
           )}
           {o.explorerUrl && (
-            <Button variant="brand" size="sm" asChild>
+            <Button variant="brand" size="default" asChild>
               <a href={o.explorerUrl} target="_blank" rel="noreferrer noopener">
-                Ver no Etherscan (simulado) <ExternalLink />
+                Ver no Etherscan (simulado) <ExternalLink className="ml-1.5 size-4" />
               </a>
             </Button>
           )}
@@ -235,12 +278,19 @@ function OrderPage() {
   );
 }
 
-/** Exibe um metadado curto do pedido confirmado. */
-function Meta({ label, value }: { label: string; value: string }) {
+/** Exibe um metadado curto do pedido confirmado com tipografia mono e destaque de cor opcional. */
+function Meta({ label, value, isPrimary }: { label: string; value: string; isPrimary?: boolean }) {
   return (
-    <div>
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 font-semibold">{value}</dd>
+    <div className="px-2 py-1 text-center sm:first:pl-0 sm:last:pr-0">
+      <dt className="font-mono text-[11px] text-muted-foreground">{label}</dt>
+      <dd
+        className={cn(
+          "mt-0.5 font-mono text-xs font-bold",
+          isPrimary ? "text-primary" : "text-foreground",
+        )}
+      >
+        {value}
+      </dd>
     </div>
   );
 }
