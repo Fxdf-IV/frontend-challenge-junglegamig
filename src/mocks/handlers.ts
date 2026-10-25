@@ -617,7 +617,13 @@ export const handlers = [
               "IDEMPOTENCY_CONFLICT",
               "Chave de idempotência reutilizada com outro conteúdo",
             );
-          return HttpResponse.json(publicOrder(s.orders[prior.orderId]), { status: 200 });
+          const existing = s.orders[prior.orderId];
+          if (existing && existing.status === "pending") {
+            existing.resolveAt = Date.now() + 1500;
+            save();
+            setTimeout(() => resolveOrder(existing.id), 1510);
+          }
+          return HttpResponse.json(publicOrder(existing), { status: 200 });
         }
         const fields: Record<string, string> = {};
         if (!body.collector?.name || body.collector.name.trim().length < 2)
@@ -656,6 +662,8 @@ export const handlers = [
             quote,
           });
         }
+        const isTimeout = s.scenario === "order-timeout";
+        const resolveDelay = isTimeout ? 15000 : 2500;
         const now = new Date().toISOString();
         const order: DbOrder = {
           id: `ord_${crypto.randomUUID().slice(0, 8)}`,
@@ -673,14 +681,14 @@ export const handlers = [
           wallet: { label: wallet!.label, address: wallet!.address, provider: wallet!.provider },
           collector: body.collector,
           userId: a.userId,
-          resolveAt: Date.now() + 2500,
+          resolveAt: Date.now() + resolveDelay,
           outcome: s.scenario === "payment-declined" ? "declined" : "confirmed",
         };
         s.orders[order.id] = order;
         s.idempotency[key] = { userId: a.userId, hash, orderId: order.id };
         save();
-        setTimeout(() => resolveOrder(order.id), 2510);
-        if (s.scenario === "order-timeout") await delay(12000); // client times out; order exists
+        setTimeout(() => resolveOrder(order.id), resolveDelay + 10);
+        if (isTimeout) await delay(12000); // client times out; order exists
         return HttpResponse.json(publicOrder(order), { status: 201 });
       },
       { kind: "write" },

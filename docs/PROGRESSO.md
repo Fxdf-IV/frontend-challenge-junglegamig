@@ -121,6 +121,10 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   `src/routes/_authenticated.checkout.tsx` para não sobrescrever `sessionStorage` no `StrictMode`), e
   isolamento de carteiras, favoritos e carrinho entre Ana e Bruno. Typecheck, lint (0 erros/9 avisos) e
   Vitest 18/18 passaram. Próximo lote: Task 13 (regressão visual e overflow responsivo).
+- Ajustada a liquidação do cenário `order-timeout` em `src/mocks/handlers.ts` para não emitir
+  `order.updated` nem esvaziar o carrinho aos 2,5 s antes do timeout HTTP de 8 s do cliente, agendando a
+  liquidação após a retomada idempotente; reposicionado o botão mobile do `MockPanel` para `bottom-28
+  right-3` para não sobrepor o controle de quantidade da barra fixa de `/nft/$id` em 390×844.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
@@ -188,3 +192,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `8ca0654` | Testes E2E de reconciliação Socket.IO no checkout| Cobrir confirmação por evento, mudança de preço/estoque no checkout e reconexão em desktop e mobile                                 |
 | 25/10/2026 | `d42f3a7` | Testes E2E de versão e deduplicação de eventos   | Cobrir descarte de eventos duplicados/obsoletos, retomada de pedido pendente e snapshot do recibo                                   |
 | 25/10/2026 | `7820f86` | Testes E2E de teclado, foco e validação acessível| Cobrir salto de conteúdo, focus trap/restauração em dialogs e atributos ARIA em desktop e mobile                                    |
+| 25/10/2026 | `a81ae5b` | Testes E2E de skeletons, falha e recuperação     | Cobrir `.shimmer` com `prefers-reduced-motion`, recuperação de 500, expiração de sessão preservando rascunho e isolamento de contas |
