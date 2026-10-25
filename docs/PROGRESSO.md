@@ -14,6 +14,15 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Transições e animações inspiradas no site da Jungle Gaming (`src/styles.css`, `index.tsx`, `NftCard.tsx`, `HomeEditorialSections.tsx`, `Catalog.tsx`, FD-41):**
+  - Analisado o vídeo de captura de tela da Jungle Gaming (`Gravando 2026-10-25 172014.mp4`), extraídos frames e mapeados os padrões de ritmo, iluminação ambiental e microinterações táteis.
+  - Criadas classes utilitárias de animação aceleradas por hardware em `src/styles.css`: `@keyframes fade-up` com curva `cubic-bezier(0.16, 1, 0.3, 1)`, `@keyframes ambient-glow`, `animate-fade-up`, `animate-fade-in`, `animate-ambient` e delays escalonados (`anim-delay-75` a `anim-delay-300`).
+  - Hero com entrada sequencial suave dos elementos tipográficos (badge, título, descrição e CTA de exploração com translação de seta no hover) e halo de luz ambiental dourada respirando suavemente atrás da arte em destaque em telas desktop.
+  - Microinterações táteis nos cards de NFT e oferta limitada: elevação suave (`hover:-translate-y-1`), zoom sutil e fluido da arte (`group-hover:scale-[1.05]` com `will-change-transform`), iluminação dourada na borda e sombra âmbar difusa (`group-hover:border-[#d28a4c]/35 group-hover:shadow-[0_10px_25px_-5px_rgba(210,138,76,0.16)]`) e feedback tátil no botão de favoritos (`active:scale-95 hover:scale-110`).
+  - Campanhas e artigos do Diário da Cunhagem com elevação suave, zoom de imagem e microdeslocamento na seta do link ("Ler mais →").
+  - Conformidade estrita com acessibilidade e preferência de movimento reduzido (`@media (prefers-reduced-motion: reduce)`): animações e transições instantaneamente desativadas, garantindo zero layout shift e 100% de estabilidade nos testes de regressão visual (Playwright visual 4/4 e catálogo 12/12 aprovados).
+
+
 - **Ativação e cobertura completa nos viewports desktop e mobile dos testes de ordenação e troca de conta (`tests/e2e/catalog.spec.ts`, `tests/e2e/account.spec.ts`):**
   - Removido o `test.skip(isMobile)` em `ordena o catálogo por preço crescente`, exercitando o seletor `Ordenar por:` na rota `/mercado` em ambos os viewports (desktop e mobile).
   - Removido o `test.skip` em `troca de conta remove os dados privados da sessão anterior`, padronizando o fluxo de logout e troca de credenciais a partir da rota de perfil, onde o cabeçalho com menu de usuário e a ação de sair operam com consistência no desktop e no mobile, validando redirecionamento para login e isolamento da sessão.

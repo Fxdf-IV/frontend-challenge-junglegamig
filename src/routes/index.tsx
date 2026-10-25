@@ -133,15 +133,7 @@ function Home() {
           <span className="h-2 w-2 rounded-full bg-[#55321f]" />
         </div>
       </section>
-
-      {/* Linha de transição luminosa sutil entre o Hero e o Catálogo */}
-      <div className="section-divider-glow my-2 md:my-6" aria-hidden="true" />
-
       <Catalog search={search} from="/" />
-
-      {/* Linha de transição luminosa entre o Catálogo e as Seções Editoriais */}
-      <div className="section-divider-glow my-6 md:my-10" aria-hidden="true" />
-
       <HomeEditorialSections />
     </div>
   );
