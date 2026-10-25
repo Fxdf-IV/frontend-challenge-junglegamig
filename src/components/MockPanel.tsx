@@ -40,12 +40,17 @@ export function MockPanel() {
   const cart = useCart();
   const { status } = useRealtime();
   const [scenario, setScenario] = useState<string>("default");
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     api.mock
       .scenario()
       .then((r) => setScenario(r.scenario))
       .catch(() => {});
   }, []);
+
+  if (!mounted) return null;
 
   const change = async (s: string) => {
     await api.mock.setScenario(s);
