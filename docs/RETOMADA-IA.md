@@ -127,4 +127,10 @@ estado atual antes de editar ou commitar.
   pendente. Servidor Vite local respondeu na porta 3001 na inspeção anterior.
 - O plano E2E foi salvo em `docs/superpowers/plans/2026-10-25-playwright-e2e.md`; divide a configuração
   e os 12 grupos exigidos em lotes testáveis, seguidos de regressão visual. A execução do plano ainda
-  não começou; Playwright não está instalado/configurado.
+  começou no worktree; Playwright está instalado e configurado ali.
+- Worktree Playwright: `C:\Users\Vi\Projetos\frontend-challenge-junglegamig\.worktrees\playwright-e2e`,
+  branch `codex/playwright-e2e`. A branch principal termina em `688b35c` antes dos commits do worktree.
+- Primeiro lote E2E: smoke da home desktop e mobile passou (2/2) usando Google Chrome instalado.
+  `typecheck` e Vitest (18/18) passaram; lint passou serialmente com 9 avisos. Faltam os outros 12
+  grupos completos, regressão visual e build de entrega. Código e README estão commitados em
+  `2a30fb6 test: add Playwright home smoke coverage`; há documentação de cobertura pendente de commit.

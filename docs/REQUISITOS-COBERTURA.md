@@ -22,7 +22,7 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 | Tailwind CSS       | Implementado | `src/styles.css`                                            |
 | shadcn/ui          | Implementado | `src/components/ui` (adaptar aos tokens do Figma)           |
 | MSW                | Implementado | `src/mocks`                                                 |
-| Playwright         | Pendente     | Sem configuração nem testes                                 |
+| Playwright         | Em andamento | Configuração desktop/mobile e smoke E2E da home em `tests/e2e/home.spec.ts`; faltam os 12 grupos completos |
 | Lighthouse         | Pendente     | Sem configuração nem relatórios                             |
 
 ## 3. Telas e fluxos
@@ -166,7 +166,7 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 | 10. Eventos duplicados/antigos, desconexão, retomada                    | Pendente |
 | 11. Teclado, foco de dialogs, validação                                 | Pendente |
 | 12. Skeletons, falha e recuperação                                      | Pendente |
-| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Pendente |
+| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Em andamento; smoke da home passou em 1440×1000 e 390×844, baselines visuais pendentes |
 
 ## 10. Performance e Lighthouse
 
@@ -186,5 +186,5 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 | Acesso direto e refresh em qualquer rota                                        | Pendente     | Fallback de SPA no deploy        |
 | `README.md` completo                                                            | Pendente     | Hoje só tem o básico             |
 | `ARCHITECTURE.md` completo                                                      | Pendente     | Ainda não existe                 |
-| Scripts: dev com mocks, build, preview, typecheck, lint, Playwright, Lighthouse | Em andamento | Faltam `test:e2e` e `lighthouse` |
+| Scripts: dev com mocks, build, preview, typecheck, lint, Playwright, Lighthouse | Em andamento | `test:e2e` e `test:e2e:ui` disponíveis; falta `lighthouse` |
 | Execução a partir de checkout limpo                                             | Pendente     | Validar ao final                 |

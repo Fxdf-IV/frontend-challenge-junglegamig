@@ -36,6 +36,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 - `bun run typecheck`, `bun run test` (18 testes) e `bun run lint` passaram; lint mantém 9 avisos.
   Uma execução simultânea de lint/E2E encontrou uma condição de corrida no diretório temporário; o
   lint foi repetido sozinho e passou. Os comandos devem ser executados em sequência durante o commit.
+- Relatório e resultados temporários do Playwright (`playwright-report/`, `test-results/`) foram
+  excluídos do Git; a matriz registra apenas a configuração e o smoke test efetivamente comprovados.
 - Plano E2E salvo em `docs/superpowers/plans/2026-10-25-playwright-e2e.md`, dividido por grupo de
   requisito para preparar Playwright e avançar em commits pequenos.
 - Preparado `.worktrees/` ignorado para executar a implementação E2E isolada em branch `codex/`,

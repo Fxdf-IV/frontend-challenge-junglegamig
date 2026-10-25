@@ -30,13 +30,13 @@
 
 ### Task 1: Playwright foundation and home smoke tests
 
-**Files:** `package.json`, `bun.lock`, `playwright.config.ts`, `tests/e2e/home.spec.ts`, `docs/PROGRESSO.md`.
+**Files:** `package.json`, `bun.lock`, `.gitignore`, `playwright.config.ts`, `tests/e2e/home.spec.ts`, `README.md`, `docs/PROGRESSO.md`, `docs/REQUISITOS-COBERTURA.md`.
 
-- [ ] Add `@playwright/test` as a dev dependency and scripts `test:e2e` and `test:e2e:ui`.
-- [ ] Configure Chromium desktop (1440×1000) and mobile (390×844), isolated contexts, HTML report, trace on retry, and a Vite web server on port 4174.
-- [ ] Add smoke tests asserting the home heading, catalog content and campaign section on both projects; fail on uncaught page errors.
-- [ ] Run the two home tests and all required pre-commit checks.
-- [ ] Commit as `test: add Playwright home smoke coverage`.
+- [x] Add `@playwright/test` as a dev dependency and scripts `test:e2e` and `test:e2e:ui`.
+- [x] Configure Chromium desktop (1440×1000) and mobile (390×844), isolated contexts, HTML report, trace on retry, and a Vite web server on port 4174.
+- [x] Add smoke tests asserting the home heading, catalog content and campaign section on both projects; fail on uncaught page errors.
+- [x] Run the two home tests and all required pre-commit checks; Chrome desktop/mobile passed. `typecheck` and Vitest passed; lint passed when rerun serially after a parallel E2E run briefly created/removed its ignored output directory.
+- [x] Commit as `test: add Playwright home smoke coverage` (`2a30fb6`).
 
 ### Task 2: Catalog and history
 
