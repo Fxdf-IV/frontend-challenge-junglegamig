@@ -32,16 +32,29 @@ import { cn } from "@/lib/utils";
 /** Metadados e validação da edição selecionada na URL. */
 export const Route = createFileRoute("/nft/$id")({
   validateSearch: zodValidator(z.object({ edition: z.string().optional().catch(undefined) })),
-  head: ({ params }) => ({
-    meta: [
-      { title: `NFT ${params.id} — Kurio` },
-      { name: "description", content: "Detalhes, edições e compra deste NFT na Kurio." },
-      { property: "og:title", content: "NFT na Kurio" },
-      { property: "og:description", content: "Galeria, edições e compra deste NFT." },
-      { property: "og:type", content: "product" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: ({ params }) => {
+    const slug = params.id.toLowerCase();
+    const image = slug.includes("emerald")
+      ? "/nft/emerald.webp"
+      : slug.includes("neon")
+        ? "/nft/neon.webp"
+        : slug.includes("sage")
+          ? "/nft/sage.webp"
+          : slug.includes("golden")
+            ? "/nft/golden.webp"
+            : undefined;
+    return {
+      meta: [
+        { title: `NFT ${params.id} — Kurio` },
+        { name: "description", content: "Detalhes, edições e compra deste NFT na Kurio." },
+        { property: "og:title", content: "NFT na Kurio" },
+        { property: "og:description", content: "Galeria, edições e compra deste NFT." },
+        { property: "og:type", content: "product" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: image ? [{ rel: "preload", as: "image", href: image, fetchPriority: "high" }] : [],
+    };
+  },
   component: NftDetail,
 });
 
@@ -167,6 +180,8 @@ function NftDetail() {
                       alt=""
                       width={80}
                       height={80}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover"
                     />
                   </button>
@@ -464,12 +479,27 @@ function MoreFromCollection({ collection, exclude }: { collection: string; exclu
   );
 }
 
-/** Reserva dimensões próximas ao conteúdo do detalhe durante o carregamento. */
+/** Reserva dimensões próximas ao conteúdo do detalhe durante o carregamento para evitar CLS. */
 function DetailSkeleton() {
   return (
-    <div className="container-page py-6" aria-busy="true" aria-label="Carregando NFT">
-      <div className="shimmer mb-4 h-4 w-32 rounded" />
-      <div className="grid gap-8 lg:grid-cols-2">
+    <div
+      className="container-page min-h-[72rem] pb-40 pt-4 md:min-h-[60rem] md:py-6"
+      aria-busy="true"
+      aria-label="Carregando NFT"
+    >
+      <div className="mb-4 flex items-center justify-between md:hidden">
+        <Link
+          to="/mercado"
+          aria-label="Voltar ao mercado"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-card"
+        >
+          <ArrowLeft aria-hidden />
+          <span className="sr-only">Voltar</span>
+        </Link>
+        <span className="text-xs text-muted-foreground">Carregando NFT…</span>
+      </div>
+      <div className="shimmer mb-4 hidden h-4 w-32 rounded md:block" />
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-8">
         <div className="shimmer aspect-square rounded-lg" />
         <div className="space-y-3">
           <div className="shimmer h-8 w-2/3 rounded" />

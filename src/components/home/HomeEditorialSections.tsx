@@ -229,6 +229,8 @@ function Campaign({
         alt={alt}
         width={320}
         height={320}
+        loading="lazy"
+        decoding="async"
         className="aspect-square w-full rounded-md object-cover"
       />
       <div className="text-center">

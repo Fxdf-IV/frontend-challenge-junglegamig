@@ -54,7 +54,7 @@ function withScenario<P extends Record<string, string>, B extends DefaultBodyTyp
     const sc = s.scenario;
     if (sc === "slow") await delay(1800);
     else if (sc === "jitter") await delay(100 + ((n * 7919) % 1400));
-    else await delay(120 + ((n * 31) % 180));
+    else await delay(4);
     if (sc === "offline") return HttpResponse.error();
     if (sc === "flaky" && n % 3 === 0)
       return err(503, "UNAVAILABLE", "Serviço temporariamente indisponível");
