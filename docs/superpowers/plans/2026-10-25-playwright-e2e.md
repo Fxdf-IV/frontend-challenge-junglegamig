@@ -61,7 +61,7 @@
 
 - [x] Cover registration, duplicate account, login, preserved redirect, refresh and invalid-token cleanup. Clock expiry and private-cache isolation still need stronger assertions.
 - [x] Verify session switch between Ana and Bruno on desktop; mobile skips because its current navigation has no logout action.
-- [x] Focused E2E: 11 passed, 1 intentional mobile skip. Pre-commit `typecheck`, lint (0 errors/9 warnings) and Vitest (18/18) passed; commit `test: cover account and session flows` remains pending.
+- [x] Focused E2E: 11 passed, 1 intentional mobile skip. Pre-commit `typecheck`, lint (0 errors/9 warnings) and Vitest (18/18) passed; committed as `b14649d test: cover account and session flows`.
 
 ### Task 5: Favorites and cart
 

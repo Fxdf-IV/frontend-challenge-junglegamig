@@ -123,3 +123,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `9347fa3` | Bloqueio da captura visual documentado          | Captura simples no navegador controlado também travou; evitar alegar verificação visual inexistente                                    |
 | 25/10/2026 | `ed60376` | Lista de commits na nota de retomada formatada   | Corrigir whitespace em Markdown e ordenar a lista do mais recente para o mais antigo                                                   |
 | 25/10/2026 | `13d301d` | Diário e nota de retomada atualizados            | Registrar lotes da retomada e deixar explícita a referência ao histórico Git                                                           |
+| 25/10/2026 | `b14649d` | Testes E2E de conta e sessão                     | Cobrir autenticação, retorno seguro, cadastro, token inválido e troca de conta; corrigir o guard privado                              |

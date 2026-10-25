@@ -154,8 +154,8 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 
 - Branch de implementação: `codex/playwright-e2e` no worktree
   `C:\Users\Vi\Projetos\frontend-challenge-junglegamig\.worktrees\playwright-e2e`.
-- Último commit existente antes do grupo 3: `e73eae2 test: cover NFT detail and not-found states`.
-  Há alterações não commitadas do grupo 3; não fazer merge nem push sem pedido do usuário.
+- Commits E2E desta branch: `2a30fb6` home, `ace6105` catálogo, `e73eae2` detalhe e `b14649d`
+  conta/sessão. O worktree está limpo após o lote; não fazer merge nem push sem pedido do usuário.
 - O grupo 3 criou `tests/e2e/account.spec.ts` (6 cenários em desktop/mobile). Resultado focado mais
   recente: **11 passaram, 1 skip intencional** (troca de conta mobile, pois o menu de sessão não existe
   na navegação mobile). Abrange redirect para login/perfil, refresh, credenciais incorretas, cadastro,
@@ -166,13 +166,12 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   não redirecionar novamente se a URL já começar por `/login`. O teste demonstra acesso privado e
   retorno ao perfil após autenticar. O teste também usa seletores escopados ao diálogo para evitar o
   campo de newsletter, e considera a navegação mobile ao validar sessão autenticada.
-- Arquivos de código e documentação do grupo 3 estão modificados, mas ainda não commitados. Checks
-  pré-commit passaram serialmente: typecheck limpo; lint sem erros e com 9 avisos existentes; Vitest
-  7 arquivos/18 testes; E2E focado 11 passou e 1 skip. Atualizar a matriz e o diário no commit do lote
-  (resumo atual da matriz: Verificado 4,
+- Grupo 3 foi commitado em `b14649d`. Checks pré-commit passaram serialmente: typecheck limpo; lint
+  sem erros e com 9 avisos existentes; Vitest 7 arquivos/18 testes; E2E focado 11 passou e 1 skip.
+  Resumo atual da matriz: Verificado 4,
   Implementado 69, Em andamento 8, Pendente 28; 109 itens).
-- Plano atualizado: grupos 1 e 2 têm commits `ace6105` e `e73eae2`; grupo 3 concluído em E2E focado,
-  aguardando pre-commit e commit `test: cover account and session flows`.
+- Plano atualizado: grupos 1–3 estão commitados (`ace6105`, `e73eae2`, `b14649d`), além da fundação
+  de home (`2a30fb6`).
 - Próximo lote previsto: grupo 4, favoritos e carrinho, em teste separado. Depois seguir grupos 5–12,
   regressão visual, Lighthouse, documentação README/ARCHITECTURE, auditoria completa e build final.
   Manter lotes pequenos e commits separados; atualizar progresso e handoff em cada mudança relevante.
