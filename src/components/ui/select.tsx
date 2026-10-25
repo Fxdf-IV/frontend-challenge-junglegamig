@@ -1,3 +1,4 @@
+// Seletor dropdown Select (shadcn/ui baseado em Radix UI) adaptado para foco, itens e bordas do Figma.
 "use client";
 
 import * as React from "react";

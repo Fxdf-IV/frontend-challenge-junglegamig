@@ -1,3 +1,4 @@
+// Barra lateral expansível Sidebar (shadcn/ui) adaptada aos padrões estruturais e tokens do Figma.
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";

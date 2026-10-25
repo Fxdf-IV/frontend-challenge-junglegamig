@@ -1,3 +1,4 @@
+// Área de rolagem customizada ScrollArea (shadcn/ui baseada em Radix UI) adaptada para barras de rolagem do Figma.
 import * as React from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
 
