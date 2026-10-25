@@ -137,6 +137,8 @@ assets no formato nativo da plataforma. Não configure `.output/public` como dir
 estático nem reescreva todas as rotas para `/`: isso remove o servidor SSR do deploy e quebra o
 acesso direto a páginas como `/nft/emerald-ape-042`.
 
+Produção: [https://frontend-challenge-junglegamig.vercel.app/](https://frontend-challenge-junglegamig.vercel.app/).
+
 Os mocks MSW e o transporte de tempo real operam no cliente também na versão publicada. Em hosts
 estáticos, `public/_redirects` contém uma regra SPA, mas o build padrão deste projeto é SSR; use
 uma integração de servidor compatível com TanStack Start/Nitro para publicar esse build.

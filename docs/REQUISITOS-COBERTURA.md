@@ -4,19 +4,19 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 `Verificado`. Só vira `Verificado` com teste automatizado ou medição citada na linha
 (regras em `AGENTS.md`, seção 13).
 
-Legenda de leitura: todos os 12 grupos funcionais do Playwright, baselines de regressão visual,
-fontes locais, testes unitários, documentação completa (`README.md` e `ARCHITECTURE.md`), a suíte oficial
-de 3 medições do Lighthouse com relatórios versionados e a execução limpa de build/testes estão verificados
-(`88 passed, 2 skipped` no E2E; `27 passed` no Vitest; Lighthouse 100/99 desktop, 87/86 mobile com 100 em a11y, bp e seo).
-Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
+Legenda de leitura: os 12 grupos funcionais do Playwright, baselines de regressão visual,
+fontes locais, testes unitários, documentação (`README.md` e `ARCHITECTURE.md`), auditorias Lighthouse
+versionadas, build e deploy público foram verificados. A suíte atual passou com `92/92` no E2E e
+`33/33` no Vitest. Lighthouse: 100/99 desktop e 87/86 mobile; acessibilidade, melhores práticas e SEO
+ficaram em 100 em todos os perfis.
 
-**Resumo atual:** Verificado 108 · Implementado 0 · Em andamento 0 · Pendente 1 (109 itens)
+**Resumo atual:** Verificado 109 · Implementado 0 · Em andamento 0 · Pendente 0 (109 itens)
 
 ## 2. Stack obrigatória
 
 | Item               | Status     | Onde / prova                                                                                     |
 | ------------------ | ---------- | ------------------------------------------------------------------------------------------------ |
-| React + TypeScript | Verificado | `src/`, `bun run typecheck`, `bun run test` (27/27) e `bun run test:e2e` (88/88)                 |
+| React + TypeScript | Verificado | `src/`, `bun run typecheck`, `bun run test` (33/33) e `bun run test:e2e` (92/92)                 |
 | TanStack Router    | Verificado | `src/routes`, `src/test/app-routing.test.tsx`, `tests/e2e/catalog.spec.ts`                       |
 | TanStack Query     | Verificado | `src/api/queries.ts`, `tests/e2e/favorites.spec.ts`, `tests/e2e/loading-recovery.spec.ts`        |
 | Axios              | Verificado | `src/api/client.ts`, `tests/e2e/checkout-failures.spec.ts`, `tests/e2e/loading-recovery.spec.ts` |
@@ -25,7 +25,7 @@ Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
 | Tailwind CSS       | Verificado | `src/styles.css`, `tests/e2e/visual.spec.ts`                                                     |
 | shadcn/ui          | Verificado | `src/components/ui`, `tests/e2e/accessibility.spec.ts`, `tests/e2e/visual.spec.ts`               |
 | MSW                | Verificado | `src/mocks`, `tests/e2e/*.spec.ts`                                                               |
-| Playwright         | Verificado | `playwright.config.ts`, `tests/e2e/*.spec.ts` (88 aprovados, 2 skips mobile intencionais)        |
+| Playwright         | Verificado | `playwright.config.ts`, `tests/e2e/*.spec.ts` (92 aprovados, sem skips; desktop/mobile)          |
 | Lighthouse         | Verificado | `scripts/lighthouse.mjs`, `lighthouserc.json`, `reports/lighthouse/summary.json`                 |
 
 ## 3. Telas e fluxos
@@ -169,7 +169,7 @@ Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
 | 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, desktop/mobile)                          |
 | 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 4/4, desktop/mobile)                             |
 | 12. Skeletons, falha e recuperação                                      | Verificado (`tests/e2e/loading-recovery.spec.ts`; 6/6, desktop/mobile)                          |
-| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Verificado (`playwright.config.ts`, `tests/e2e/visual.spec.ts`; 88 aprovados e 2 skips mobile)  |
+| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Verificado (`playwright.config.ts`, `tests/e2e/visual.spec.ts`; 92 aprovados, sem skips)          |
 
 ## 10. Performance e Lighthouse
 
@@ -185,8 +185,8 @@ Resta apenas a publicação do deploy mediante credenciais/provedor do usuário.
 | ------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------- |
 | Código, lockfile, assets, mocks, fixtures                                       | Verificado | `bun.lock`, `src/mocks`, `bun run build`                                                                |
 | Testes e configuração de auditoria                                              | Verificado | `playwright.config.ts`, `lighthouserc.json`, `scripts/lighthouse.mjs`, relatórios versionados           |
-| Deploy público com mocks e tempo real                                           | Pendente   | Depende de credenciais de publicação do usuário                                                         |
-| Acesso direto e refresh em qualquer rota                                        | Verificado | `public/_redirects`, `vercel.json`, `tests/e2e/nft-detail.spec.ts`, `tests/e2e/account.spec.ts`         |
+| Deploy público com mocks e tempo real                                           | Verificado | [URL pública](https://frontend-challenge-junglegamig.vercel.app/); HTTP 200 após o novo deploy          |
+| Acesso direto e refresh em qualquer rota                                        | Verificado | HTTP 200 em `/` e `/nft/emerald-ape-042`; `tests/e2e/nft-detail.spec.ts`, `tests/e2e/account.spec.ts`   |
 | `README.md` completo                                                            | Verificado | `README.md` (setup, env vars, credenciais, cenários, comandos e falhas)                                 |
 | `ARCHITECTURE.md` completo                                                      | Verificado | `ARCHITECTURE.md` (REST, Socket.IO, sessão, carrinho, cache, MSW, UX e Lighthouse)                      |
 | Scripts: dev com mocks, build, preview, typecheck, lint, Playwright, Lighthouse | Verificado | `package.json` (`dev`, `build`, `preview`, `typecheck`, `lint`, `test`, `test:e2e`, `lighthouse`)       |

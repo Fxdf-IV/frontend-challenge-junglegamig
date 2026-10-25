@@ -5,15 +5,16 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Próximos passos (ordem de prioridade)
 
-1. **Deploy público (`AGENTS.md`, seção 11):**
-   - Realizar o deploy na Vercel/Netlify/Cloudflare Pages mediante indicação de credenciais ou autorização de publicação pelo usuário (projeto com `vercel.json` e `public/_redirects` prontos).
+1. **Performance mobile Lighthouse:**
+   - Investigar a inicialização/hidratação no perfil mobile e elevar Home (87) e detalhe (86) à meta ≥90 sem remover funcionalidades ou conteúdo.
 
 ### Bloqueios e decisões do usuário
 
-- **Deploy público:** depende da indicação e autorização do usuário sobre qual provedor de hospedagem utilizar.
+- Nenhum bloqueio de publicação. O deploy Vercel foi validado na Home e na rota direta de detalhe.
 
 ## Concluído recentemente (25/10/2026)
 
+- **Corrigida e publicada a integração com a Vercel:** removida a publicação incorreta de `.output/public` e a reescrita de todas as rotas para `/`; configurado `tanstack-start` e liberada a detecção automática do preset Nitro. O build com `VERCEL=1` gerou a função SSR e rota catch-all. Após a publicação, Home e `/nft/emerald-ape-042` responderam HTTP 200. Lint, typecheck, build, Vitest (33/33) e Playwright (92/92) passaram.
 - **Inputs numéricos de preço sincronizados com o slider no catálogo (`src/components/nft/Catalog.tsx`, `slider.tsx`, FD-39):**
   - Implementados campos de entrada de texto/numéricos ("Mínimo" e "Máximo") para digitação direta de valores de preço em ETH no filtro "Faixa de preço" do catálogo, atendendo à solicitação do usuário.
   - Atualizado o componente `Slider` em `src/components/ui/slider.tsx` para suportar renderização de alças duplas independentes (`thumbsCount` baseado no array de valores), permitindo arrastar tanto o limite inferior quanto o superior.
