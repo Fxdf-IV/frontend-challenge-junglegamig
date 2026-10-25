@@ -151,3 +151,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `8be3b9a` | Testes E2E de carrinho                           | Cobrir quantidades, remoção, cupons, totais da cotação e migração do carrinho visitante                                              |
 | 25/10/2026 | `135c951` | Teste E2E de checkout confirmado                 | Cobrir conexão simulada, revisão, confirmação e restauração do recibo                                                               |
 | 25/10/2026 | `2ecbec7` | Testes E2E de falhas e idempotência no checkout  | Provar pagamento recusado, preço/estoque alterados, bloqueio de clique duplo e retry após timeout                                   |
+| 25/10/2026 | `971c250` | Testes E2E de perfil e carteiras                 | Cobrir metadados, avatar, senha e criação/edição de carteiras em desktop e mobile                                                   |
