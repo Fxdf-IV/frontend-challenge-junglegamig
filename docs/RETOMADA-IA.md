@@ -266,3 +266,11 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   2. Desconexão do socket com pedido pendente, retorno ao `/checkout` exibindo aviso `"Você tem um pedido em processamento."`, retomada por `"Acompanhar pedido"` sem criar segunda compra (`orderPosts === 1`), confirmação do recibo e preservação do snapshot (`0.9942 ETH`) após replays duplicado/obsoleto de `order.updated` e alteração posterior de preço no catálogo (`1.35 ETH`).
 - Matriz atualizada: Verificado 34, Implementado 43, Em andamento 8, Pendente 24 (109 itens).
 - Próximo passo imediato: Task 11 (`tests/e2e/accessibility.spec.ts` — teclado, foco visível, focus trap/restauração em dialogs e drawers, labels/`aria-invalid`/`aria-describedby` e anúncios `aria-live`), seguido por Tasks 12 e 13.
+
+## Estado consolidado mais recente — grupo 11 concluído (25/10/2026)
+
+- `tests/e2e/accessibility.spec.ts` passou **4/4** em Chromium desktop e mobile (`--workers=1`), cobrindo:
+  1. Navegação por teclado para `"Pular para o conteúdo"` com foco visível, prisão de foco no drawer de simulação e restauração ao gatilho com `Escape`, `alt` em imagens relevantes e aviso explícito em rota fora de escopo (`/aprenda`).
+  2. Restauração de foco no modal controlado de carteira em `/checkout` (corrigido `onCloseAutoFocus` em `src/routes/_authenticated.checkout.tsx` porque o botão ficava desabilitado enquanto `conn === "connecting"`), associação de `label`, `aria-invalid` e `aria-describedby` em formulários de login e checkout, `role="status"` da carteira conectada e anúncio de evento Socket.IO em `aria-live="polite"`.
+- Matriz atualizada: Verificado 42, Implementado 38, Em andamento 7, Pendente 22 (109 itens).
+- Próximo passo imediato: Task 12 (`tests/e2e/loading-recovery.spec.ts` — skeletons, `prefers-reduced-motion`, falha e recuperação de requisição, expiração de sessão e complemento do grupo 3), seguido por Task 13 (regressão visual e suíte final).

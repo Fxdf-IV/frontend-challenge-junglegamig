@@ -109,10 +109,10 @@
 
 ### Task 11: Keyboard and focus
 
-**Files:** `tests/e2e/accessibility.spec.ts`, progress and coverage docs.
+**Files:** `tests/e2e/accessibility.spec.ts`, `src/routes/_authenticated.checkout.tsx`, progress and coverage docs.
 
-- [ ] Cover keyboard navigation, visible focus, dialog focus trap/restore, labels, inline errors and live announcements.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover keyboard and focus behavior`.
+- [x] Cover keyboard navigation, visible focus, dialog focus trap/restore, labels, inline errors and live announcements; focused E2E passed 4/4 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover keyboard and focus behavior`.
 
 ### Task 12: Skeletons and recovery
 

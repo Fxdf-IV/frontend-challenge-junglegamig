@@ -5,10 +5,10 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 (regras em `AGENTS.md`, seção 13).
 
 Legenda de leitura: "Implementado" significa que o código existe, mas o requisito ainda não tem prova
-automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–10 estão verificados;
+automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–11 estão verificados;
 o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 34 · Implementado 43 · Em andamento 8 · Pendente 24 (109 itens)
+**Resumo atual:** Verificado 42 · Implementado 38 · Em andamento 7 · Pendente 22 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -23,7 +23,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Tailwind CSS       | Implementado | `src/styles.css`                                            |
 | shadcn/ui          | Implementado | `src/components/ui` (adaptar aos tokens do Figma)           |
 | MSW                | Implementado | `src/mocks`                                                 |
-| Playwright         | Em andamento | Grupos 1–10 verificados; grupo 3 parcial; grupos 11–12 e regressão visual pendentes |
+| Playwright         | Em andamento | Grupos 1–11 verificados; grupo 3 parcial; grupo 12 e regressão visual pendentes |
 | Lighthouse         | Pendente     | Sem configuração nem relatórios                             |
 
 ## 3. Telas e fluxos
@@ -42,7 +42,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Carteiras principal e secundária                        | Verificado   | `tests/e2e/profile-wallets.spec.ts` (criar, editar, validar)      |
 | Desktop e mobile fiéis ao Figma                         | Em andamento | `docs/FIGMA-DEVIATIONS.md`; falta acesso aos pins/frame por frame |
 | Perfil, carteiras e confirmação em mobile               | Em andamento | Sem frame no Figma; revisar em 390 px                             |
-| Ações fora do escopo não aparentam sucesso              | Em andamento | `components/ComingSoon.tsx`; revisar links do header e footer     |
+| Ações fora do escopo não aparentam sucesso              | Verificado   | `components/ComingSoon.tsx`, `tests/e2e/accessibility.spec.ts`    |
 
 ## Catálogo e detalhe
 
@@ -69,7 +69,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 
 | Item                                                      | Status       | Onde / prova                               |
 | --------------------------------------------------------- | ------------ | ------------------------------------------ |
-| Validação dos campos e revisão antes do envio             | Implementado | `checkout.tsx`                             |
+| Validação dos campos e revisão antes do envio             | Verificado   | `tests/e2e/accessibility.spec.ts`, `tests/e2e/checkout-success.spec.ts` |
 | Carteiras cadastradas, rede, conexão, recusa, desconexão  | Implementado | `checkout.tsx`                             |
 | Revalidar preço, estoque, cupom e taxas; nova confirmação | Implementado | handler `/orders`, `quote.id`              |
 | Sem pedidos duplicados (clique repetido, timeout)         | Verificado   | `tests/e2e/checkout-failures.spec.ts` (clique duplo e retry com a mesma chave/corpo) |
@@ -85,7 +85,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Cadastro, login, logout, sessão                      | Implementado | `lib/session.tsx`, handlers `/auth`     |
 | Sessão recuperável após refresh; expiração tratada   | Implementado | `tokenStore`, cenário `session-expired` |
 | Logout/troca de usuário limpam cache e subscriptions | Implementado | `clearPrivate`, `RealtimeProvider`      |
-| Validação de formulários com erros da API            | Implementado | `components/Field.tsx`, `AuthForms.tsx` |
+| Validação de formulários com erros da API            | Verificado   | `tests/e2e/accessibility.spec.ts`, `tests/e2e/account.spec.ts` |
 | Senhas não armazenadas em claro                      | Implementado | `sha256(salt + senha)` em `mocks/db.ts` |
 
 ## 4. Integração e estado
@@ -144,10 +144,10 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 390, 768 e 1440 px sem overflow                       | Pendente     | Medir e cobrir em teste            |
 | Skeleton com shimmer e `prefers-reduced-motion`       | Implementado | `styles.css`, `NftCardSkeleton`    |
 | Skeleton sem layout shift (catálogo, detalhe, resumo) | Pendente     | Conferir dimensões e medir CLS     |
-| Teclado, foco visível, foco em dialogs e drawers      | Pendente     | Revisar e testar                   |
-| Labels, `aria-invalid`, `aria-describedby`            | Implementado | `components/Field.tsx`             |
-| `alt` em imagens relevantes                           | Implementado | Revisar todas as telas             |
-| Feedback acessível de mutations e eventos             | Implementado | `aria-live` e `role="status"`      |
+| Teclado, foco visível, foco em dialogs e drawers      | Verificado   | `tests/e2e/accessibility.spec.ts`  |
+| Labels, `aria-invalid`, `aria-describedby`            | Verificado   | `tests/e2e/accessibility.spec.ts`, `components/Field.tsx` |
+| `alt` em imagens relevantes                           | Verificado   | `tests/e2e/accessibility.spec.ts`  |
+| Feedback acessível de mutations e eventos             | Verificado   | `tests/e2e/accessibility.spec.ts`, `tests/e2e/checkout-realtime.spec.ts` |
 | Fontes e imagens locais                               | Pendente     | Hoje as fontes vêm do Google Fonts |
 | Desvios de asset/a11y documentados                    | Pendente     | `docs/FIGMA-DEVIATIONS.md`         |
 
@@ -165,7 +165,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 8. Perfil, avatar, senha e carteiras com erros                          | Verificado (`tests/e2e/profile-wallets.spec.ts`; 8/8, desktop/mobile) |
 | 9. Preço/disponibilidade via Socket.IO no checkout                      | Verificado (`tests/e2e/checkout-realtime.spec.ts`; 6/6, desktop/mobile) |
 | 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, desktop/mobile) |
-| 11. Teclado, foco de dialogs, validação                                 | Pendente |
+| 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 4/4, desktop/mobile) |
 | 12. Skeletons, falha e recuperação                                      | Pendente |
 | Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Em andamento; smoke da home passou em 1440×1000 e 390×844, baselines visuais pendentes |
 

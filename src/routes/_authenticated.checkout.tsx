@@ -75,6 +75,8 @@ function Checkout() {
   const [changed, setChanged] = useState<string | null>(null);
   const [pending, setPending] = useState<string | null>(null);
   const inflight = useRef(false);
+  const connectBtnRef = useRef<HTMLButtonElement>(null);
+  const reviewBtnRef = useRef<HTMLButtonElement>(null);
 
   // restore draft (session expiry / refresh) and pending order
   useEffect(() => {
@@ -357,6 +359,7 @@ function Checkout() {
                   </>
                 ) : (
                   <Button
+                    ref={connectBtnRef}
                     type="button"
                     variant="line"
                     className="w-full"
@@ -411,6 +414,7 @@ function Checkout() {
             </p>
           ))}
           <Button
+            ref={reviewBtnRef}
             variant="brand"
             className="mt-5 w-full max-md:fixed max-md:inset-x-4 max-md:bottom-4 max-md:z-40 max-md:mt-0 max-md:w-[calc(100%-2rem)]"
             disabled={!q || !!q.issues.length || quote.isFetching}
@@ -429,7 +433,16 @@ function Checkout() {
           }
         }}
       >
-        <DialogContent>
+        <DialogContent
+          onCloseAutoFocus={(e) => {
+            // O botão fica desabilitado enquanto `conn === "connecting"`, perdendo o foco ativo;
+            // devolvemos o foco explicitamente ao gatilho quando o modal controlado fecha sem aprovar.
+            if (connectBtnRef.current) {
+              e.preventDefault();
+              connectBtnRef.current.focus();
+            }
+          }}
+        >
           <DialogHeader>
             <DialogTitle>
               {wallet ? PROVIDER_LABELS[wallet.provider] : "Carteira"} (simulação)
@@ -465,7 +478,16 @@ function Checkout() {
       </Dialog>
 
       <Dialog open={review} onOpenChange={(o) => !submitting && setReview(o)}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogContent
+          className="max-h-[90vh] overflow-y-auto"
+          onCloseAutoFocus={(e) => {
+            // Restaura o foco ao botão "Revisar pedido" ao fechar o diálogo controlado de revisão.
+            if (reviewBtnRef.current) {
+              e.preventDefault();
+              reviewBtnRef.current.focus();
+            }
+          }}
+        >
           <DialogHeader>
             <DialogTitle>Revise seu pedido</DialogTitle>
             <DialogDescription>
