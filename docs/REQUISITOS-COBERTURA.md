@@ -4,10 +4,11 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 `Verificado`. Só vira `Verificado` com teste automatizado ou medição citada na linha
 (regras em `AGENTS.md`, seção 13).
 
-Legenda de leitura: "Implementado" aqui significa que o código existe no repositório, mas ainda não foi
-provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste de roteamento.
+Legenda de leitura: "Implementado" significa que o código existe, mas o requisito ainda não tem prova
+automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1 e 2 estão verificados;
+o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 2 · Implementado 71 · Em andamento 8 · Pendente 28 (109 itens)
+**Resumo atual:** Verificado 4 · Implementado 69 · Em andamento 8 · Pendente 28 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -22,7 +23,7 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 | Tailwind CSS       | Implementado | `src/styles.css`                                            |
 | shadcn/ui          | Implementado | `src/components/ui` (adaptar aos tokens do Figma)           |
 | MSW                | Implementado | `src/mocks`                                                 |
-| Playwright         | Em andamento | Configuração desktop/mobile e smoke E2E da home em `tests/e2e/home.spec.ts`; faltam os 12 grupos completos |
+| Playwright         | Em andamento | Grupos 1–2 verificados; grupo 3 parcial; grupos 4–12 e regressão visual pendentes |
 | Lighthouse         | Pendente     | Sem configuração nem relatórios                             |
 
 ## 3. Telas e fluxos
@@ -35,8 +36,8 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 | Carrinho: quantidades, remoção, cupom, resumo           | Implementado | `routes/carrinho.tsx`                                             |
 | Pagamento: dados, carteira e rede, revisão, envio       | Implementado | `routes/_authenticated.checkout.tsx`                              |
 | Confirmação de pedido                                   | Implementado | `routes/_authenticated.pedido.$id.tsx`                            |
-| Login com retorno ao fluxo anterior                     | Implementado | `routes/login.tsx`, `lib/redirect.ts`                             |
-| Cadastro com conflito                                   | Implementado | `routes/cadastro.tsx`                                             |
+| Login com retorno ao fluxo anterior                     | Verificado   | `tests/e2e/account.spec.ts` (login privado e refresh, desktop/mobile) |
+| Cadastro com conflito                                   | Verificado   | `tests/e2e/account.spec.ts` (conflito duplicado, desktop/mobile)   |
 | Perfil: dados, avatar, senha                            | Implementado | `routes/_authenticated.perfil.tsx`                                |
 | Carteiras principal e secundária                        | Implementado | `routes/_authenticated.carteiras.tsx`                             |
 | Desktop e mobile fiéis ao Figma                         | Em andamento | `docs/FIGMA-DEVIATIONS.md`; falta acesso aos pins/frame por frame |
@@ -156,7 +157,7 @@ provado por teste E2E. Hoje existem apenas testes unitários de `eth` e um teste
 | ----------------------------------------------------------------------- | -------- |
 | 1. Busca, filtros, ordenação, paginação, histórico                      | Verificado (`tests/e2e/catalog.spec.ts`; desktop/mobile, sort desktop) |
 | 2. Detalhe direto e recurso inexistente                                 | Verificado (`tests/e2e/nft-detail.spec.ts`; ambos viewports) |
-| 3. Cadastro, login, expiração, logout, troca de usuário                 | Pendente |
+| 3. Cadastro, login, expiração, logout, troca de usuário                 | Em andamento (`tests/e2e/account.spec.ts`; 11 passaram, logout/troca desktop; 1 skip mobile) |
 | 4. Favoritos com falha e recuperação                                    | Pendente |
 | 5. Carrinho, quantidades, remoção, cupom, persistência                  | Pendente |
 | 6. Compra completa até o recibo                                         | Pendente |

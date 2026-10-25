@@ -45,7 +45,7 @@
 - [x] Cover search, combinable filters, sort, pagination, query-string history/back, empty results and delayed/out-of-order responses.
 - [x] Verify URL and rendered result set after each operation.
 - [x] Run focused E2E and pre-commit checks; full E2E passed with 11 passed / 1 intentionally skipped, Vitest 18/18, typecheck clean, lint 0 errors / 9 existing warnings.
-- [ ] Commit `test: cover catalog navigation and history`.
+- [x] Commit `test: cover catalog navigation and history` (`ace6105`).
 
 ### Task 3: NFT detail and not-found
 
@@ -53,15 +53,15 @@
 
 - [x] Cover direct access, gallery, edition selection, quantity limits, favorite redirect, add-to-cart and 404.
 - [x] Run focused E2E and pre-commit checks; full suite passed with 19 passed / 1 skipped, Vitest 18/18, typecheck clean, lint 0 errors / 9 warnings.
-- [ ] Commit `test: cover NFT detail and not-found states`.
+- [x] Commit `test: cover NFT detail and not-found states` (`e73eae2`).
 
 ### Task 4: Account and session
 
 **Files:** `tests/e2e/account.spec.ts`, progress and coverage docs.
 
-- [ ] Cover registration, duplicate account, login, preserved redirect, refresh, expiry and logout/cache cleanup.
-- [ ] Verify private data remains isolated between Ana and Bruno.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover account and session flows`.
+- [x] Cover registration, duplicate account, login, preserved redirect, refresh and invalid-token cleanup. Clock expiry and private-cache isolation still need stronger assertions.
+- [x] Verify session switch between Ana and Bruno on desktop; mobile skips because its current navigation has no logout action.
+- [x] Focused E2E: 11 passed, 1 intentional mobile skip. Pre-commit `typecheck`, lint (0 errors/9 warnings) and Vitest (18/18) passed; commit `test: cover account and session flows` remains pending.
 
 ### Task 5: Favorites and cart
 

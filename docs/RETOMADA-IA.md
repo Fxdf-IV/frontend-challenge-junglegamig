@@ -147,3 +147,32 @@ estado atual antes de editar ou commitar.
 - Suíte E2E completa depois dos grupos 1 e 2: 19 aprovados e 1 skip intencional (sort mobile). Vitest
   18/18, typecheck aprovado, lint sem erros e com 9 avisos existentes; estes lotes seguem commitados
   individualmente nas branches e histórico do worktree.
+
+## Estado consolidado mais recente — grupo 3 (25/10/2026)
+
+Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não estava configurado.
+
+- Branch de implementação: `codex/playwright-e2e` no worktree
+  `C:\Users\Vi\Projetos\frontend-challenge-junglegamig\.worktrees\playwright-e2e`.
+- Último commit existente antes do grupo 3: `e73eae2 test: cover NFT detail and not-found states`.
+  Há alterações não commitadas do grupo 3; não fazer merge nem push sem pedido do usuário.
+- O grupo 3 criou `tests/e2e/account.spec.ts` (6 cenários em desktop/mobile). Resultado focado mais
+  recente: **11 passaram, 1 skip intencional** (troca de conta mobile, pois o menu de sessão não existe
+  na navegação mobile). Abrange redirect para login/perfil, refresh, credenciais incorretas, cadastro,
+  conflito duplicado, token inválido e alternância Bruno/Ana no desktop. Expiração pelo relógio e
+  validação direta do cache/subscriptions continuam pendentes.
+- O teste identificou que o guard privado com `<Navigate>` gerava renders/navegações repetidas. Em
+  `src/routes/_authenticated.tsx`, foi substituído por `useEffect` + `useNavigate`, com proteção para
+  não redirecionar novamente se a URL já começar por `/login`. O teste demonstra acesso privado e
+  retorno ao perfil após autenticar. O teste também usa seletores escopados ao diálogo para evitar o
+  campo de newsletter, e considera a navegação mobile ao validar sessão autenticada.
+- Arquivos de código e documentação do grupo 3 estão modificados, mas ainda não commitados. Checks
+  pré-commit passaram serialmente: typecheck limpo; lint sem erros e com 9 avisos existentes; Vitest
+  7 arquivos/18 testes; E2E focado 11 passou e 1 skip. Atualizar a matriz e o diário no commit do lote
+  (resumo atual da matriz: Verificado 4,
+  Implementado 69, Em andamento 8, Pendente 28; 109 itens).
+- Plano atualizado: grupos 1 e 2 têm commits `ace6105` e `e73eae2`; grupo 3 concluído em E2E focado,
+  aguardando pre-commit e commit `test: cover account and session flows`.
+- Próximo lote previsto: grupo 4, favoritos e carrinho, em teste separado. Depois seguir grupos 5–12,
+  regressão visual, Lighthouse, documentação README/ARCHITECTURE, auditoria completa e build final.
+  Manter lotes pequenos e commits separados; atualizar progresso e handoff em cada mudança relevante.
