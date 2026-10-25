@@ -1,3 +1,4 @@
+// Handlers REST que mantêm o estado determinístico do marketplace de demonstração.
 import { delay, http, HttpResponse, type DefaultBodyType, type HttpResponseResolver } from "msw";
 import type {
   ApiErrorBody,
@@ -15,6 +16,7 @@ import type {
   Wallet,
 } from "@/api/types";
 import { ethAdd, ethBps, ethCmp, ethMul, ethSub } from "@/lib/eth";
+import { validateProfileMetadata } from "@/lib/profile-metadata";
 import {
   COLLECTION_LABELS,
   COUPONS,
@@ -67,6 +69,8 @@ function userPublic(u: UserRecord): User {
     username: u.username,
     avatar: u.avatar,
     bio: u.bio,
+    ensName: u.ensName,
+    walletNickname: u.walletNickname,
   };
 }
 
@@ -189,7 +193,7 @@ function publicOrder(o: DbOrder): Order {
 }
 type DbOrder = ReturnType<typeof db>["orders"][string];
 
-/** Moves a pending order to its final state, applying side effects exactly once. */
+/** Finaliza um pedido pendente uma vez e aplica os efeitos confirmados ou recusados. */
 export function resolveOrder(id: string) {
   const s = db();
   const o = s.orders[id];
@@ -231,6 +235,7 @@ export function resolveOrder(id: string) {
   emitOrderUpdated(publicOrder(o), o.userId);
 }
 
+/** Agenda a resolução das compras pendentes persistidas no mock. */
 export function schedulePendingOrders() {
   for (const o of Object.values(db().orders)) {
     if (o.status === "pending")
@@ -257,6 +262,7 @@ function validateWallet(body: Partial<Wallet>) {
   return fields;
 }
 
+/** Rotas REST simuladas consumidas pelo cliente HTTP da aplicação. */
 export const handlers = [
   // ---------- NFTs ----------
   http.get(
@@ -727,6 +733,7 @@ export const handlers = [
         fields.username = "Use 3–20 letras minúsculas, números, _ ou .";
       if (b.email !== undefined && !EMAIL.test(b.email)) fields.email = "E-mail inválido";
       if (b.bio !== undefined && b.bio.length > 160) fields.bio = "Máximo de 160 caracteres";
+      Object.assign(fields, validateProfileMetadata(b));
       if (
         b.avatar !== undefined &&
         b.avatar &&
@@ -747,6 +754,8 @@ export const handlers = [
         ...(b.email !== undefined && { email: b.email.toLowerCase() }),
         ...(b.bio !== undefined && { bio: b.bio }),
         ...(b.avatar !== undefined && { avatar: b.avatar || undefined }),
+        ...(b.ensName !== undefined && { ensName: b.ensName.trim() }),
+        ...(b.walletNickname !== undefined && { walletNickname: b.walletNickname.trim() }),
       });
       save();
       return HttpResponse.json(userPublic(u));

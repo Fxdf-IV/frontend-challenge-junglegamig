@@ -1,5 +1,7 @@
-/** Typed REST + realtime contracts shared by the MSW mocks and the client. */
+// Contratos REST e de tempo real compartilhados entre cliente e mocks.
+/** Redes blockchain usadas nas obras e carteiras do marketplace. */
 export type Network = "ethereum" | "polygon" | "solana";
+/** Categorias de coleção aceitas pelo catálogo. */
 export type Collection =
   | "arte-digital"
   | "fotografia"
@@ -10,8 +12,10 @@ export type Collection =
   | "jogos"
   | "assinaturas"
   | "utilidade";
+/** Formatos de edição disponíveis para compra. */
 export type EditionKind = "1/1" | "1/10" | "1/50" | "aberta";
 
+/** Preço e disponibilidade de uma edição. Valores ETH permanecem decimais em texto. */
 export interface Edition {
   kind: EditionKind;
   /** decimal ETH string */
@@ -20,6 +24,7 @@ export interface Edition {
   maxPerOrder: number;
 }
 
+/** Dados de uma obra listada no marketplace. */
 export interface Nft {
   id: string;
   name: string;
@@ -45,7 +50,9 @@ export interface Nft {
   version: number;
 }
 
+/** Ordenações suportadas pelo catálogo. */
 export type NftSort = "recent" | "price-asc" | "price-desc" | "name";
+/** Parâmetros de busca, filtros e paginação do catálogo. */
 export interface NftListParams {
   q?: string;
   collections?: string[];
@@ -57,11 +64,13 @@ export interface NftListParams {
   page?: number;
   pageSize?: number;
 }
+/** Opção de filtro e quantidade de obras correspondentes. */
 export interface Facet {
   value: string;
   label: string;
   count: number;
 }
+/** Página de resultados e facetas disponíveis no catálogo. */
 export interface NftListResponse {
   items: Nft[];
   page: number;
@@ -71,6 +80,7 @@ export interface NftListResponse {
   facets: { collections: Facet[]; networks: Facet[]; priceRange: { min: string; max: string } };
 }
 
+/** Conta pública do colecionador usada pela sessão e pelo perfil. */
 export interface User {
   id: string;
   email: string;
@@ -78,13 +88,19 @@ export interface User {
   username: string;
   avatar?: string;
   bio?: string;
+  /** Parte local do nome ENS, antes do sufixo exibido na interface. */
+  ensName?: string;
+  /** Apelido da carteira principal mostrado no perfil do colecionador. */
+  walletNickname?: string;
 }
+/** Token temporário de autenticação e conta associada. */
 export interface Session {
   token: string;
   expiresAt: string;
   user: User;
 }
 
+/** Linha do carrinho com preço e disponibilidade atuais da obra. */
 export interface CartItem {
   nftId: string;
   edition: EditionKind;
@@ -98,12 +114,14 @@ export interface CartItem {
   /** set when price/availability changed since the item was added */
   notice?: string;
 }
+/** Carrinho persistido e sua versão para reconciliação. */
 export interface Cart {
   id: string;
   items: CartItem[];
   version: number;
 }
 
+/** Linha de cotação congelada para a revisão do pedido. */
 export interface QuoteLine {
   nftId: string;
   edition: EditionKind;
@@ -114,12 +132,14 @@ export interface QuoteLine {
   lineTotal: string;
   available: number;
 }
+/** Problema que impede confirmar a cotação atual. */
 export interface QuoteIssue {
   nftId: string;
   edition: EditionKind;
   code: "PRICE_CHANGED" | "SOLD_OUT" | "INSUFFICIENT";
   message: string;
 }
+/** Valores calculados pelo servidor para confirmar uma compra. */
 export interface Quote {
   id: string;
   lines: QuoteLine[];
@@ -133,7 +153,9 @@ export interface Quote {
   expiresAt: string;
 }
 
+/** Provedores de carteira disponíveis no fluxo simulado. */
 export type WalletProvider = "metamask" | "walletconnect" | "coinbase";
+/** Carteira conectada à conta do colecionador. */
 export interface Wallet {
   id: string;
   role: "primary" | "secondary";
@@ -143,7 +165,9 @@ export interface Wallet {
   network: Network;
 }
 
+/** Estados terminais e pendentes de um pedido. */
 export type OrderStatus = "pending" | "confirmed" | "declined";
+/** Recibo imutável da compra e dados da carteira usada. */
 export interface Order {
   id: string;
   status: OrderStatus;
@@ -164,6 +188,7 @@ export interface Order {
   declineReason?: string;
 }
 
+/** Formato único de erro usado pelos endpoints REST. */
 export interface ApiErrorBody {
   error: {
     code:
@@ -194,9 +219,12 @@ export interface RealtimeEvent<T> {
   userId?: string;
   data: T;
 }
+/** Evento com os dados de preço e disponibilidade atualizados de uma obra. */
 export type NftUpdatedEvent = RealtimeEvent<Pick<Nft, "id" | "price" | "editions" | "version">>;
+/** Evento com estado atualizado de um pedido. */
 export type OrderUpdatedEvent = RealtimeEvent<Order>;
 
+/** Cenários determinísticos disponíveis no serviço de mock. */
 export type ScenarioId =
   | "default"
   | "slow"

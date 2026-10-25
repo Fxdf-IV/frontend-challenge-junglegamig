@@ -167,6 +167,10 @@ export interface UserRecord {
   username: string;
   avatar?: string;
   bio?: string;
+  /** Parte local do nome ENS; a interface acrescenta o sufixo. */
+  ensName?: string;
+  /** Identificação da carteira principal no perfil público. */
+  walletNickname?: string;
   /** SHA-256 hex of salt+password; plain passwords are never stored */
   passwordHash: string;
   salt: string;
@@ -181,6 +185,8 @@ export const SEED_USERS: Array<Omit<UserRecord, "passwordHash" | "salt"> & { pas
     username: "anasato",
     password: "Kurio@123",
     bio: "Colecionadora de arte generativa.",
+    ensName: "ana",
+    walletNickname: "Ana principal",
   },
   {
     id: "u_bruno",
@@ -188,6 +194,8 @@ export const SEED_USERS: Array<Omit<UserRecord, "passwordHash" | "salt"> & { pas
     displayName: "Bruno Lima",
     username: "brunolima",
     password: "Kurio@123",
+    ensName: "bruno",
+    walletNickname: "Bruno principal",
   },
 ];
 
