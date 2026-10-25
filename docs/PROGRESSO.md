@@ -32,6 +32,8 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 - Plano E2E salvo em `docs/superpowers/plans/2026-10-25-playwright-e2e.md`, dividido por grupo de
   requisito para preparar Playwright e avançar em commits pequenos.
+- Preparado `.worktrees/` ignorado para executar a implementação E2E isolada em branch `codex/`,
+  sem misturar os commits já feitos em `main` com os novos grupos de teste.
 - Corrigida a cópia da campanha “Arte digital selecionada e muito mais” conforme o frame local (#64):
   removido o sufixo “cultura”; a ação de cópia segue indefinida no material disponível.
 - A captura controlada da home desktop voltou a travar após mais de 60 segundos e foi interrompida;
