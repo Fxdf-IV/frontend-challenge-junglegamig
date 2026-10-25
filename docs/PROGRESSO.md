@@ -14,7 +14,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
    (revalidação, duplo clique, timeout com idempotência).
 5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
 6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: grupos 1–9 verificados; grupo 3 parcial; faltam grupos 10–12 e regressão visual.
+7. Playwright: grupos 1–10 verificados; grupo 3 parcial; faltam grupos 11–12 e regressão visual.
 8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
 9. `README.md` e `ARCHITECTURE.md` completos.
 10. Formatar o código com Prettier para zerar o lint.
@@ -100,6 +100,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   conexão com reconexão automática e reconciliação de `/api/cart` e cotação. Typecheck passou, lint sem
   erros (9 avisos conhecidos) e Vitest 18/18 passaram. Próximo lote: grupo 10 (versão e deduplicação de
   eventos).
+- Grupo 10 passou em `tests/e2e/event-versioning.spec.ts`: **4/4** em Chromium desktop/mobile. Cobre
+  descarte de `nft.updated` e `order.updated` duplicados (`duplicate`) e antigos (`stale`), aplicação
+  exclusiva da versão mais nova, interrupção do socket com pedido pendente e retomada pelo aviso do
+  checkout sem criar segunda compra (`orderPosts === 1`), e imutabilidade do snapshot do recibo após
+  mudanças posteriores no catálogo. Typecheck, lint (0 erros/9 avisos) e Vitest 18/18 passaram. Próximo
+  lote: grupo 11 (teclado, foco e validação acessível).
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
@@ -164,3 +170,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `2ecbec7` | Testes E2E de falhas e idempotência no checkout  | Provar pagamento recusado, preço/estoque alterados, bloqueio de clique duplo e retry após timeout                                   |
 | 25/10/2026 | `971c250` | Testes E2E de perfil e carteiras                 | Cobrir metadados, avatar, senha e criação/edição de carteiras em desktop e mobile                                                   |
 | 25/10/2026 | `e9318e4` | Conexão Socket.IO sob MSW e testes do grupo 9    | Importar `socket.io-client` após o `worker.start()` e cobrir eventos e reconexão no checkout                                        |
+| 25/10/2026 | `8ca0654` | Testes E2E de reconciliação Socket.IO no checkout| Cobrir confirmação por evento, mudança de preço/estoque no checkout e reconexão em desktop e mobile                                 |

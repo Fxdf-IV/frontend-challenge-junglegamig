@@ -5,10 +5,10 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 (regras em `AGENTS.md`, seção 13).
 
 Legenda de leitura: "Implementado" significa que o código existe, mas o requisito ainda não tem prova
-automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–9 estão verificados;
+automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–10 estão verificados;
 o grupo 3 tem cobertura parcial e segue em andamento.
 
-**Resumo atual:** Verificado 28 · Implementado 48 · Em andamento 8 · Pendente 25 (109 itens)
+**Resumo atual:** Verificado 34 · Implementado 43 · Em andamento 8 · Pendente 24 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -23,7 +23,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Tailwind CSS       | Implementado | `src/styles.css`                                            |
 | shadcn/ui          | Implementado | `src/components/ui` (adaptar aos tokens do Figma)           |
 | MSW                | Implementado | `src/mocks`                                                 |
-| Playwright         | Em andamento | Grupos 1–9 verificados; grupo 3 parcial; grupos 10–12 e regressão visual pendentes |
+| Playwright         | Em andamento | Grupos 1–10 verificados; grupo 3 parcial; grupos 11–12 e regressão visual pendentes |
 | Lighthouse         | Pendente     | Sem configuração nem relatórios                             |
 
 ## 3. Telas e fluxos
@@ -73,10 +73,10 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Carteiras cadastradas, rede, conexão, recusa, desconexão  | Implementado | `checkout.tsx`                             |
 | Revalidar preço, estoque, cupom e taxas; nova confirmação | Implementado | handler `/orders`, `quote.id`              |
 | Sem pedidos duplicados (clique repetido, timeout)         | Verificado   | `tests/e2e/checkout-failures.spec.ts` (clique duplo e retry com a mesma chave/corpo) |
-| Pendente, confirmado, recusado; recuperação após refresh  | Implementado | `resolveOrder`, `schedulePendingOrders`    |
-| Confirmação só para pedido confirmado                     | Implementado | `pedido.$id.tsx`                           |
+| Pendente, confirmado, recusado; recuperação após refresh  | Verificado   | `tests/e2e/checkout-success.spec.ts`, `tests/e2e/checkout-failures.spec.ts`, `tests/e2e/event-versioning.spec.ts` |
+| Confirmação só para pedido confirmado                     | Verificado   | `tests/e2e/checkout-realtime.spec.ts`, `tests/e2e/event-versioning.spec.ts` |
 | Preserva itens em falha; remove só o comprado             | Verificado   | `tests/e2e/checkout-failures.spec.ts` (carrinho preservado após recusa) |
-| Recibo é snapshot do pedido                               | Implementado | `Order.lines` no pedido                    |
+| Recibo é snapshot do pedido                               | Verificado   | `tests/e2e/event-versioning.spec.ts` (`Order.lines` imutável após mudança de preço) |
 
 ## Conta e sessão
 
@@ -129,12 +129,12 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Item                                                              | Status       | Onde / prova                      |
 | ----------------------------------------------------------------- | ------------ | --------------------------------- |
 | `nft.updated` e `order.updated`                                   | Verificado   | `tests/e2e/checkout-realtime.spec.ts` |
-| Identidade estável, recurso e versão; tolera duplicatas e antigos | Implementado | `fresh()` em `realtime.tsx`       |
+| Identidade estável, recurso e versão; tolera duplicatas e antigos | Verificado   | `tests/e2e/event-versioning.spec.ts` (`fresh()` em `realtime.tsx`) |
 | Reconexão reconcilia com REST                                     | Verificado   | `tests/e2e/checkout-realtime.spec.ts` |
 | Eventos de outra sessão ignorados                                 | Implementado | Filtro por `userId`               |
 | Listeners liberados no cleanup                                    | Implementado | `removeAllListeners`              |
 | Cenário carrinho, mudança, aviso, checkout bloqueado              | Verificado   | `tests/e2e/checkout-realtime.spec.ts`, `tests/e2e/checkout-failures.spec.ts` |
-| Interrupção com pedido pendente sem nova compra                   | Implementado | Cenário `order-timeout`           |
+| Interrupção com pedido pendente sem nova compra                   | Verificado   | `tests/e2e/event-versioning.spec.ts`, `tests/e2e/checkout-failures.spec.ts` |
 
 ## 8. Interface, responsividade e acessibilidade
 
@@ -164,7 +164,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 7. Falha de pagamento, clique repetido, timeout e idempotência          | Verificado (`tests/e2e/checkout-failures.spec.ts`; 10/10, desktop/mobile) |
 | 8. Perfil, avatar, senha e carteiras com erros                          | Verificado (`tests/e2e/profile-wallets.spec.ts`; 8/8, desktop/mobile) |
 | 9. Preço/disponibilidade via Socket.IO no checkout                      | Verificado (`tests/e2e/checkout-realtime.spec.ts`; 6/6, desktop/mobile) |
-| 10. Eventos duplicados/antigos, desconexão, retomada                    | Pendente |
+| 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, desktop/mobile) |
 | 11. Teclado, foco de dialogs, validação                                 | Pendente |
 | 12. Skeletons, falha e recuperação                                      | Pendente |
 | Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Em andamento; smoke da home passou em 1440×1000 e 390×844, baselines visuais pendentes |

@@ -104,8 +104,8 @@
 
 **Files:** `tests/e2e/event-versioning.spec.ts`, progress and coverage docs.
 
-- [ ] Verify duplicate and older `nft.updated` / `order.updated` events are ignored and newer versions reconcile.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover event deduplication and versions`.
+- [x] Verify duplicate and older `nft.updated` / `order.updated` events are ignored, newer versions reconcile, pending order resumes after disconnect without duplicate purchase, and receipt snapshot stays immutable. Focused E2E passed 4/4 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover event deduplication and versions`.
 
 ### Task 11: Keyboard and focus
 

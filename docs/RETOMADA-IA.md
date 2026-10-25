@@ -258,3 +258,11 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
 - `tests/e2e/checkout-realtime.spec.ts` passou **6/6** em Chromium desktop e mobile (`--workers=1`), cobrindo confirmação do pedido via `order.updated` antes do polling (`orderReads <= 1`), mudança de preço e bloqueio por esgotamento via `nft.updated` na revisão do checkout e queda/reconexão do socket com reconciliação de `/api/cart` e cotação.
 - Matriz atualizada: Verificado 28, Implementado 48, Em andamento 8, Pendente 25 (109 itens).
 - Próximo passo imediato: Task 10 (`tests/e2e/event-versioning.spec.ts` — deduplicação, versões antigas e retomada sem compra duplicada), seguido por Tasks 11, 12 e 13.
+
+## Estado consolidado mais recente — grupo 10 concluído (25/10/2026)
+
+- `tests/e2e/event-versioning.spec.ts` passou **4/4** em Chromium desktop e mobile (`--workers=1`), cobrindo:
+  1. Descarte de `nft.updated` duplicados e antigos (`stale`), sem novas leituras de `/api/cart`, e reconciliação apenas na versão mais nova (`1.12 ETH`).
+  2. Desconexão do socket com pedido pendente, retorno ao `/checkout` exibindo aviso `"Você tem um pedido em processamento."`, retomada por `"Acompanhar pedido"` sem criar segunda compra (`orderPosts === 1`), confirmação do recibo e preservação do snapshot (`0.9942 ETH`) após replays duplicado/obsoleto de `order.updated` e alteração posterior de preço no catálogo (`1.35 ETH`).
+- Matriz atualizada: Verificado 34, Implementado 43, Em andamento 8, Pendente 24 (109 itens).
+- Próximo passo imediato: Task 11 (`tests/e2e/accessibility.spec.ts` — teclado, foco visível, focus trap/restauração em dialogs e drawers, labels/`aria-invalid`/`aria-describedby` e anúncios `aria-live`), seguido por Tasks 12 e 13.
