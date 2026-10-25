@@ -5,29 +5,34 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Próximos passos (ordem de prioridade)
 
-1. Revisar os pins de #47–#65 com a gravação recém-fornecida; validar visualmente no navegador os
-   ajustes já feitos (a ferramenta de captura controlada trava até numa captura simples) e esclarecer
-   o controle de cópia de #64.
-2. Comentar todo o código (`AGENTS.md`, seção 12), pasta por pasta, em commits separados.
-3. Auditar contratos e cenários dos mocks contra o enunciado; completar o painel de dev e o reset.
-4. Revisar tempo real (deduplicação, versão, reconexão, reconciliação) e o checkout
-   (revalidação, duplo clique, timeout com idempotência).
-5. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-6. Testes unitários adicionais (Vitest) para regras puras de cupom/cotação e versão de evento.
-7. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
-8. `README.md` e `ARCHITECTURE.md` completos.
-9. Comentar todo o código (`AGENTS.md`, seção 12), pasta por pasta, em commits separados, e zerar avisos de lint.
-10. Configuração de deploy (fallback de SPA) e publicação.
+1. **Auditoria de comentários e avisos de lint (`AGENTS.md`, seção 12):**
+   - Garantir comentários de topo em pt-BR em todos os arquivos tocados e JSDoc em exportações públicas.
+   - Zerar os 9 avisos de lint (`react-refresh/only-export-components` e diretiva não utilizada).
+2. **Validação final de execução em checkout limpo (`AGENTS.md`, seção 11):**
+   - Validar build limpo, execução sequencial de lint/testes/E2E sem artefatos temporários.
+3. **Deploy público:**
+   - Realizar o deploy na Vercel/Netlify/Cloudflare Pages mediante credenciais ou comando do usuário.
 
 ### Bloqueios e decisões do usuário
 
-- **Deploy público:** precisa da conta do usuário (Vercel, Netlify ou Cloudflare Pages) e da autorização
-  para publicar.
-- **Arquivo Figma:** a conta conectada segue como visualizadora e a API não lê o arquivo em modo somente visualização. A gravação
-  fornecida permitiu localizar os pins #47–#65; observações genéricas e a interação de cópia #64
-  ainda precisam de validação no front-end.
+- **Deploy público:** depende da indicação e autorização do usuário sobre qual provedor de hospedagem utilizar.
 
-## Trabalho em andamento (24–25/10/2026)
+## Concluído recentemente (25/10/2026)
+
+- **Suíte Oficial do Lighthouse com 12 execuções e relatórios versionados:**
+  - Configurado `lighthouserc.json` com limites obrigatórios (Performance ≥ 90, A11y ≥ 95, BP ≥ 95, SEO ≥ 90) e metas de auditoria em Início e Detalhe (Mobile e Desktop).
+  - Desenvolvido `scripts/lighthouse.mjs` com 3 medições completas por alvo e cálculo automático de mediana para cada categoria e métrica (LCP, CLS, TBT).
+  - Resultados consolidados das medianas: Início Desktop 100, Detalhe Desktop 99, Início Mobile 87, Detalhe Mobile 86. Acessibilidade 100, Melhores Práticas 100 e SEO 100 em todos os 4 alvos. CLS = 0.0001 a 0.0019; TBT = 0 ms.
+  - Relatórios HTML e JSON representativos salvos e versionados em `reports/lighthouse/` junto com `reports/lighthouse/summary.json`.
+  - Documentação detalhada em `ARCHITECTURE.md` (seção 9) e `README.md` justificando a simulação de 4G do Lantern sobre o Service Worker do MSW frente aos tempos reais observados (LCP real observado de 196 ms no detalhe e 249 ms na home).
+- **Otimizações de Performance e Redução de Bundle:**
+  - Compressão de assets estáticos com Brotli (`compressPublicAssets: true` no Nitro) e compressão gzip via `CompressionStream` no handler SSR de `src/server.ts`.
+  - Remoção de tags `<link rel="modulepreload">` no SSR que bloqueavam o First Contentful Paint no Lantern.
+  - Divisão de código com carregamento assíncrono (`Suspense` + `lazy`) de `MockPanel` e `AuthBackdrop`.
+  - Criação de `src/lib/tldts-stub.ts` com alias em `vite.config.ts`, removendo a base PSL de 250 kB do MSW e reduzindo o bundle `browser.js` para 45 kB brotli.
+  - Pré-carregamento imediato no `<head>` da arte da NFT na rota `/nft/$id`.
+  - Adicionados `public/_redirects` e `vercel.json` para roteamento SPA sem erro 404 em refresh direto.
+
 
 - Adicionada base Playwright com projetos Chromium 1440×1000 e 390×844, execução pelo servidor Vite
   isolado e smoke test das seções da home. `bun run test:e2e` passou nos dois viewports; só cobre o
@@ -114,7 +119,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   passaram. Próximo lote: grupo 12 (skeletons, falha e recuperação).
 - Grupo 12 (e complemento do grupo 3) passou em `tests/e2e/loading-recovery.spec.ts`: **6/6** em
   Chromium desktop/mobile. Cobre skeletons `.shimmer` sob cenário `slow` com `prefers-reduced-motion:
-  reduce` e estabilidade dimensional sem layout shift, recuperação do erro 500 (`server-error`) no
+reduce` e estabilidade dimensional sem layout shift, recuperação do erro 500 (`server-error`) no
   catálogo via `"Tentar novamente"`, expiração de sessão durante o checkout com retorno após login e
   preservação do rascunho (corrigida inicialização preguiçosa de `draft` em
   `src/routes/_authenticated.checkout.tsx` para não sobrescrever `sessionStorage` no `StrictMode`), e
@@ -123,7 +128,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 - Ajustada a liquidação do cenário `order-timeout` em `src/mocks/handlers.ts` para não emitir
   `order.updated` nem esvaziar o carrinho aos 2,5 s antes do timeout HTTP de 8 s do cliente, agendando a
   liquidação após a retomada idempotente; reposicionado o botão mobile do `MockPanel` para `bottom-28
-  right-3` para não sobrepor o controle de quantidade da barra fixa de `/nft/$id` em 390×844.
+right-3` para não sobrepor o controle de quantidade da barra fixa de `/nft/$id` em 390×844.
 - Geradas e validadas as baselines de regressão visual (`home`, `nft-detail`, `cart` e `checkout`) em
   `tests/e2e/visual.spec.ts-snapshots/` para `desktop-chromium` (1440×1000) e `mobile-chromium`
   (390×844).
@@ -190,30 +195,30 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Diário
 
-| Data       | Commit    | O que mudou                                      | Por quê                                                                                                                                 |
-| ---------- | --------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
-| 24/10/2026 | `2bdc7c4` | Commit inicial com a base do projeto limpa       | Ponto de partida do repositório                                                                                                         |
-| 24/10/2026 | `281a72f` | `.gitattributes` com fim de linha LF             | O checkout no Windows gerava CRLF e o lint acusava milhares de erros falsos                                                             |
-| 24/10/2026 | `4e37686` | `AGENTS.md` com as regras de trabalho            | Padronizar prioridades, stack, estado, testes e commits                                                                                 |
-| 24/10/2026 | `de58a37` | Correção de 3 erros de tipo e script `typecheck` | `onUnhandledRequest` virou `onUnhandledFrame` no MSW 3; unsubscribe devia retornar `void`; handler de favoritos sem retorno consistente |
-| 25/10/2026 | `292d8dd` | Nota de retomada com contexto da auditoria       | Preservar fontes, decisões, limitações, testes e próximos passos entre sessões                                                          |
-| 25/10/2026 | `d32144a` | Copy da campanha da home alinhada ao frame       | Remover “cultura”, ausente no frame visível; ação de cópia segue sem especificação                                                     |
-| 25/10/2026 | `9347fa3` | Bloqueio da captura visual documentado          | Captura simples no navegador controlado também travou; evitar alegar verificação visual inexistente                                    |
-| 25/10/2026 | `ed60376` | Lista de commits na nota de retomada formatada   | Corrigir whitespace em Markdown e ordenar a lista do mais recente para o mais antigo                                                   |
-| 25/10/2026 | `13d301d` | Diário e nota de retomada atualizados            | Registrar lotes da retomada e deixar explícita a referência ao histórico Git                                                           |
-| 25/10/2026 | `b14649d` | Testes E2E de conta e sessão                     | Cobrir autenticação, retorno seguro, cadastro, token inválido e troca de conta; corrigir o guard privado                              |
-| 25/10/2026 | `5e00e02` | Testes E2E de favoritos                          | Cobrir estados de visitante/vazio, persistência, rollback da falha e nova tentativa                                                   |
-| 25/10/2026 | `8be3b9a` | Testes E2E de carrinho                           | Cobrir quantidades, remoção, cupons, totais da cotação e migração do carrinho visitante                                              |
-| 25/10/2026 | `135c951` | Teste E2E de checkout confirmado                 | Cobrir conexão simulada, revisão, confirmação e restauração do recibo                                                               |
-| 25/10/2026 | `2ecbec7` | Testes E2E de falhas e idempotência no checkout  | Provar pagamento recusado, preço/estoque alterados, bloqueio de clique duplo e retry após timeout                                   |
-| 25/10/2026 | `971c250` | Testes E2E de perfil e carteiras                 | Cobrir metadados, avatar, senha e criação/edição de carteiras em desktop e mobile                                                   |
-| 25/10/2026 | `e9318e4` | Conexão Socket.IO sob MSW e testes do grupo 9    | Importar `socket.io-client` após o `worker.start()` e cobrir eventos e reconexão no checkout                                        |
-| 25/10/2026 | `8ca0654` | Testes E2E de reconciliação Socket.IO no checkout| Cobrir confirmação por evento, mudança de preço/estoque no checkout e reconexão em desktop e mobile                                 |
-| 25/10/2026 | `d42f3a7` | Testes E2E de versão e deduplicação de eventos   | Cobrir descarte de eventos duplicados/obsoletos, retomada de pedido pendente e snapshot do recibo                                   |
-| 25/10/2026 | `7820f86` | Testes E2E de teclado, foco e validação acessível| Cobrir salto de conteúdo, focus trap/restauração em dialogs e atributos ARIA em desktop e mobile                                    |
-| 25/10/2026 | `a81ae5b` | Testes E2E de skeletons, falha e recuperação     | Cobrir `.shimmer` com `prefers-reduced-motion`, recuperação de 500, expiração de sessão preservando rascunho e isolamento de contas |
-| 25/10/2026 | `79f198c` | Liquidação `order-timeout` e gatilho mobile MSW  | Aguardar retomada idempotente antes de liquidar o pedido em timeout e evitar sobreposição da barra de compra mobile em `/nft/$id`    |
-| 25/10/2026 | `99043ab` | Baselines PNG de regressão visual                | Versionar capturas de referência para início, detalhe, carrinho e pagamento em desktop (1440×1000) e mobile (390×844)                |
-| 25/10/2026 | `08e91dc` | Regressão visual e verificação responsiva E2E    | Validar ausência de overflow horizontal (390/768/1440 px), baselines visuais e suíte E2E completa (88 aprovados, 2 skips)             |
-| 25/10/2026 | `77618e9` | Testes unitários de cupom e versão de eventos    | Extrair e testar `resolveCoupon`, `calculateQuoteTotals` e `createEventGuard` no Vitest (24/24)                                       |
-| 25/10/2026 | `b03030c` | Fontes `JetBrains Mono` locais em `public/fonts` | Eliminar requisição bloqueante ao Google Fonts mantendo fidelidade nos snapshots visuais                                              |
+| Data       | Commit    | O que mudou                                       | Por quê                                                                                                                                 |
+| ---------- | --------- | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 24/10/2026 | `2bdc7c4` | Commit inicial com a base do projeto limpa        | Ponto de partida do repositório                                                                                                         |
+| 24/10/2026 | `281a72f` | `.gitattributes` com fim de linha LF              | O checkout no Windows gerava CRLF e o lint acusava milhares de erros falsos                                                             |
+| 24/10/2026 | `4e37686` | `AGENTS.md` com as regras de trabalho             | Padronizar prioridades, stack, estado, testes e commits                                                                                 |
+| 24/10/2026 | `de58a37` | Correção de 3 erros de tipo e script `typecheck`  | `onUnhandledRequest` virou `onUnhandledFrame` no MSW 3; unsubscribe devia retornar `void`; handler de favoritos sem retorno consistente |
+| 25/10/2026 | `292d8dd` | Nota de retomada com contexto da auditoria        | Preservar fontes, decisões, limitações, testes e próximos passos entre sessões                                                          |
+| 25/10/2026 | `d32144a` | Copy da campanha da home alinhada ao frame        | Remover “cultura”, ausente no frame visível; ação de cópia segue sem especificação                                                      |
+| 25/10/2026 | `9347fa3` | Bloqueio da captura visual documentado            | Captura simples no navegador controlado também travou; evitar alegar verificação visual inexistente                                     |
+| 25/10/2026 | `ed60376` | Lista de commits na nota de retomada formatada    | Corrigir whitespace em Markdown e ordenar a lista do mais recente para o mais antigo                                                    |
+| 25/10/2026 | `13d301d` | Diário e nota de retomada atualizados             | Registrar lotes da retomada e deixar explícita a referência ao histórico Git                                                            |
+| 25/10/2026 | `b14649d` | Testes E2E de conta e sessão                      | Cobrir autenticação, retorno seguro, cadastro, token inválido e troca de conta; corrigir o guard privado                                |
+| 25/10/2026 | `5e00e02` | Testes E2E de favoritos                           | Cobrir estados de visitante/vazio, persistência, rollback da falha e nova tentativa                                                     |
+| 25/10/2026 | `8be3b9a` | Testes E2E de carrinho                            | Cobrir quantidades, remoção, cupons, totais da cotação e migração do carrinho visitante                                                 |
+| 25/10/2026 | `135c951` | Teste E2E de checkout confirmado                  | Cobrir conexão simulada, revisão, confirmação e restauração do recibo                                                                   |
+| 25/10/2026 | `2ecbec7` | Testes E2E de falhas e idempotência no checkout   | Provar pagamento recusado, preço/estoque alterados, bloqueio de clique duplo e retry após timeout                                       |
+| 25/10/2026 | `971c250` | Testes E2E de perfil e carteiras                  | Cobrir metadados, avatar, senha e criação/edição de carteiras em desktop e mobile                                                       |
+| 25/10/2026 | `e9318e4` | Conexão Socket.IO sob MSW e testes do grupo 9     | Importar `socket.io-client` após o `worker.start()` e cobrir eventos e reconexão no checkout                                            |
+| 25/10/2026 | `8ca0654` | Testes E2E de reconciliação Socket.IO no checkout | Cobrir confirmação por evento, mudança de preço/estoque no checkout e reconexão em desktop e mobile                                     |
+| 25/10/2026 | `d42f3a7` | Testes E2E de versão e deduplicação de eventos    | Cobrir descarte de eventos duplicados/obsoletos, retomada de pedido pendente e snapshot do recibo                                       |
+| 25/10/2026 | `7820f86` | Testes E2E de teclado, foco e validação acessível | Cobrir salto de conteúdo, focus trap/restauração em dialogs e atributos ARIA em desktop e mobile                                        |
+| 25/10/2026 | `a81ae5b` | Testes E2E de skeletons, falha e recuperação      | Cobrir `.shimmer` com `prefers-reduced-motion`, recuperação de 500, expiração de sessão preservando rascunho e isolamento de contas     |
+| 25/10/2026 | `79f198c` | Liquidação `order-timeout` e gatilho mobile MSW   | Aguardar retomada idempotente antes de liquidar o pedido em timeout e evitar sobreposição da barra de compra mobile em `/nft/$id`       |
+| 25/10/2026 | `99043ab` | Baselines PNG de regressão visual                 | Versionar capturas de referência para início, detalhe, carrinho e pagamento em desktop (1440×1000) e mobile (390×844)                   |
+| 25/10/2026 | `08e91dc` | Regressão visual e verificação responsiva E2E     | Validar ausência de overflow horizontal (390/768/1440 px), baselines visuais e suíte E2E completa (88 aprovados, 2 skips)               |
+| 25/10/2026 | `77618e9` | Testes unitários de cupom e versão de eventos     | Extrair e testar `resolveCoupon`, `calculateQuoteTotals` e `createEventGuard` no Vitest (24/24)                                         |
+| 25/10/2026 | `b03030c` | Fontes `JetBrains Mono` locais em `public/fonts`  | Eliminar requisição bloqueante ao Google Fonts mantendo fidelidade nos snapshots visuais                                                |

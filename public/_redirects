@@ -1,0 +1,2 @@
+# Fallback de SPA para Cloudflare Pages e Netlify: redireciona todas as rotas para o documento raiz
+/*    /index.html   200

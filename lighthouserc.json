@@ -1,0 +1,37 @@
+{
+  "port": 4175,
+  "runs": 3,
+  "outputDir": "reports/lighthouse",
+  "targets": [
+    {
+      "id": "home-mobile",
+      "label": "Início (Mobile)",
+      "path": "/",
+      "formFactor": "mobile"
+    },
+    {
+      "id": "home-desktop",
+      "label": "Início (Desktop)",
+      "path": "/",
+      "formFactor": "desktop"
+    },
+    {
+      "id": "detail-mobile",
+      "label": "Detalhe NFT (Mobile)",
+      "path": "/nft/emerald-ape-042",
+      "formFactor": "mobile"
+    },
+    {
+      "id": "detail-desktop",
+      "label": "Detalhe NFT (Desktop)",
+      "path": "/nft/emerald-ape-042",
+      "formFactor": "desktop"
+    }
+  ],
+  "thresholds": {
+    "performance": 90,
+    "accessibility": 95,
+    "bestPractices": 95,
+    "seo": 90
+  }
+}
