@@ -30,6 +30,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Trabalho em andamento (24–25/10/2026)
 
+- Atualizada a tipografia global para Roboto Mono com carregamento 100% local (`@fontsource/roboto-mono`), alinhando ao design do Figma e eliminando requisições externas ao Google Fonts em `styles.css` e `__root.tsx` (FD-18). Adicionado utilitário `bg-hero-circles` para os anéis de gradiente do hero mobile.
 - Alinhado o modal de autenticação (`AuthShell.tsx`, `AuthForms.tsx`, `login.tsx`) ao frame do Figma
   (FD-17): cabeçalho inline `Entrar | Criar conta` com divisor vertical, barra laranja inferior no
   modal desktop, subtítulo e placeholders de login corrigidos (`contato@email.com` e `***********`),
