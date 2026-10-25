@@ -89,6 +89,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   além de criação/edição das carteiras principal e secundária e validação de endereço Ethereum/Solana.
   Os fluxos exercitados em 390 px não tiveram overflow horizontal. Typecheck passou, lint sem erros
   (9 avisos conhecidos) e Vitest 18/18 passaram. Próximo lote: grupo 9 (Socket.IO no checkout).
+- Corrigida a interceptação de WebSocket do Socket.IO sob MSW: `src/lib/realtime.tsx` agora importa
+  `socket.io-client` dinamicamente após a montagem do `MocksGate`, garantindo que `engine.io-client`
+  use o `WebSocketProxy` do MSW em vez do `WebSocket` nativo capturado antes de `worker.start()`. Em
+  `src/mocks/realtime.ts`, o handler vincula a origem `ws://`/`wss://` normalizada pelo MSW e dispara
+  evento `error` ao recusar reconexões durante a janela `refuseUntil`.
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
