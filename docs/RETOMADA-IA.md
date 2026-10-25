@@ -274,3 +274,12 @@ Este bloco prevalece sobre notas anteriores que diziam que Playwright ainda não
   2. Restauração de foco no modal controlado de carteira em `/checkout` (corrigido `onCloseAutoFocus` em `src/routes/_authenticated.checkout.tsx` porque o botão ficava desabilitado enquanto `conn === "connecting"`), associação de `label`, `aria-invalid` e `aria-describedby` em formulários de login e checkout, `role="status"` da carteira conectada e anúncio de evento Socket.IO em `aria-live="polite"`.
 - Matriz atualizada: Verificado 42, Implementado 38, Em andamento 7, Pendente 22 (109 itens).
 - Próximo passo imediato: Task 12 (`tests/e2e/loading-recovery.spec.ts` — skeletons, `prefers-reduced-motion`, falha e recuperação de requisição, expiração de sessão e complemento do grupo 3), seguido por Task 13 (regressão visual e suíte final).
+
+## Estado consolidado mais recente — grupos 1–12 concluídos (25/10/2026)
+
+- `tests/e2e/loading-recovery.spec.ts` passou **6/6** em Chromium desktop e mobile (`--workers=1`), cobrindo:
+  1. Skeletons `.shimmer` sob cenário `slow` com `prefers-reduced-motion: reduce` (`animationName === "none"`) e ausência de layout shift horizontal ao renderizar os cards reais.
+  2. Erro 500 (`server-error`) no catálogo com alerta acessível e recuperação via `"Tentar novamente"`.
+  3. Expiração de sessão durante o checkout redirecionando para `/login?redirect=%2Fcheckout&expired=true`, aviso `role="status"`, retorno ao `/checkout` com rascunho preservado (corrigida inicialização preguiçosa de `draft` em `src/routes/_authenticated.checkout.tsx` para não perder o `sessionStorage` no `StrictMode`) e isolamento completo de carteiras, favoritos e carrinho ao alternar para a conta de Bruno.
+- Todos os 12 grupos funcionais do Playwright estão agora verificados! Matriz atualizada: Verificado 50, Implementado 32, Em andamento 6, Pendente 21 (109 itens).
+- Próximo passo imediato: Task 13 (`tests/e2e/visual.spec.ts` — baselines de regressão visual em desktop e mobile para início, detalhe, carrinho e pagamento, além de verificação de overflow horizontal em 390, 768 e 1440 px).

@@ -116,10 +116,10 @@
 
 ### Task 12: Skeletons and recovery
 
-**Files:** `tests/e2e/loading-recovery.spec.ts`, progress and coverage docs.
+**Files:** `tests/e2e/loading-recovery.spec.ts`, `src/routes/_authenticated.checkout.tsx`, progress and coverage docs.
 
-- [ ] Cover loading placeholders, failed requests, retry, session recovery and reduced-motion behavior.
-- [ ] Run focused E2E and pre-commit checks; commit `test: cover loading and recovery states`.
+- [x] Cover loading placeholders, reduced-motion behavior, failed requests, retry, session recovery preserving checkout draft, and private data isolation between users; focused E2E passed 6/6 across desktop/mobile.
+- [x] Run focused E2E and pre-commit checks; commit `test: cover loading and recovery states`.
 
 ### Task 13: Visual regression and final suite
 

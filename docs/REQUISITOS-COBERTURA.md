@@ -5,10 +5,10 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 (regras em `AGENTS.md`, seção 13).
 
 Legenda de leitura: "Implementado" significa que o código existe, mas o requisito ainda não tem prova
-automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–11 estão verificados;
-o grupo 3 tem cobertura parcial e segue em andamento.
+automatizada suficiente para ser marcado como verificado. Os grupos Playwright 1–12 estão verificados;
+resta concluir os baselines de regressão visual.
 
-**Resumo atual:** Verificado 42 · Implementado 38 · Em andamento 7 · Pendente 22 (109 itens)
+**Resumo atual:** Verificado 50 · Implementado 32 · Em andamento 6 · Pendente 21 (109 itens)
 
 ## 2. Stack obrigatória
 
@@ -23,7 +23,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Tailwind CSS       | Implementado | `src/styles.css`                                            |
 | shadcn/ui          | Implementado | `src/components/ui` (adaptar aos tokens do Figma)           |
 | MSW                | Implementado | `src/mocks`                                                 |
-| Playwright         | Em andamento | Grupos 1–11 verificados; grupo 3 parcial; grupo 12 e regressão visual pendentes |
+| Playwright         | Em andamento | Grupos 1–12 verificados; regressão visual pendente |
 | Lighthouse         | Pendente     | Sem configuração nem relatórios                             |
 
 ## 3. Telas e fluxos
@@ -82,9 +82,9 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 
 | Item                                                 | Status       | Onde / prova                            |
 | ---------------------------------------------------- | ------------ | --------------------------------------- |
-| Cadastro, login, logout, sessão                      | Implementado | `lib/session.tsx`, handlers `/auth`     |
-| Sessão recuperável após refresh; expiração tratada   | Implementado | `tokenStore`, cenário `session-expired` |
-| Logout/troca de usuário limpam cache e subscriptions | Implementado | `clearPrivate`, `RealtimeProvider`      |
+| Cadastro, login, logout, sessão                      | Verificado   | `tests/e2e/account.spec.ts`, `tests/e2e/loading-recovery.spec.ts` |
+| Sessão recuperável após refresh; expiração tratada   | Verificado   | `tests/e2e/account.spec.ts`, `tests/e2e/loading-recovery.spec.ts` |
+| Logout/troca de usuário limpam cache e subscriptions | Verificado   | `tests/e2e/account.spec.ts`, `tests/e2e/loading-recovery.spec.ts` |
 | Validação de formulários com erros da API            | Verificado   | `tests/e2e/accessibility.spec.ts`, `tests/e2e/account.spec.ts` |
 | Senhas não armazenadas em claro                      | Implementado | `sha256(salt + senha)` em `mocks/db.ts` |
 
@@ -93,10 +93,10 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | Item                                                      | Status       | Onde / prova                                   |
 | --------------------------------------------------------- | ------------ | ---------------------------------------------- |
 | Contratos tipados                                         | Implementado | `api/types.ts`                                 |
-| Estados de carregamento, vazio, erro, sucesso, background | Implementado | Catálogo, carrinho, detalhe                    |
+| Estados de carregamento, vazio, erro, sucesso, background | Verificado   | `tests/e2e/loading-recovery.spec.ts`, `tests/e2e/catalog.spec.ts`, `tests/e2e/cart.spec.ts` |
 | Invalidação após mutations e eventos                      | Implementado | `lib/cart.ts`, `lib/realtime.tsx`              |
 | Descarte de respostas obsoletas                           | Implementado | Query keys com params; revisar uso de `signal` |
-| Isolamento por usuário e por parâmetros                   | Implementado | Query keys `["u", userId, ...]`                |
+| Isolamento por usuário e por parâmetros                   | Verificado   | `tests/e2e/loading-recovery.spec.ts`, `tests/e2e/catalog.spec.ts` |
 | Rotas inexistentes e acesso direto                        | Implementado | `NotFoundComponent` em `__root.tsx`            |
 | Atualização otimista com rollback                         | Verificado   | `tests/e2e/favorites.spec.ts` (falha 500 e nova tentativa) |
 | Política de cache documentada                             | Pendente     | `ARCHITECTURE.md`                              |
@@ -142,7 +142,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | ----------------------------------------------------- | ------------ | ---------------------------------- |
 | Fidelidade ao Figma                                   | Em andamento | `docs/FIGMA-DEVIATIONS.md`         |
 | 390, 768 e 1440 px sem overflow                       | Pendente     | Medir e cobrir em teste            |
-| Skeleton com shimmer e `prefers-reduced-motion`       | Implementado | `styles.css`, `NftCardSkeleton`    |
+| Skeleton com shimmer e `prefers-reduced-motion`       | Verificado   | `tests/e2e/loading-recovery.spec.ts`, `styles.css`, `NftCardSkeleton` |
 | Skeleton sem layout shift (catálogo, detalhe, resumo) | Pendente     | Conferir dimensões e medir CLS     |
 | Teclado, foco visível, foco em dialogs e drawers      | Verificado   | `tests/e2e/accessibility.spec.ts`  |
 | Labels, `aria-invalid`, `aria-describedby`            | Verificado   | `tests/e2e/accessibility.spec.ts`, `components/Field.tsx` |
@@ -157,7 +157,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | ----------------------------------------------------------------------- | -------- |
 | 1. Busca, filtros, ordenação, paginação, histórico                      | Verificado (`tests/e2e/catalog.spec.ts`; desktop/mobile, sort desktop) |
 | 2. Detalhe direto e recurso inexistente                                 | Verificado (`tests/e2e/nft-detail.spec.ts`; ambos viewports) |
-| 3. Cadastro, login, expiração, logout, troca de usuário                 | Em andamento (`tests/e2e/account.spec.ts`; 11 passaram, logout/troca desktop; 1 skip mobile) |
+| 3. Cadastro, login, expiração, logout, troca de usuário                 | Verificado (`tests/e2e/account.spec.ts` e `tests/e2e/loading-recovery.spec.ts`; desktop/mobile) |
 | 4. Favoritos com falha e recuperação                                    | Verificado (`tests/e2e/favorites.spec.ts`; 8/8, desktop/mobile) |
 | 5. Carrinho, quantidades, remoção, cupom, persistência                  | Verificado (`tests/e2e/cart.spec.ts`; 6/6, desktop/mobile) |
 | 6. Compra completa até o recibo                                         | Verificado (`tests/e2e/checkout-success.spec.ts`; 2/2, desktop/mobile) |
@@ -166,7 +166,7 @@ o grupo 3 tem cobertura parcial e segue em andamento.
 | 9. Preço/disponibilidade via Socket.IO no checkout                      | Verificado (`tests/e2e/checkout-realtime.spec.ts`; 6/6, desktop/mobile) |
 | 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, desktop/mobile) |
 | 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 4/4, desktop/mobile) |
-| 12. Skeletons, falha e recuperação                                      | Pendente |
+| 12. Skeletons, falha e recuperação                                      | Verificado (`tests/e2e/loading-recovery.spec.ts`; 6/6, desktop/mobile) |
 | Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Em andamento; smoke da home passou em 1440×1000 e 390×844, baselines visuais pendentes |
 
 ## 10. Performance e Lighthouse

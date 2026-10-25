@@ -58,12 +58,22 @@ function Checkout() {
     queryFn: api.wallets,
     select: (d) => d.items,
   });
-  const [draft, setDraft] = useState({
-    name: user!.displayName,
-    email: user!.email,
-    note: "",
-    walletId: "",
-    network: "ethereum" as Network,
+  const [draft, setDraft] = useState(() => {
+    const base = {
+      name: user!.displayName,
+      email: user!.email,
+      note: "",
+      walletId: "",
+      network: "ethereum" as Network,
+    };
+    if (typeof window === "undefined") return base;
+    const raw = sessionStorage.getItem(DRAFT_KEY);
+    if (!raw) return base;
+    try {
+      return { ...base, ...(JSON.parse(raw) as Partial<typeof base>) };
+    } catch {
+      return base;
+    }
   });
   const [coupon, setCoupon] = useState<string | undefined>();
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -78,10 +88,9 @@ function Checkout() {
   const connectBtnRef = useRef<HTMLButtonElement>(null);
   const reviewBtnRef = useRef<HTMLButtonElement>(null);
 
-  // restore draft (session expiry / refresh) and pending order
+  // Restaura cupom e pedido pendente na montagem; o rascunho já inicia do sessionStorage
+  // para que o StrictMode não sobrescreva o storage com estado vazio no primeiro efeito.
   useEffect(() => {
-    const raw = sessionStorage.getItem(DRAFT_KEY);
-    if (raw) setDraft((d) => ({ ...d, ...JSON.parse(raw) }));
     setCoupon(sessionStorage.getItem(COUPON_KEY) ?? undefined);
     setPending(localStorage.getItem(PENDING_ORDER_KEY));
   }, []);

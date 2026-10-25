@@ -14,7 +14,7 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
    (revalidação, duplo clique, timeout com idempotência).
 5. Perfil, carteiras e confirmação em mobile; acessibilidade (foco, dialogs, formulários, `aria-live`).
 6. Performance: fontes locais (hoje vêm do Google Fonts), divisão de código, imagens com dimensões.
-7. Playwright: grupos 1–11 verificados; grupo 3 parcial; falta grupo 12 e regressão visual.
+7. Playwright: grupos 1–12 verificados; falta regressão visual (Task 13).
 8. Lighthouse: configuração, 3 medições por página e perfil, relatórios versionados.
 9. `README.md` e `ARCHITECTURE.md` completos.
 10. Formatar o código com Prettier para zerar o lint.
@@ -113,6 +113,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
   formulários, `alt` em imagens relevantes, aviso explícito em rota fora de escopo (`/aprenda`) e
   anúncio de eventos em `aria-live="polite"`. Typecheck, lint (0 erros/9 avisos) e Vitest 18/18
   passaram. Próximo lote: grupo 12 (skeletons, falha e recuperação).
+- Grupo 12 (e complemento do grupo 3) passou em `tests/e2e/loading-recovery.spec.ts`: **6/6** em
+  Chromium desktop/mobile. Cobre skeletons `.shimmer` sob cenário `slow` com `prefers-reduced-motion:
+  reduce` e estabilidade dimensional sem layout shift, recuperação do erro 500 (`server-error`) no
+  catálogo via `"Tentar novamente"`, expiração de sessão durante o checkout com retorno após login e
+  preservação do rascunho (corrigida inicialização preguiçosa de `draft` em
+  `src/routes/_authenticated.checkout.tsx` para não sobrescrever `sessionStorage` no `StrictMode`), e
+  isolamento de carteiras, favoritos e carrinho entre Ana e Bruno. Typecheck, lint (0 erros/9 avisos) e
+  Vitest 18/18 passaram. Próximo lote: Task 13 (regressão visual e overflow responsivo).
 - Criada `docs/RETOMADA-IA.md` com objetivo, fontes, limites de evidência, commits, validações e
   sequência de pendências para permitir que outra sessão continue sem perder o contexto.
 - Tornada explícita no `AGENTS.md` a execução em lotes pequenos, revisáveis e com commits separados.
@@ -179,3 +187,4 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 | 25/10/2026 | `e9318e4` | Conexão Socket.IO sob MSW e testes do grupo 9    | Importar `socket.io-client` após o `worker.start()` e cobrir eventos e reconexão no checkout                                        |
 | 25/10/2026 | `8ca0654` | Testes E2E de reconciliação Socket.IO no checkout| Cobrir confirmação por evento, mudança de preço/estoque no checkout e reconexão em desktop e mobile                                 |
 | 25/10/2026 | `d42f3a7` | Testes E2E de versão e deduplicação de eventos   | Cobrir descarte de eventos duplicados/obsoletos, retomada de pedido pendente e snapshot do recibo                                   |
+| 25/10/2026 | `7820f86` | Testes E2E de teclado, foco e validação acessível| Cobrir salto de conteúdo, focus trap/restauração em dialogs e atributos ARIA em desktop e mobile                                    |
