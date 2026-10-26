@@ -72,6 +72,8 @@ test("adiciona item, atualiza quantidade e calcula cupom e totais", async ({ pag
   await page.getByRole("button", { name: "Remover Golden Beat #207" }).click();
   expect((await remove).status()).toBe(200);
   await expect(page.getByText("Seu carrinho está vazio")).toBeVisible();
+  await expect(summaryValue(page, "Total")).toHaveText("0.00 ETH");
+  await expect(summaryValue(page, "Subtotal")).toHaveText("0.00 ETH");
 });
 
 test("migra itens do visitante para a conta antes do pagamento", async ({ page }) => {

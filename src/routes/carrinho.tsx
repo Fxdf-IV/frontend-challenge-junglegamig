@@ -79,13 +79,15 @@ function CartPage() {
 
   const items = cart.data?.items ?? [];
   const uid = user?.id ?? "guest";
+  // Cotação do carrinho: desabilitada quando o carrinho está vazio; o placeholder só retém a
+  // cotação anterior se ainda houver itens, garantindo que o resumo zere ao remover o último item.
   const quote = useQuery({
     queryKey: ["quote", uid, coupon ?? "", "ethereum", cart.data?.version],
     queryFn: () => api.quote({ coupon, network: "ethereum" }),
     enabled: !!cart.data && items.length > 0,
     retry: false,
     staleTime: 5_000,
-    placeholderData: (p) => p,
+    placeholderData: (p) => (items.length > 0 ? p : undefined),
   });
 
   const suggestions = useQuery(nftListQuery({ page: 1, pageSize: 24 }));
@@ -159,7 +161,8 @@ function CartPage() {
     }
   };
 
-  const q = quote.data;
+  // Garante que, ao esvaziar o carrinho, a cotação exibida zere imediatamente para 0 ETH em vez de manter a última em cache.
+  const q = items.length > 0 ? quote.data : undefined;
   return (
     <div className="container-page pt-4 pb-32 md:py-8">
       {/* Cabeçalho mobile com botão de retorno */}

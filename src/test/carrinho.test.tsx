@@ -8,13 +8,33 @@ import type { Cart, Quote } from "@/api/types";
 import { buildNfts } from "@/mocks/fixtures";
 import { Route } from "@/routes/carrinho";
 
-const mocks = vi.hoisted(() => ({
-  quote: vi.fn(),
-  navigate: vi.fn(),
-  updateMutate: vi.fn(),
-  removeMutate: vi.fn(),
-  listNfts: vi.fn(),
-}));
+const mocks = vi.hoisted(() => {
+  const initialCart: import("@/api/types").Cart = {
+    id: "cart-u-ana",
+    version: 1,
+    items: [
+      {
+        nftId: "emerald-ape-042",
+        edition: "1/50",
+        quantity: 1,
+        name: "Emerald Ape #042",
+        image: "/nft/emerald.webp",
+        unitPrice: "1.19",
+        available: 5,
+        maxPerOrder: 5,
+        network: "ethereum",
+      },
+    ],
+  };
+  return {
+    quote: vi.fn(),
+    navigate: vi.fn(),
+    updateMutate: vi.fn(),
+    removeMutate: vi.fn(),
+    listNfts: vi.fn(),
+    cart: initialCart,
+  };
+});
 
 const sampleCart: Cart = {
   id: "cart-u-ana",
@@ -85,7 +105,7 @@ vi.mock("@/api/endpoints", () => ({
 }));
 
 vi.mock("@/lib/cart", () => ({
-  useCart: () => ({ data: sampleCart, isLoading: false }),
+  useCart: () => ({ data: mocks.cart, isLoading: false }),
   useCartMutations: () => ({
     update: { isPending: false, mutate: mocks.updateMutate },
     remove: { isPending: false, mutate: mocks.removeMutate },
@@ -122,6 +142,7 @@ function renderCart() {
 describe("CartPage coupon handling", () => {
   beforeEach(() => {
     sessionStorage.clear();
+    mocks.cart = sampleCart;
     mocks.quote.mockReset();
     mocks.navigate.mockReset();
     mocks.listNfts.mockReset();
@@ -194,5 +215,18 @@ describe("CartPage coupon handling", () => {
     expect(tabs[2]).toHaveAttribute("aria-selected", "false");
 
     fireEvent.click(tabs[1]);
+  });
+
+  it("resets total, subtotal and network fee to 0.00 ETH and disables checkout when cart has no items", async () => {
+    // Simula o carrinho esvaziado pelo usuário
+    mocks.cart = { id: "cart-u-ana", version: 2, items: [] };
+    renderCart();
+
+    expect(screen.getByText("Seu carrinho está vazio")).toBeInTheDocument();
+    // Subtotal, Taxa de rede e Total devem zerar em 0.00 ETH
+    const zeroValues = screen.getAllByText("0.00 ETH");
+    expect(zeroValues.length).toBeGreaterThanOrEqual(3);
+    const checkoutBtn = screen.getByRole("button", { name: "Concluir e finalizar" });
+    expect(checkoutBtn).toBeDisabled();
   });
 });

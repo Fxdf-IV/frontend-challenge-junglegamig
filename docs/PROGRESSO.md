@@ -14,6 +14,15 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (26/10/2026)
 
+- **Correção do reset de totais e cotação ao esvaziar o carrinho (`src/routes/carrinho.tsx`, `src/lib/cart.ts`):**
+  - **Identificação do bug:** ao adicionar um item e posteriormente removê-lo do carrinho até esvaziá-lo completamente, a query de cotação (`quote`) ficava desabilitada (`enabled: false`), fazendo com que o TanStack Query mantivesse a cotação anterior em cache (reforçado pelo `placeholderData: (p) => p`). Como resultado, o resumo da carteira continuava exibindo subtotal, taxas e valor total do item antigo em vez de zerar para `0.00 ETH`.
+  - **Resolução síncrona e limpeza de cache:**
+    - Em `src/routes/carrinho.tsx`, a referência da cotação ativa foi condicionada à presença de itens (`const q = items.length > 0 ? quote.data : undefined`), zerando subtotal, taxa de rede e total imediatamente para `0.00 ETH` no momento do esvaziamento, além de restringir o `placeholderData` para reter dados anteriores apenas enquanto houver itens (`placeholderData: (p) => (items.length > 0 ? p : undefined)`).
+    - Em `src/lib/cart.ts`, a mutação de remoção passou a executar `qc.removeQueries({ queryKey: ["quote"] })` quando `c.items.length === 0`, expurgando cotações obsoletas da memória.
+  - **Cobertura de testes automatizados:**
+    - Adicionada verificação no teste E2E `tests/e2e/cart.spec.ts` validando que `Total` e `Subtotal` zeram em `0.00 ETH` após a remoção do item (desktop e mobile).
+    - Adicionado teste unitário em `src/test/carrinho.test.tsx` comprovando que o resumo zera em `0.00 ETH` e desabilita o botão de checkout quando o carrinho não possui itens.
+
 - **Portabilidade total do Playwright com Chromium nativo, suporte a preview e baselines Linux:**
   - **Canal desacoplado e suporte a preview (`playwright.config.ts`):** removida a obrigatoriedade do canal proprietário `"chrome"`, permitindo que o Playwright utilize o Chromium padrão headless empacotado pelo próprio runner. Adicionado suporte opcional à variável `PLAYWRIGHT_PREVIEW=1` para executar a suíte E2E sobre o servidor de preview do build de produção.
   - **Baselines visuais cross-platform (`tests/e2e/visual.spec.ts-snapshots/`):** incluídas as baselines `-linux.png` para todos os 8 snapshots de regressão visual (desktop e mobile para Início, Detalhe, Carrinho e Pagamento), assegurando aprovação imediata em ambientes Linux, Docker e pipelines de CI sem erro de snapshot ausente.

@@ -25,7 +25,13 @@ export function useCartMutations() {
   const key = qk.cart(user?.id ?? "guest");
   const onSuccess = (c: Cart) => {
     qc.setQueryData(key, c);
-    qc.invalidateQueries({ queryKey: ["quote"] });
+    // Se todos os itens foram removidos, remove as cotações residuais do cache para resetar os totais;
+    // caso contrário, invalida a cotação ativa para recalcular subtotal, taxas e descontos.
+    if (c.items.length === 0) {
+      qc.removeQueries({ queryKey: ["quote"] });
+    } else {
+      qc.invalidateQueries({ queryKey: ["quote"] });
+    }
   };
   const onError = (e: Error) => toast.error(e.message);
   return {
