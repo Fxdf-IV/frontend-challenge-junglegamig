@@ -62,8 +62,8 @@ Conforme estipulado na **Seção 10 de `REQUISITOS.md`** ("justificar o que fica
 
 Os relatórios completos em formato HTML interativo e JSON estão disponíveis em:
 
-- [Início Desktop HTML](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/home-desktop.report.html) / [JSON](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/home-desktop.report.json)
-- [Início Mobile HTML](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/home-mobile.report.html) / [JSON](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/home-mobile.report.json)
-- [Detalhe NFT Desktop HTML](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/detail-desktop.report.html) / [JSON](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/detail-desktop.report.json)
-- [Detalhe NFT Mobile HTML](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/detail-mobile.report.html) / [JSON](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/detail-mobile.report.json)
-- [Resumo Consolidado JSON](file:///c:/Users/Vi/Projetos/frontend-challenge-junglegamig/lighthouse/reports/summary.json)
+- [Início Desktop HTML](../reports/lighthouse/home-desktop.report.html) / [JSON](../reports/lighthouse/home-desktop.report.json)
+- [Início Mobile HTML](../reports/lighthouse/home-mobile.report.html) / [JSON](../reports/lighthouse/home-mobile.report.json)
+- [Detalhe NFT Desktop HTML](../reports/lighthouse/detail-desktop.report.html) / [JSON](../reports/lighthouse/detail-desktop.report.json)
+- [Detalhe NFT Mobile HTML](../reports/lighthouse/detail-mobile.report.html) / [JSON](../reports/lighthouse/detail-mobile.report.json)
+- [Resumo Consolidado JSON](../reports/lighthouse/summary.json)

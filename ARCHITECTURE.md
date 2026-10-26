@@ -25,40 +25,42 @@ Todas as rotas REST utilizam o prefixo `/api` (configurável via `VITE_API_URL`)
 | Método e rota               | Autenticação               | Descrição                                                                                                                                                           |
 | --------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `POST /api/auth/login`      | Pública                    | Autentica por `email` e `password`, retorna `Session` (`token`, `expiresAt`, `user`).                                                                               |
-| `POST /api/auth/register`   | Pública                    | Cria conta validando formato e unicidade de e-mail (`409 EMAIL_TAKEN`) e usuário (`409 USERNAME_TAKEN`).                                                            |
-| `POST /api/auth/logout`     | Bearer                     | Invalida o token da sessão atual no servidor.                                                                                                                       |
-| `GET /api/auth/session`     | Bearer                     | Revalida a sessão ativa e retorna os dados públicos do usuário.                                                                                                     |
-| `GET /api/nfts`             | Pública                    | Lista paginada e filtrada (`q`, `collections`, `editions`, `networks`, `minPrice`, `maxPrice`, `onlyAvailable`, `sort`, `page`, `pageSize`) com facetas (`facets`). |
-| `GET /api/nfts/:id`         | Pública                    | Retorna detalhe completo do NFT, edições, disponibilidade e `version`.                                                                                              |
-| `GET /api/favorites`        | Bearer                     | Lista IDs e objetos `Nft` favoritados pelo usuário autenticado.                                                                                                     |
-| `POST /api/favorites/:id`   | Bearer                     | Adiciona NFT aos favoritos do usuário.                                                                                                                              |
-| `DELETE /api/favorites/:id` | Bearer                     | Remove NFT dos favoritos do usuário.                                                                                                                                |
-| `GET /api/cart`             | Bearer ou `X-Cart-Id`      | Retorna carrinho atual reconciliado com preço e disponibilidade vigentes.                                                                                           |
-| `POST /api/cart/items`      | Bearer ou `X-Cart-Id`      | Adiciona ou incrementa item/edição respeitando `Math.min(available, maxPerOrder)`.                                                                                  |
-| `PATCH /api/cart/items`     | Bearer ou `X-Cart-Id`      | Atualiza quantidade inteira de um item no carrinho.                                                                                                                 |
-| `DELETE /api/cart/items`    | Bearer ou `X-Cart-Id`      | Remove item/edição do carrinho.                                                                                                                                     |
-| `POST /api/cart/merge`      | Bearer                     | Mescla itens do `guestCartId` no carrinho da conta autenticada respeitando limites de estoque.                                                                      |
-| `POST /api/quote`           | Bearer ou `X-Cart-Id`      | Calcula `Quote` determinística (`id` por SHA-256 dos itens, preços, cupom e rede), `subtotal`, `discount`, `networkFee`, `total` e `issues`.                        |
-| `POST /api/orders`          | Bearer + `Idempotency-Key` | Cria pedido pendente após revalidar `quoteId`, estoque, preço, cupom e carteira.                                                                                    |
-| `GET /api/orders/:id`       | Bearer                     | Consulta estado atual e recibo snapshot do pedido (`pending`, `confirmed`, `declined`).                                                                             |
-| `PATCH /api/me`             | Bearer                     | Atualiza perfil (`displayName`, `username`, `bio`, `ensName`, `walletNickname`).                                                                                    |
-| `PUT /api/me/avatar`        | Bearer                     | Atualiza ou remove (`avatar: null`) o avatar em data URL validada.                                                                                                  |
-| `POST /api/me/password`     | Bearer                     | Valida `currentPassword` por hash SHA-256 com salt e grava nova senha.                                                                                              |
-| `GET /api/wallets`          | Bearer                     | Lista carteiras cadastradas do usuário (`primary` e `secondary`).                                                                                                   |
-| `POST /api/wallets`         | Bearer                     | Cria ou substitui carteira validando endereço EVM (`0x...`) ou Solana (Base58).                                                                                     |
-| `PATCH /api/wallets/:id`    | Bearer                     | Edita rótulo, rede, provedor, endereço ou papel da carteira.                                                                                                        |
-| `DELETE /api/wallets/:id`   | Bearer                     | Remove carteira cadastrada.                                                                                                                                         |
+| `POST /api/auth/register`   | Pública                    | Cria conta validando formato e unicidade de e-mail e usuário (retorna `409 CONFLICT` com `fields`).                                 |
+| `POST /api/auth/logout`     | Bearer                     | Invalida o token da sessão atual no servidor.                                                                                        |
+| `GET /api/auth/session`     | Bearer                     | Revalida a sessão ativa e retorna os dados públicos do usuário.                                                                      |
+| `GET /api/nfts`             | Pública                    | Lista paginada e filtrada (`q`, `collections`, `networks`, `min`, `max`, `tab`, `sort`, `page`) com paginação determinística.        |
+| `GET /api/nfts/:id`         | Pública                    | Retorna detalhe completo do NFT, edições, disponibilidade e `version`.                                                               |
+| `GET /api/favorites`        | Bearer                     | Lista IDs dos NFTs favoritados pelo usuário autenticado.                                                                             |
+| `PUT /api/favorites/:id`    | Bearer                     | Adiciona NFT aos favoritos do usuário autenticado.                                                                                   |
+| `DELETE /api/favorites/:id` | Bearer                     | Remove NFT dos favoritos do usuário autenticado.                                                                                     |
+| `GET /api/cart`             | Bearer ou `X-Cart-Id`      | Retorna carrinho atual reconciliado com preço e disponibilidade vigentes.                                                            |
+| `POST /api/cart/items`      | Bearer ou `X-Cart-Id`      | Adiciona ou incrementa item/edição respeitando `Math.min(available, maxPerOrder)`.                                                   |
+| `PATCH /api/cart/items`     | Bearer ou `X-Cart-Id`      | Atualiza quantidade inteira de um item no carrinho.                                                                                  |
+| `DELETE /api/cart/items`    | Bearer ou `X-Cart-Id`      | Remove item/edição do carrinho.                                                                                                      |
+| `POST /api/cart/merge`      | Bearer                     | Mescla itens do `guestCartId` no carrinho da conta autenticada respeitando limites de estoque.                                       |
+| `POST /api/quote`           | Bearer ou `X-Cart-Id`      | Calcula `Quote` determinística (`id` por SHA-256 dos itens, preços, cupom e rede), `subtotal`, `discount`, `networkFee` e `total`.   |
+| `POST /api/orders`          | Bearer + `Idempotency-Key` | Cria pedido pendente após revalidar `quoteId`, estoque, preço, cupom e carteira.                                                     |
+| `GET /api/orders/:id`       | Bearer                     | Consulta estado atual e recibo snapshot do pedido (`pending`, `confirmed`, `declined`).                                              |
+| `PATCH /api/me`             | Bearer                     | Atualiza dados de perfil (`displayName`, `username`, `email`, `bio`, `avatar`, `ensName`, `walletNickname`).                         |
+| `POST /api/me/password`     | Bearer                     | Valida senha atual e grava nova senha via hash SHA-256 com salt.                                                                     |
+| `GET /api/wallets`          | Bearer                     | Lista carteiras cadastradas do usuário (`primary` e `secondary`).                                                                    |
+| `POST /api/wallets`         | Bearer                     | Cria nova carteira validando unicidade de papel (`primary`/`secondary`) e endereço.                                                  |
+| `PATCH /api/wallets/:id`    | Bearer                     | Edita rótulo, rede, provedor, endereço ou inverte papéis (`primary`/`secondary`) da carteira.                                        |
 
 ### Formato único de erro (`ApiErrorBody`)
 
 Erros HTTP retornam sempre `{ error: { code, message, fields?, quote? } }`, normalizados por `toApiError()` em `src/api/client.ts`:
 
 - `VALIDATION` (`400`/`422`): erro de validação de formulário, acompanhado de `fields: Record<string, string>` associado a cada campo via `aria-invalid` e `aria-describedby`.
-- `INVALID_CREDENTIALS` (`401`): e-mail ou senha incorretos no login.
-- `UNAUTHORIZED` / `SESSION_EXPIRED` (`401`): ausência de token ou sessão expirada.
-- `FORBIDDEN` (`403`): tentativa de acessar pedido ou carteira de outro usuário.
-- `NOT_FOUND` (`404`): NFT, pedido ou item inexistente.
-- `EMAIL_TAKEN` / `USERNAME_TAKEN` (`409`): conflito no cadastro.
+- `UNAUTHORIZED` (`401`): ausência de token, credenciais inválidas no login ou acesso não autenticado.
+- `SESSION_EXPIRED` (`401`): sessão com TTL expirado, acionando interceptador e redirecionamento com preservação de rascunho.
+- `FORBIDDEN` (`403`): tentativa de acessar pedido ou recurso pertencente a outro usuário.
+- `NOT_FOUND` (`404`): NFT, pedido ou recurso inexistente.
+- `CONFLICT` (`409`): conflito de unicidade de e-mail ou nome de usuário no cadastro (acompanhado de `fields`).
+- `COUPON_INVALID` / `COUPON_EXPIRED` (`422`): cupom inexistente ou fora da validade.
+- `AVAILABILITY` / `QUOTE_STALE` (`409`): estoque esgotado/insuficiente ou mudança de preço/taxa/cupom entre a cotação e o envio do pedido; inclui a nova `quote` no corpo para atualização imediata da revisão.
+- `IDEMPOTENCY_CONFLICT` (`409`): reutilização de `Idempotency-Key` com payload diferente.
+- `UNAVAILABLE` / `SERVER_ERROR` (`503`/`500`) e `NETWORK` / `TIMEOUT`: falhas transitórias de rede ou servidor.
 - `COUPON_INVALID` / `COUPON_EXPIRED` (`422`): cupom inexistente ou fora da validade.
 - `AVAILABILITY` / `QUOTE_STALE` (`409`): estoque esgotado/insuficiente ou mudança de preço/taxa/cupom entre a cotação e o envio do pedido; inclui a nova `quote` no corpo para atualização imediata da revisão.
 - `IDEMPOTENCY_CONFLICT` (`409`): reutilização de `Idempotency-Key` com payload diferente.
@@ -101,8 +103,8 @@ Erros HTTP retornam sempre `{ error: { code, message, fields?, quote? } }`, norm
   - Carrinho e cotação: `["cart", userId ?? "guest"]` e `["quote", userId ?? "guest", coupon, network, cartVersion]`.
 - **Descarte de respostas obsoletas:** `nftListQuery` e `nftDetailQuery` repassam o `signal` do TanStack Query ao Axios (`api.listNfts(params, signal)`), cancelando requisições substituídas e garantindo que respostas atrasadas (cenário `jitter`) nunca sobrescrevam a combinação de parâmetros ativa.
 - **Política de retries:**
-  - Configurada no `QueryClient` (`src/router.tsx`): até 1 nova tentativa automática apenas para erros transitórios (`NETWORK`, `TIMEOUT` ou `503 UNAVAILABLE`). Erros `4xx` e `500 SERVER_ERROR` falham imediatamente para exibir feedback claro e botão `"Tentar novamente"`.
-  - `staleTime` padrão de 15 s, com `refetchOnWindowFocus: false` para previsibilidade durante simulação de cenários.
+  - Configurada no `QueryClient` (`src/router.tsx`): até 2 tentativas automáticas apenas para falhas transitórias de rede ou servidor (`status === 0` ou `status >= 500`), com recuo exponencial (`retryDelay: (n) => Math.min(400 * 2 ** n, 2000)`). Erros `4xx` nunca são retentados; mutations possuem `retry: false`.
+  - `staleTime` padrão de 15 s, com `refetchOnWindowFocus: true` para revalidação ao alternar de volta para a aba.
 - **Atualização otimista com rollback:** `useToggleFavorite` (`src/api/queries.ts`) aplica o estado favoritado/desfavoritado imediatamente em `["u", userId, "favorites"]` no `onMutate` e restaura o snapshot anterior em `onError` (demonstrado pelo cenário `favorite-fail`), sempre invalidando a query no `onSettled`.
 
 ---
@@ -140,8 +142,8 @@ O `RealtimeProvider` (`src/lib/realtime.tsx`) mantém uma conexão `socket.io-cl
   - Regiões `role="status"` e `aria-live="polite"` anunciam mudanças de conexão de carteira, expiração de sessão e eventos Socket.IO sem depender apenas de cor.
   - Skeletons `.shimmer` preservam as dimensões dos cards/painéis para evitar layout shift (CLS = 0) e desativam a animação quando `prefers-reduced-motion: reduce` está ativo.
 - **Performance:**
-  - Fonte `JetBrains Mono` servida localmente em `public/fonts/*.woff2` com `font-display: swap` e `<link rel="preload">` para o subset latino.
-  - Imagens de NFT servidas localmente em `public/art/*.svg` com atributos `width` e `height` explícitos; a imagem principal acima da dobra usa `fetchPriority="high"` e as demais `loading="lazy"`.
+  - Tipografia servida localmente (`@fontsource/roboto-mono`) com `font-display: swap` sem requisições a CDNs externas.
+  - Imagens de NFT servidas localmente em formato WebP otimizado em `public/nft/*.webp` com atributos `width` e `height` explícitos; a imagem principal acima da dobra usa `fetchPriority="high"` e as demais `loading="lazy"`.
   - Importação sob demanda do `socket.io-client` e dos mocks, mantendo o bundle inicial enxuto.
 - **Rotas fora de escopo:** links editoriais, suporte e páginas institucionais (`/criadores`, `/aprenda`) renderizam o componente `ComingSoon`, informando claramente que a seção não faz parte do escopo em vez de simular ação bem-sucedida.
 

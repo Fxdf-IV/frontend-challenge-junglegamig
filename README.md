@@ -53,7 +53,7 @@ $env:VITE_SHOW_MOCK_PANEL="true"; bun run dev
 
 | Usuário        | E-mail            | Senha       | Características iniciais                                                                                                                                                  |
 | -------------- | ----------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Ana Sato**   | `ana@kurio.dev`   | `Kurio@123` | Possui favorito inicial (`emerald-ape-042`), metadados ENS (`anasato.eth`) e duas carteiras cadastradas (Principal Ethereum MetaMask e Secundária Polygon WalletConnect). |
+| **Ana Sato**   | `ana@kurio.dev`   | `Kurio@123` | Possui favorito inicial (`emerald-ape-042`), metadados ENS (`ana.eth`) e carteira inicial cadastrada (Ethereum MetaMask "Reserva"). |
 | **Bruno Lima** | `bruno@kurio.dev` | `Kurio@123` | Conta limpa (sem favoritos nem carteiras iniciais) para testar estados vazios, primeiro cadastro de carteira e isolamento entre sessões.                                  |
 
 ### Cupons promocionais
@@ -61,7 +61,7 @@ $env:VITE_SHOW_MOCK_PANEL="true"; bun run dev
 | Código                             | Comportamento                                                             |
 | ---------------------------------- | ------------------------------------------------------------------------- |
 | `KURIO10`                          | Válido — aplica **10% de desconto** (`1000 bps`) sobre o subtotal em ETH. |
-| `COLECIONADOR5`                    | Válido — aplica **5% de desconto** (`500 bps`) sobre o subtotal em ETH.   |
+| `WELCOME5`                         | Válido — aplica **5% de desconto** (`500 bps`) sobre o subtotal em ETH.   |
 | `VERAO25`                          | Expirado — retorna erro `422 COUPON_EXPIRED` (`"Este cupom expirou"`).    |
 | Qualquer outro (ex.: `INVALIDO99`) | Inválido — retorna erro `422 COUPON_INVALID` (`"Cupom inválido"`).        |
 

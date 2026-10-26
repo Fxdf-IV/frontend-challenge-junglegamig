@@ -14,6 +14,12 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (26/10/2026)
 
+- **Sincronização estrita de documentação com a arquitetura real e limpeza de resíduos:**
+  - **Sincronização do README (`README.md`):** corrigida a contagem e especificação das carteiras da Ana (1 carteira inicial "Reserva" em Ethereum MetaMask), sufixo ENS (`ana.eth`) e código do cupom promocional de 5% (`WELCOME5`).
+  - **Sincronização da arquitetura (`ARCHITECTURE.md`):** alinhada a política real de retries (2 tentativas automáticas com backoff exponencial para falhas transitórias 5xx/network, sem retry em 4xx e `refetchOnWindowFocus: true`), endpoints REST reais (`PUT /api/favorites/:id`, `PATCH /api/me`), códigos de erro padronizados (`CONFLICT`, `UNAUTHORIZED`, `SESSION_EXPIRED`) e formato de assets WebP locais (`public/nft/*.webp`).
+  - **Unificação de relatórios Lighthouse (`lighthouse/RESULTS.md`, `reports/lighthouse/`):** eliminada a pasta duplicada `lighthouse/reports/`, mantendo `reports/lighthouse/` como diretório canônico de saída e atualizando os links de `RESULTS.md` para URLs relativas portáveis.
+  - **Limpeza de resíduos de processo (`docs/`):** excluídos `docs/RETOMADA-IA.md` e `docs/superpowers/`, em estrita conformidade com a seção 10 do `AGENTS.md`.
+
 - **Guarda de rotas autenticadas em beforeLoad, precisão no filtro de preço e flexibilidade de canal E2E:**
   - **Guarda nativa do TanStack Router (`src/routes/_authenticated.tsx`):** implementado redirecionamento imediato em `beforeLoad` com `throw redirect({ to: "/login", search: { redirect: location.href }, replace: true })` quando não há token na sessão, eliminando flash de tela ou carregamento parcial de rotas privadas antes da renderização.
   - **Precisão monetária no filtro de preço do catálogo (`src/components/nft/Catalog.tsx`):** integrado o helper `ethCmp` de `src/lib/eth.ts` para validação e ordenação de limites digitados e comparação rigorosa em wei sem deriva de ponto flutuante.

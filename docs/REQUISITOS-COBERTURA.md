@@ -177,7 +177,7 @@ ficaram em 100 em todos os perfis.
 | -------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Auditoria de início e detalhe, mobile e desktop, 3 medições, mediana       | Verificado | `scripts/lighthouse.mjs`, `lighthouserc.json`, `reports/lighthouse/summary.json` (12 medições executadas)                                                    |
 | Metas: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90 | Verificado | Desktop: Perf 100/99, A11y 100, BP 100, SEO 100; Mobile: A11y 100, BP 100, SEO 100, Perf 87/86 com justificativa de Lantern documentada em `ARCHITECTURE.md` |
-| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `lighthouse/RESULTS.md`, `lighthouse/reports/*.report.*`, `reports/lighthouse/summary.json`                                                                  |
+| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `lighthouse/RESULTS.md`, `reports/lighthouse/*.report.*`, `reports/lighthouse/summary.json`                                                                 |
 
 ## 12. Entrega
 
