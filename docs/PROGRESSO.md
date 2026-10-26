@@ -14,6 +14,32 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (26/10/2026)
 
+- **Integração do menu "Meu perfil" (AccountNav) na tela de Favoritos (`src/routes/favoritos.tsx`, `src/components/layout/Header.tsx`, FD-44):**
+  - **Identificação da necessidade:** ao acessar a rota de favoritos (`/favoritos`), a página era renderizada em largura total sem a barra lateral de navegação da conta (`AccountNav` / "Meu perfil"), impossibilitando a alternância direta entre "Dados do perfil", "Carteiras" e "Lista de interesse" no desktop e mobile, quebrando a consistência com as demais páginas da conta.
+  - **Layout integrado da conta:**
+    - Em `src/routes/favoritos.tsx`, incorporado o componente `AccountNav` em grade responsiva (`container-page grid gap-8 py-8 md:grid-cols-[14rem_1fr]`) para usuários autenticados, com a seção "Favoritos" posicionada à direita e o menu "Meu perfil" fixado à esquerda destacando o item ativo "Lista de interesse".
+    - No mobile, o seletor acessível da conta exibe "Lista de interesse" com ícone de coração e aciona a gaveta (Sheet) móvel de opções com retorno de foco.
+    - Preservada a visualização informativa para visitantes não autenticados com convite para login e retorno via `redirect=/favoritos`.
+    - No cabeçalho global (`src/components/layout/Header.tsx`), adicionado o atalho "Lista de interesse" no menu suspenso do usuário ao lado de "Meu perfil" e "Carteiras".
+  - **Validação e testes:** aprovados 100% dos testes unitários (Vitest 34/34), testes E2E de favoritos (`favorites.spec.ts` 8/8), perfil e carteiras (`profile-wallets.spec.ts` 8/8) e regressão visual sem overflow horizontal (`visual.spec.ts` 4/4).
+
+- **Apresentação visual completa e galeria de capturas de tela no README (`README.md`, `docs/screenshots/`):**
+  - **Capturas de alta resolução da plataforma (`docs/screenshots/`):** incluída galeria completa cobrindo os 12 fluxos e telas essenciais da aplicação:
+    - `01-home-hero.png`: Banner hero com oferta limitada em contagem regressiva e categorias.
+    - `02-catalog-filters.png`: Catálogo com filtros de preço em ETH, rede e paginação.
+    - `03-nft-detail.png`: Detalhes do NFT com seletores de edição (1/1, 1/10, 1/50 e aberta), atributos no IPFS e histórico.
+    - `04-cart.png`: Carrinho de compras com múltiplos itens, alteração de quantidade e cupom promocional `KURIO10` aplicado (10% de desconto).
+    - `05-checkout.png`: Checkout com associação do perfil de colecionador e carteira MetaMask conectada.
+    - `06-order-review.png`: Modal de revisão do pedido com blindagem contra oscilação de preços.
+    - `07-order-receipt.png`: Recibo oficial da transação com ID do pedido emitido e confirmação de titularidade na rede.
+    - `08-profile.png`: Perfil do colecionador com metadados ENS `.eth` e alteração de senha segura.
+    - `09-wallets.png`: Gestão de múltiplas carteiras (primária e secundárias).
+    - `10-favorites.png`: Lista de interesse (favoritos) sincronizada com feedback otimista.
+    - `11-simulation-panel.png`: Painel flutuante de simulação de cenários MSW e disparo de eventos Socket.IO em tempo real.
+    - `12-mobile-responsive.png`: Experiência mobile responsiva (390px) sem overflow horizontal.
+  - **Enriquecimento do README (`README.md`):** adicionada seção dedicada `## Prévia visual e telas da plataforma` no topo da documentação, apresentando as imagens em tabelas comparativas e descrições detalhadas de cada fluxo.
+  - **Script de captura automatizada (`scripts/capture-showcase-screenshots.mjs`):** mantido script de automação Playwright para regerar e atualizar os snapshots de demonstração em alta resolução.
+
 - **Correção do reset de totais e cotação ao esvaziar o carrinho (`src/routes/carrinho.tsx`, `src/lib/cart.ts`):**
   - **Identificação do bug:** ao adicionar um item e posteriormente removê-lo do carrinho até esvaziá-lo completamente, a query de cotação (`quote`) ficava desabilitada (`enabled: false`), fazendo com que o TanStack Query mantivesse a cotação anterior em cache (reforçado pelo `placeholderData: (p) => p`). Como resultado, o resumo da carteira continuava exibindo subtotal, taxas e valor total do item antigo em vez de zerar para `0.00 ETH`.
   - **Resolução síncrona e limpeza de cache:**

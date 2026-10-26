@@ -10,6 +10,60 @@ Documentação complementar:
 
 ---
 
+## Prévia visual e telas da plataforma
+
+Confira abaixo as principais telas e fluxos completos desenvolvidos na plataforma:
+
+### 1. Início e Catálogo de Coleções
+
+> Banner hero com contagem regressiva para oferta limitada, navegação por categorias, filtros multifacetados por rede e faixa de preço em ETH, ordenação dinâmica e paginação.
+
+![Início e Banner Hero](docs/screenshots/01-home-hero.png)
+
+![Catálogo com Filtros de Preço e Rede](docs/screenshots/02-catalog-filters.png)
+
+### 2. Detalhes do Ativo & Seletor de Edições
+
+> Visualização da obra em alta resolução, histórico de valorização em gráfico interativo, atributos e raridade no IPFS, seletor de edições (1/1, 1/10, 1/50 e aberta) e ações de compra e favoritar.
+
+![Detalhes do NFT e Seleção de Edição](docs/screenshots/03-nft-detail.png)
+
+### 3. Carrinho de Compras e Resumo Financeiro
+
+> Gestão de múltiplos itens com alteração de quantidade em tempo real, aplicação de cupom promocional (`KURIO10`), cálculo de taxas de rede e estimativas em ETH com precisão decimal.
+
+![Carrinho de Compras com Cupom Aplicado](docs/screenshots/04-cart.png)
+
+### 4. Checkout Web3, Revisão e Confirmação da Transação
+
+> Conexão simulada de carteira Web3 (MetaMask/Ethereum), modal de revisão com proteção contra oscilação de cotação e recibo oficial emitido com ID da transação após confirmação na rede.
+
+|                   Checkout e Carteira Conectada                    |                 Modal de Revisão do Pedido                 |
+| :----------------------------------------------------------------: | :--------------------------------------------------------: |
+| ![Checkout e Carteira Conectada](docs/screenshots/05-checkout.png) | ![Revisão do Pedido](docs/screenshots/06-order-review.png) |
+
+|               Recibo e Confirmação da Transação               |         Lista de Favoritos Sincronizada         |
+| :-----------------------------------------------------------: | :---------------------------------------------: |
+| ![Recibo da Transação](docs/screenshots/07-order-receipt.png) | ![Favoritos](docs/screenshots/10-favorites.png) |
+
+### 5. Painel de Simulação (MSW / Socket.IO) e Responsividade Mobile
+
+> Painel lateral de testes determinísticos para simular 13 cenários de rede (offline, jitter, flutuação de preço, timeout, 503) e disparar eventos Socket.IO em tempo real. Interface 100% responsiva (390px, 768px e 1440px) sem overflow horizontal.
+
+|              Painel de Simulação (MSW & Socket.IO)               |                    Experiência Mobile (390px)                     |
+| :--------------------------------------------------------------: | :---------------------------------------------------------------: |
+| ![Painel de Simulação](docs/screenshots/11-simulation-panel.png) | ![Visualização Mobile](docs/screenshots/12-mobile-responsive.png) |
+
+### 6. Perfil e Gestão de Múltiplas Carteiras
+
+> Edição de dados do colecionador (nome de exibição, domínio ENS `.eth`, avatar e alteração de senha segura) e gerenciamento de carteira primária e secundárias por rede.
+
+|           Dados do Perfil do Colecionador           |                   Gestão de Carteiras                   |
+| :-------------------------------------------------: | :-----------------------------------------------------: |
+| ![Dados do Perfil](docs/screenshots/08-profile.png) | ![Gestão de Carteiras](docs/screenshots/09-wallets.png) |
+
+---
+
 ## 1. Requisitos e instalação
 
 Requer [Bun](https://bun.sh/) (v1.1+) e Google Chrome instalado localmente para execução dos testes E2E Playwright e auditorias Lighthouse.

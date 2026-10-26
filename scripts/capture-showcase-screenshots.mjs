@@ -109,7 +109,12 @@ async function main() {
     const couponInput = page.getByPlaceholder("Digite o código promocional...");
     await couponInput.fill("KURIO10");
     await page.getByRole("button", { name: "Aplicar" }).click();
-    await page.getByText("- 0.10 ETH").or(page.getByText("- 0.099 ETH")).first().waitFor({ timeout: 5000 }).catch(() => {});
+    await page
+      .getByText("- 0.10 ETH")
+      .or(page.getByText("- 0.099 ETH"))
+      .first()
+      .waitFor({ timeout: 5000 })
+      .catch(() => {});
     await stabilize(page, true);
     await page.screenshot({
       path: path.join(outDir, "03-cart-desktop.png"),
