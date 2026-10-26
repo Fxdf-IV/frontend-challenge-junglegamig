@@ -1,6 +1,15 @@
 // Cabeçalho e navegação: expõe caminhos principais e ações globais da conta.
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { LogIn, Search, ShoppingCart, User as UserIcon, Wallet, LogOut, X } from "lucide-react";
+import {
+  Heart,
+  LogIn,
+  Search,
+  ShoppingCart,
+  User as UserIcon,
+  Wallet,
+  LogOut,
+  X,
+} from "lucide-react";
 import { useState, useRef, useEffect, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -286,6 +295,11 @@ export function Header() {
                   <DropdownMenuItem asChild>
                     <Link to="/carteiras">
                       <Wallet /> Carteiras
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/favoritos">
+                      <Heart /> Lista de interesse
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
