@@ -103,9 +103,16 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
               {TABS.map(([id, label]) => (
                 <button
                   key={id}
+                  type="button"
                   role="tab"
                   aria-selected={params.tab === id}
                   onClick={() => set({ tab: id === "all" ? undefined : id })}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      set({ tab: id === "all" ? undefined : id });
+                    }
+                  }}
                   className={cn(
                     "-mb-px shrink-0 cursor-pointer whitespace-nowrap border-b-2 pb-2.5 transition-colors",
                     params.tab === id

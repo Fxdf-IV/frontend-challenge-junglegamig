@@ -12,6 +12,16 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 - Nenhum bloqueio de publicação. O deploy Vercel foi validado na Home e na rota direta de detalhe.
 
+## Concluído recentemente (26/10/2026)
+
+- **Aprofundamento da cobertura E2E, controle determinístico de relógio e acessibilidade via teclado:**
+  - **Persistência do carrinho após refresh (`tests/e2e/cart.spec.ts`):** implementado teste comprovando a integridade dos itens, quantidades e cálculos monetários em ETH após recarregamento completo da página (`page.reload()`), exercitando persistência no localStorage e restauração no TanStack Query em desktop e mobile (8/8 testes no grupo do carrinho).
+  - **Skeletons sem layout shift em todas as telas obrigatórias (`tests/e2e/loading-recovery.spec.ts`):** ampliada a cobertura para além do catálogo, verificando a exibição e dimensões do skeleton shimmer no detalhe do NFT (`/nft/golden-beat-207?scenario=slow`) e no resumo do carrinho (`/carrinho?scenario=slow`), comprovando a estabilidade de layout e a desativação da animação sob `prefers-reduced-motion: reduce`.
+  - **Controle determinístico de relógio nos testes (`src/mocks/handlers.ts`, `tests/e2e/loading-recovery.spec.ts`):** adicionados helpers de tempo simulado (`simNow()`, `advanceSimTime()`, `resetSimTime()`) e endpoint de controle `POST /api/__mock/time` no MSW. No teste de expiração de sessão, o relógio é adiantado em 25 s via `page.clock.fastForward(25_000)` e `/api/__mock/time`, testando a expiração real do TTL (20 s) sem esperas reais de temporizador e sem injeção estática de tokens, com recuperação íntegra do rascunho no checkout e isolamento de dados entre usuários.
+  - **Entrega assíncrona determinística em eventos Socket.IO (`tests/e2e/event-versioning.spec.ts`):** adicionada janela de espera assíncrona após emissão de eventos duplicados e antigos (`stale`), garantindo que o ciclo de recepção e descarte pelo guardião de eventos do Socket.IO concluiu antes da asserção de leituras do carrinho (`cartReads`).
+  - **Navegação acessível via teclado no catálogo e abas (`src/components/nft/Catalog.tsx`, `tests/e2e/accessibility.spec.ts`):** implementado suporte estrito ao padrão W3C ARIA Tab pattern com `type="button"` e manipulação de `Enter` e `Space` nas abas de navegação do catálogo. Adicionado teste E2E navegando e ativando abas e cards de NFT exclusivamente via teclado (6/6 testes de acessibilidade).
+  - Suíte consolidada em 96 testes Playwright E2E e 33 testes Vitest 100% aprovados.
+
 ## Concluído recentemente (25/10/2026)
 
 - **Correção da largura e do truncamento das abas do catálogo na rota do mercado (`src/components/nft/Catalog.tsx`, FD-43):**

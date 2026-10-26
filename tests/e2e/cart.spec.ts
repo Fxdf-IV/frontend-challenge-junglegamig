@@ -87,3 +87,16 @@ test("migra itens do visitante para a conta antes do pagamento", async ({ page }
   await expect(page.getByRole("link", { name: /Golden Beat #207/ })).toBeVisible();
   await expect(page.getByRole("button", { name: "Concluir e finalizar" })).toBeVisible();
 });
+
+test("persiste itens e totais do carrinho após recarregar a página (refresh)", async ({ page }) => {
+  await addGoldenBeat(page);
+  await expect(page.getByRole("link", { name: /Golden Beat #207/ })).toBeVisible();
+  await expect(summaryValue(page, "Total")).toHaveText("0.9942 ETH");
+
+  // Recarrega a página completamente e confirma que os itens e cálculos permanecem íntegros no storage/cache.
+  await page.reload();
+  await expect(page.getByRole("link", { name: /Golden Beat #207/ })).toBeVisible();
+  const quantity = page.getByRole("group", { name: "Quantidade de Golden Beat #207" });
+  await expect(quantity.getByRole("status")).toHaveText("1");
+  await expect(summaryValue(page, "Total")).toHaveText("0.9942 ETH");
+});

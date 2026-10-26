@@ -32,6 +32,24 @@ const API = "/api";
 const SESSION_TTL = 30 * 60_000;
 const SHORT_TTL = 20_000;
 
+let timeOffsetMs = 0;
+
+/** Retorna o timestamp atual considerando o relógio simulado para testes controlados. */
+export function simNow(): number {
+  return Date.now() + timeOffsetMs;
+}
+
+/** Avança o relógio simulado do mock pelo número de milissegundos informado. */
+export function advanceSimTime(ms: number): number {
+  timeOffsetMs += ms;
+  return simNow();
+}
+
+/** Restaura o relógio simulado do mock ao tempo real. */
+export function resetSimTime(): void {
+  timeOffsetMs = 0;
+}
+
 type ErrCode = ApiErrorBody["error"]["code"];
 function err(
   status: number,
@@ -82,7 +100,7 @@ function auth(request: Request): { userId: string } | { res: Response } {
   if (!token) return { res: err(401, "UNAUTHORIZED", "Faça login para continuar") };
   const sess = db().sessions[token];
   if (!sess) return { res: err(401, "SESSION_EXPIRED", "Sua sessão expirou") };
-  if (sess.expiresAt < Date.now()) {
+  if (sess.expiresAt < simNow()) {
     delete db().sessions[token];
     save();
     return { res: err(401, "SESSION_EXPIRED", "Sua sessão expirou") };
@@ -93,7 +111,7 @@ function auth(request: Request): { userId: string } | { res: Response } {
 function newSession(userId: string): Session {
   const token = `tok_${crypto.randomUUID()}`;
   const ttl = db().scenario === "session-expired" ? SHORT_TTL : SESSION_TTL;
-  const expiresAt = Date.now() + ttl;
+  const expiresAt = simNow() + ttl;
   db().sessions[token] = { userId, expiresAt };
   save();
   const u = db().users.find((x) => x.id === userId)!;
@@ -179,7 +197,7 @@ async function buildQuote(
     total,
     issues,
     network,
-    expiresAt: new Date(Date.now() + 10 * 60_000).toISOString(),
+    expiresAt: new Date(simNow() + 10 * 60_000).toISOString(),
   };
 }
 
@@ -193,7 +211,7 @@ type DbOrder = ReturnType<typeof db>["orders"][string];
 export function resolveOrder(id: string) {
   const s = db();
   const o = s.orders[id];
-  if (!o || o.status !== "pending" || o.resolveAt > Date.now()) return;
+  if (!o || o.status !== "pending" || o.resolveAt > simNow()) return;
   if (o.outcome === "confirmed") {
     // re-check availability at settlement
     const short = o.lines.find((l) => {
@@ -618,7 +636,7 @@ export const handlers = [
             );
           const existing = s.orders[prior.orderId];
           if (existing && existing.status === "pending") {
-            existing.resolveAt = Date.now() + 1500;
+            existing.resolveAt = simNow() + 1500;
             save();
             setTimeout(() => resolveOrder(existing.id), 1510);
           }
@@ -680,7 +698,7 @@ export const handlers = [
           wallet: { label: wallet!.label, address: wallet!.address, provider: wallet!.provider },
           collector: body.collector,
           userId: a.userId,
-          resolveAt: Date.now() + resolveDelay,
+          resolveAt: simNow() + resolveDelay,
           outcome: s.scenario === "payment-declined" ? "declined" : "confirmed",
         };
         s.orders[order.id] = order;
@@ -897,8 +915,27 @@ export const handlers = [
         const { scenario } = ((await request.json().catch(() => ({}))) ?? {}) as {
           scenario?: ScenarioId;
         };
+        resetSimTime();
         await resetDb(scenario ?? "default");
         return HttpResponse.json({ ok: true });
+      },
+      { dev: true },
+    ),
+  ),
+  http.post(
+    `${API}/__mock/time`,
+    withScenario(
+      async ({ request }) => {
+        const { advanceMs } = ((await request.json().catch(() => ({}))) ?? {}) as {
+          advanceMs?: number;
+        };
+        advanceSimTime(advanceMs ?? 0);
+        for (const order of Object.values(db().orders)) {
+          if (order.status === "pending" && order.resolveAt <= simNow()) {
+            resolveOrder(order.id);
+          }
+        }
+        return HttpResponse.json({ ok: true, now: simNow() });
       },
       { dev: true },
     ),

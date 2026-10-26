@@ -116,3 +116,27 @@ test("associa labels, aria-invalid e aria-describedby nos formulários e anuncia
     "Um NFT do seu carrinho teve preço ou disponibilidade alterados",
   );
 });
+
+test("navega por abas do catálogo e cards exclusivamente via teclado com foco visível", async ({
+  page,
+}) => {
+  await page.goto("/mercado?scenario=default");
+  await expect(page.getByText(/36 NFTs encontrados|40 NFTs encontrados/)).toBeVisible();
+
+  // Foca na aba "Novos lançamentos" e ativa com teclado
+  const newReleasesTab = page.getByRole("tab", { name: "Novos lançamentos" });
+  await newReleasesTab.focus();
+  await page.keyboard.press("Enter");
+  await expect(newReleasesTab).toHaveAttribute("aria-selected", "true");
+  await expect(page).toHaveURL(/tab=new/);
+
+  // Navega até o primeiro card do catálogo via teclado e acessa o detalhe com Enter
+  const firstCardLink = page.locator("#catalogo article a").first();
+  await firstCardLink.focus();
+  await expect(firstCardLink).toBeFocused();
+  await page.keyboard.press("Enter");
+
+  // Confirma transição para a página de detalhe do NFT
+  await expect(page).toHaveURL(/\/nft\//);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+});

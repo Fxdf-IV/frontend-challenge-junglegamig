@@ -75,6 +75,9 @@ test("ignora eventos nft.updated duplicados e antigos e aplica versão mais nova
   );
   expect(dupStatus).toBe(200);
   expect(staleStatus).toBe(200);
+
+  // Aguarda janela assíncrona para entrega e descarte dos eventos Socket.IO duplicados/antigos
+  await page.waitForTimeout(500);
   expect(cartReads).toBe(readsAfterV2);
 
   // Emite versão 3 com preço 1.12 ETH: apenas esta versão inédita deve disparar nova leitura.
@@ -156,6 +159,8 @@ test("retoma pedido pendente após queda do socket sem nova compra e preserva sn
     });
   });
 
+  // Aguarda janela assíncrona para entrega e descarte no cliente dos eventos de pedido e catálogo
+  await page.waitForTimeout(500);
   expect(cartReads).toBe(readsAfterConfirm);
   await expect(receiptDialog.getByText("0.9942 ETH").first()).toBeVisible();
   await expect(receiptDialog.getByText("1.35 ETH")).toHaveCount(0);
