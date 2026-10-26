@@ -131,6 +131,22 @@ O `RealtimeProvider` (`src/lib/realtime.tsx`) mantém uma conexão `socket.io-cl
 - **Normalização de path no MSW:** o interceptador WebSocket do MSW 3 remove o prefixo `/socket.io/` antes de comparar o padrão da URL; por isso `src/mocks/realtime.ts` vincula o link à origem `ws://`/`wss://` da aplicação.
 - **Escopo do mock no navegador:** como os handlers e o estado em memória residem no contexto da página/Service Worker local, os eventos simulados pelo painel de cenários (`+0,05 ETH`, `Esgotar`, `Reenviar duplicado`, `Enviar antigo`, `Derrubar conexão`) trafegam pelo pipeline real `MSW -> WebSocketProxy -> engine.io-client -> socket.io-client -> RealtimeProvider` dentro do navegador.
 
+### Simulação de rede, cadência de falhas e persistência determinística (MSW)
+
+Toda chamada HTTP passa pelo wrapper `withScenario` (`src/mocks/handlers.ts`), que intercepta o tráfego do Axios e aplica latência e falhas controladas conforme o cenário selecionado:
+
+1. **Cadência exata de falhas e códigos de erro:**
+   - **`default` (Padrão):** 0% de falhas induzidas. Opera com latência estável e pedidos confirmados em ~2,5 s via Socket.IO.
+   - **`flaky` (Falha transitória):** falha **exatamente 1 a cada 3 requisições (`n % 3 === 0`)**, retornando HTTP `503 UNAVAILABLE` (`"Serviço temporariamente indisponível"`). O TanStack Query executa até 2 retries automáticos com recuo exponencial antes de apresentar erro na UI.
+   - **`offline` (Queda de conexão):** 100% das requisições são abortadas imediatamente com `HttpResponse.error()`, convertidas pelo cliente Axios em `ApiError(0, "NETWORK", "Sem conexão com o servidor")`.
+   - **`slow` (Latência alta):** 100% das requisições sofrem delay artificial fixo de 1.800 ms (1,8 s) para inspeção dos skeletons `.shimmer`.
+   - **`jitter` (Latência variável e fora de ordem):** 100% das requisições recebem delay entre 100 ms e 1.500 ms calculado deterministicamente por `100 + ((n * 7919) % 1400)`, validando descarte de respostas obsoletas via `AbortSignal`.
+   - **`order-timeout` (Timeout de pedido):** a primeira chamada a `POST /api/orders` excede o timeout de 8.000 ms do Axios, validando reenvio com mesma `Idempotency-Key`.
+   - **`session-expired` (Sessão expirada):** a sessão ativa recebe TTL de 20 segundos, retornando `401 SESSION_EXPIRED` na requisição seguinte para acionar limpeza de cache privado e redirecionamento com preservação de rascunho.
+2. **Persistência de estado determinística em `localStorage`:**
+   - O banco de dados em memória do mock e o identificador do cenário ativo residem em `localStorage` sob a chave `kurio.mockdb.v1`.
+   - Caso o usuário selecione `flaky` ou `offline`, essa simulação **permanece gravada no navegador** entre recarregamentos de página (F5) e trocas de rota até que seja explicitamente restaurada para `default` (via `?scenario=default`, pelo botão "Restaurar dados iniciais" do painel flutuante ou por chamada a `POST /api/__mock/reset`).
+
 ---
 
 ## 7. Decisões de UX, acessibilidade e performance

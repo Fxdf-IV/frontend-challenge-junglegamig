@@ -14,6 +14,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (26/10/2026)
 
+- **Documentação explícita da cadência de falhas e persistência de simulação (`README.md`, `ARCHITECTURE.md`):**
+  - **Identificação da necessidade:** esclarecer de forma transparente e destacada para avaliadores e usuários a cadência de cada falha simulada pelo mock (em especial `flaky` com falha determinística a cada 3 requisições `n % 3 === 0`, `offline` com 100% de erro de rede e `session-expired` aos 20 s), bem como a persistência do estado no `localStorage` sob a chave `kurio.mockdb.v1`.
+  - **Atualização do README (`README.md`):** inserida caixa de destaque `[!IMPORTANT]` na seção 4 detalhando a cadência exata de cada cenário, explicando o motivo pelo qual falhas continuam ocorrendo se o usuário ativou `flaky` ou `offline` anteriormente, e fornecendo o passo a passo direto para retornar ao modo normal `default` (0% de falhas) pelo painel ou pela URL.
+  - **Atualização da Arquitetura (`ARCHITECTURE.md`):** adicionada a seção "Simulação de rede, cadência de falhas e persistência determinística (MSW)" detalhando a interceptação no wrapper `withScenario`, códigos de erro retornados (`503 UNAVAILABLE`, `NETWORK`, `401 SESSION_EXPIRED`) e política de retries do TanStack Query.
+
 - **Ativação dinâmica do painel visual de cenários via query param na Vercel (`src/routes/__root.tsx`, `README.md`):**
   - **Identificação da necessidade:** na versão publicada em produção (Vercel), o painel visual flutuante de cenários dependia exclusivamente da variável em tempo de build `VITE_SHOW_MOCK_PANEL=true`, dificultando o acesso interativo aos botões de simulação e tempo real por avaliadores que não configuraram a variável de ambiente.
   - **Suporte a query string e persistência (`src/routes/__root.tsx`):**
