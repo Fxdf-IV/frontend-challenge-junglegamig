@@ -2,6 +2,7 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { ScrollRevealSection } from "@/components/ui/ScrollRevealSection";
 import {
   Bell,
   Facebook,
@@ -69,7 +70,7 @@ export function Footer() {
   return (
     <footer className="container-page mt-20 pb-24 md:pb-10">
       {/* Bloco superior: 3 cards institucionais e formulário de newsletter */}
-      <div className="grid gap-8 rounded-t-lg bg-card p-6 md:grid-cols-4 md:p-8">
+      <ScrollRevealSection className="grid gap-8 rounded-t-lg bg-card p-6 md:grid-cols-4 md:p-8">
         {FEATURES.map((f) => {
           const Icon = f.icon;
           return (
@@ -114,7 +115,7 @@ export function Footer() {
             Receba lançamentos selecionados, histórias de criadores e novidades do mercado.
           </p>
         </form>
-      </div>
+      </ScrollRevealSection>
 
       {/* Faixa intermediária horizontal de identificação institucional */}
       <div className="grid gap-3 bg-band px-6 py-5 text-xs sm:grid-cols-4 sm:items-center md:px-8">

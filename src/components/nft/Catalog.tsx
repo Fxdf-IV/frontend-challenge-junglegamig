@@ -8,6 +8,7 @@ import type { NftListResponse, NftSort } from "@/api/types";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { ScrollRevealSection } from "@/components/ui/ScrollRevealSection";
 import { NftCard, NftCardSkeleton } from "./NftCard";
 import { SORTS, type CatalogSearch } from "@/lib/catalog-search";
 import { cn } from "@/lib/utils";
@@ -68,7 +69,8 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
   const filters = <Filters data={data} search={search} set={set} />;
 
   return (
-    <section
+    <ScrollRevealSection
+      as="section"
       id="catalogo"
       aria-labelledby="catalog-title"
       className="container-page scroll-mt-20 py-10"
@@ -255,7 +257,7 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
           </div>
         </div>
       </div>
-    </section>
+    </ScrollRevealSection>
   );
 }
 

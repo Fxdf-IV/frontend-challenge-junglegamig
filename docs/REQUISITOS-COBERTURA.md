@@ -169,7 +169,7 @@ ficaram em 100 em todos os perfis.
 | 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, desktop/mobile)                          |
 | 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 4/4, desktop/mobile)                             |
 | 12. Skeletons, falha e recuperação                                      | Verificado (`tests/e2e/loading-recovery.spec.ts`; 6/6, desktop/mobile)                          |
-| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Verificado (`playwright.config.ts`, `tests/e2e/visual.spec.ts`; 92 aprovados, sem skips)          |
+| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Verificado (`playwright.config.ts`, `tests/e2e/visual.spec.ts`; 92 aprovados, sem skips)        |
 
 ## 10. Performance e Lighthouse
 

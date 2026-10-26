@@ -17,7 +17,7 @@ export function NftCard({ nft, priority }: { nft: Nft; priority?: boolean }) {
   const isFav = favIds?.includes(nft.id) ?? false;
 
   return (
-    <article className="group relative transition-all duration-300 hover:-translate-y-1">
+    <article className="group relative transition-all duration-300 hover:-translate-y-1 active:scale-[0.98] ease-[cubic-bezier(0.16,1,0.3,1)]">
       <Link
         to="/nft/$id"
         params={{ id: nft.id }}

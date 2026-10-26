@@ -7,6 +7,8 @@ import { Catalog } from "@/components/nft/Catalog";
 import { HomeEditorialSections } from "@/components/home/HomeEditorialSections";
 import { catalogSearchSchema } from "@/lib/catalog-search";
 import { Button } from "@/components/ui/button";
+import { ScrollRevealSection } from "@/components/ui/ScrollRevealSection";
+import { cn } from "@/lib/utils";
 
 /** Rota inicial: apresenta o hero e o catálogo com busca preservada na URL. */
 export const Route = createFileRoute("/")({
@@ -33,6 +35,7 @@ function Home() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/" });
   const [query, setQuery] = useState(search.q ?? "");
+  const [activeHeroDot, setActiveHeroDot] = useState(0);
   useEffect(() => setQuery(search.q ?? ""), [search.q]);
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -66,19 +69,20 @@ function Home() {
             variant="brand"
             size="icon"
             aria-label="Ir para os filtros"
-            className="h-11 w-11 rounded-2xl shadow-sm"
+            className="h-11 w-11 rounded-2xl shadow-sm active:scale-95 transition-transform duration-200"
             onClick={() => window.dispatchEvent(new Event("kurio:open-catalog-filters"))}
           >
             <SlidersHorizontal className="h-5 w-5" />
           </Button>
         </form>
       </div>
-      <section className="container-page relative my-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4 max-md:rounded-3xl max-md:bg-hero-circles max-md:px-5 max-md:py-6 md:my-0 md:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] md:gap-8 md:py-12 md:bg-hero-glow lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]">
-        <div className="md:pl-8">
-          <p className="animate-fade-up text-[11px] text-foreground/80 md:text-sm">
-            Bem-vindo à Kurio
-          </p>
-          <h1 className="animate-fade-up anim-delay-100 mt-2 text-base font-extrabold uppercase leading-snug tracking-wide md:mt-4 md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.3]">
+      <ScrollRevealSection
+        as="section"
+        className="container-page relative my-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-4 max-md:rounded-3xl max-md:bg-hero-circles max-md:px-5 max-md:py-6 md:my-0 md:grid-cols-[minmax(0,1fr)_minmax(16rem,22rem)] md:gap-8 md:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,28rem)]"
+      >
+        <div className="md:pl-8 animate-hero-copy-reveal">
+          <p className="text-[11px] text-foreground/80 md:text-sm">Bem-vindo à Kurio</p>
+          <h1 className="mt-2 text-base font-extrabold uppercase leading-snug tracking-wide md:mt-4 md:text-3xl md:leading-tight lg:text-5xl lg:leading-[1.3]">
             <span className="md:hidden">
               Seja dono da
               <br />
@@ -86,7 +90,7 @@ function Home() {
             </span>
             <span className="hidden md:inline">Seja dono do futuro da arte digital</span>
           </h1>
-          <p className="animate-fade-up anim-delay-200 mt-2 line-clamp-3 text-[11px] leading-relaxed text-muted-foreground md:mt-4 md:max-w-xl md:text-sm">
+          <p className="mt-2 line-clamp-3 text-[11px] leading-relaxed text-muted-foreground md:mt-4 md:max-w-xl md:text-sm">
             <span className="md:hidden">
               Descubra NFTs selecionados de criadores do mundo todo.
             </span>
@@ -95,11 +99,11 @@ function Home() {
               digital rara, apoie artistas e tenha uma parte da cultura da internet.
             </span>
           </p>
-          <div className="animate-fade-up anim-delay-300 mt-4 md:mt-6">
+          <div className="mt-4 md:mt-6">
             <Button
               variant="explore"
               size="sm"
-              className="group md:h-10 md:px-5 md:text-sm"
+              className="group md:h-10 md:px-5 md:text-sm active:scale-[0.97] transition-transform duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]"
               asChild
             >
               <Link to="/" hash="catalogo">
@@ -112,27 +116,39 @@ function Home() {
             </Button>
           </div>
         </div>
-        <div className="relative self-center animate-fade-up anim-delay-150">
-          {/* Brilho ambiental sutil posicionado atrás da arte em telas desktop */}
-          <div
-            className="pointer-events-none absolute -inset-4 rounded-3xl bg-primary/15 blur-2xl animate-ambient max-md:hidden"
-            aria-hidden="true"
-          />
+        <div className="relative self-center animate-hero-stage-reveal">
           <img
             src="/nft/emerald.webp"
             alt="Emerald Ape #042, macaco ilustrado de óculos e jaqueta verde"
             width={480}
             height={480}
             fetchPriority="high"
-            className="relative aspect-square w-28 rounded-2xl object-cover shadow-md transition-transform duration-500 ease-out hover:scale-[1.02] md:w-full md:rounded-2xl"
+            className="aspect-square w-28 rounded-2xl object-cover shadow-md transition-transform duration-500 ease-out hover:scale-[1.03] md:w-full md:rounded-2xl"
           />
         </div>
-        <div className="col-span-2 mt-2 flex justify-center gap-2 md:hidden" aria-hidden="true">
-          <span className="h-2 w-2 rounded-full bg-primary" />
-          <span className="h-2 w-2 rounded-full bg-[#55321f]" />
-          <span className="h-2 w-2 rounded-full bg-[#55321f]" />
+        <div
+          className="col-span-2 mt-2 flex justify-center items-center gap-2 md:hidden"
+          role="tablist"
+          aria-label="Indicadores de destaque"
+        >
+          {[0, 1, 2].map((idx) => (
+            <button
+              key={idx}
+              type="button"
+              role="tab"
+              aria-selected={activeHeroDot === idx}
+              aria-label={`Destaque ${idx + 1}`}
+              onClick={() => setActiveHeroDot(idx)}
+              className={cn(
+                "h-2 rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer",
+                activeHeroDot === idx
+                  ? "w-5 bg-primary shadow-[0_0_8px_rgba(210,138,76,0.5)]"
+                  : "w-2 bg-[#55321f] hover:bg-[#77472c]",
+              )}
+            />
+          ))}
         </div>
-      </section>
+      </ScrollRevealSection>
       <Catalog search={search} from="/" />
       <HomeEditorialSections />
     </div>

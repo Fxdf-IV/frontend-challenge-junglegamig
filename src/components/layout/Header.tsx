@@ -137,7 +137,7 @@ export function Header() {
     <>
       <header
         className={cn(
-          "sticky top-0 z-40 border-b border-[#3d2c20]/60 bg-background/95 backdrop-blur-md",
+          "sticky top-0 z-40 border-b border-[#3d2c20]/60 bg-background/95 backdrop-blur-md max-md:animate-hero-header-drop",
           isStandaloneMobile && "max-md:hidden",
         )}
       >

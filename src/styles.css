@@ -186,7 +186,66 @@
   }
 }
 
-/* Animações e transições inspiradas na identidade visual da Jungle Gaming */
+/* Animações e transições inspiradas na identidade visual e física de movimento da Jungle Gaming */
+:root {
+  --ease-jungle: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes hero-header-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-copy-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-stage-reveal {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes section-fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-stagger-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -217,6 +276,26 @@
     opacity: 0.75;
     transform: scale(1.03);
   }
+}
+
+@utility animate-hero-header-drop {
+  animation: hero-header-drop 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-hero-copy-reveal {
+  animation: hero-copy-reveal 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-hero-stage-reveal {
+  animation: hero-stage-reveal 1.05s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+}
+
+@utility animate-section-fade-up {
+  animation: section-fade-up 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-card-stagger {
+  animation: card-stagger-in 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @utility animate-fade-up {

@@ -2,6 +2,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ScrollRevealSection } from "@/components/ui/ScrollRevealSection";
 
 const JOURNAL = [
   {
@@ -42,7 +43,11 @@ const JOURNAL = [
 export function HomeEditorialSections() {
   return (
     <div className="container-page space-y-14 pb-10 md:space-y-20">
-      <section aria-label="Explore lançamentos e artistas" className="grid gap-4 lg:grid-cols-2">
+      <ScrollRevealSection
+        as="section"
+        aria-label="Explore lançamentos e artistas"
+        className="grid gap-4 lg:grid-cols-2"
+      >
         <Campaign
           image="/nft/emerald.webp"
           alt="Emerald Ape usando óculos e jaqueta verde"
@@ -56,9 +61,9 @@ export function HomeEditorialSections() {
           title="Arte digital selecionada e muito mais"
           description="Explore novos artistas, coleções verificadas e obras digitais que definem a"
         />
-      </section>
+      </ScrollRevealSection>
 
-      <section aria-labelledby="journal-title">
+      <ScrollRevealSection as="section" aria-labelledby="journal-title" delay={80}>
         <header className="mb-5 text-center">
           <h2 id="journal-title" className="text-lg font-extrabold md:text-2xl">
             Diário da Cunhagem
@@ -71,7 +76,7 @@ export function HomeEditorialSections() {
           {JOURNAL.map((article) => (
             <article
               key={article.title}
-              className="group min-w-0 overflow-hidden rounded-lg border border-transparent bg-card transition-all duration-300 hover:-translate-y-1 hover:border-[#d28a4c]/30 hover:shadow-[0_8px_24px_rgba(210,138,76,0.12)]"
+              className="group min-w-0 overflow-hidden rounded-lg border border-transparent bg-card transition-all duration-300 hover:-translate-y-1 hover:border-[#d28a4c]/30 hover:shadow-[0_8px_24px_rgba(210,138,76,0.12)] active:scale-[0.98] ease-[cubic-bezier(0.16,1,0.3,1)]"
             >
               <div className="overflow-hidden">
                 <img
@@ -110,7 +115,7 @@ export function HomeEditorialSections() {
             </article>
           ))}
         </div>
-      </section>
+      </ScrollRevealSection>
     </div>
   );
 }
@@ -130,7 +135,7 @@ function Campaign({
   search?: { tab: "new" };
 }) {
   return (
-    <article className="group grid grid-cols-[5.5rem_1fr] items-center gap-3 rounded-lg border border-transparent bg-card p-3 transition-all duration-300 hover:border-[#d28a4c]/30 hover:shadow-[0_8px_24px_rgba(210,138,76,0.12)] sm:grid-cols-[8rem_1fr] sm:gap-5 sm:p-4 md:grid-cols-[minmax(8rem,0.9fr)_1.1fr]">
+    <article className="group grid grid-cols-[5.5rem_1fr] items-center gap-3 rounded-lg border border-transparent bg-card p-3 transition-all duration-300 hover:border-[#d28a4c]/30 hover:shadow-[0_8px_24px_rgba(210,138,76,0.12)] active:scale-[0.98] ease-[cubic-bezier(0.16,1,0.3,1)] sm:grid-cols-[8rem_1fr] sm:gap-5 sm:p-4 md:grid-cols-[minmax(8rem,0.9fr)_1.1fr]">
       <div className="overflow-hidden rounded-md">
         <img
           src={image}
