@@ -126,7 +126,7 @@ $env:VITE_SHOW_MOCK_PANEL="true"; bun run dev
 Os cenários de rede e de negócio podem ser selecionados de três formas:
 
 1. **Pela URL (`?scenario=<id>`):** adicione `?scenario=<id>` ao abrir qualquer rota (ex.: `/?scenario=slow`, `/?scenario=empty`, `/login?scenario=price-change`). O inicializador do MSW aplica o cenário e reseta os contadores antes de atender a primeira requisição da página.
-2. **Pelo painel de simulação (`Cenários`):** com `VITE_SHOW_MOCK_PANEL=true`, clique no botão **Cenários** para trocar o cenário ativo em tempo real, disparar eventos Socket.IO ou clicar em **Restaurar dados iniciais**.
+2. **Pelo painel de simulação (`Cenários`):** acesse qualquer rota com `?panel=true` ou `?cenarios=true` (ex.: `https://frontend-challenge-junglegamig.vercel.app/?panel=true`) ou inicie localmente com `VITE_SHOW_MOCK_PANEL=true`. Um botão flutuante **Cenários** surgirá no canto inferior esquerdo para alternar cenários em tempo real, disparar eventos Socket.IO ou clicar em **Restaurar dados iniciais**. A preferência fica gravada no navegador (`?panel=false` para ocultar).
 3. **Por endpoint de controle (testes):** `POST /api/__mock/reset` (opcionalmente com `{ "scenario": "<id>" }`) restaura o banco determinístico no `localStorage`, e `POST /api/__mock/scenario` altera apenas o cenário ativo sem apagar sessão ou carrinho.
 
 ### Como reproduzir cada cenário e falha

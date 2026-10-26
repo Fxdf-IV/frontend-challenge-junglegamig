@@ -10,7 +10,7 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { Suspense, lazy, useEffect, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { ensureMocksReady } from "@/api/client";
@@ -115,8 +115,44 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 const MOCKS = import.meta.env.VITE_ENABLE_MOCKS !== "false";
-// O painel de cenários só aparece quando solicitado para não cobrir o design.
-const SHOW_MOCK_PANEL = import.meta.env.VITE_SHOW_MOCK_PANEL === "true";
+
+/** Detecta se o painel de cenários deve ser exibido via env, query params (?panel=true/?cenarios=true) ou storage local. */
+function useShowMockPanel(): boolean {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    if (import.meta.env.VITE_SHOW_MOCK_PANEL === "true") {
+      setShow(true);
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("panel") === "true" || params.get("cenarios") === "true" || params.has("mock")) {
+      try {
+        window.localStorage.setItem("kurio_show_mock_panel", "true");
+      } catch {
+        // Storage bloqueado em modo privado.
+      }
+      setShow(true);
+      return;
+    }
+    if (params.get("panel") === "false" || params.get("cenarios") === "false") {
+      try {
+        window.localStorage.removeItem("kurio_show_mock_panel");
+      } catch {
+        // Storage bloqueado em modo privado.
+      }
+      setShow(false);
+      return;
+    }
+    try {
+      if (window.localStorage.getItem("kurio_show_mock_panel") === "true") {
+        setShow(true);
+      }
+    } catch {
+      // Storage indisponível.
+    }
+  }, []);
+  return show;
+}
 
 /** Dispara a inicialização do worker de mocks sem bloquear o SSR da casca e do hero. */
 function MocksGate({ children }: { children: ReactNode }) {
@@ -129,6 +165,7 @@ function MocksGate({ children }: { children: ReactNode }) {
 /** Fornece cache, sessão, tempo real e layout global às rotas. */
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const showMockPanel = useShowMockPanel();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const hideFooterOnMobile =
     pathname === "/login" ||
@@ -151,7 +188,7 @@ function RootComponent() {
             <div className={cn(hideFooterOnMobile && "max-md:hidden")}>
               <Footer />
             </div>
-            {MOCKS && SHOW_MOCK_PANEL && (
+            {MOCKS && showMockPanel && (
               <Suspense fallback={null}>
                 <LazyMockPanel />
               </Suspense>

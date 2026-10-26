@@ -14,6 +14,14 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (26/10/2026)
 
+- **Ativação dinâmica do painel visual de cenários via query param na Vercel (`src/routes/__root.tsx`, `README.md`):**
+  - **Identificação da necessidade:** na versão publicada em produção (Vercel), o painel visual flutuante de cenários dependia exclusivamente da variável em tempo de build `VITE_SHOW_MOCK_PANEL=true`, dificultando o acesso interativo aos botões de simulação e tempo real por avaliadores que não configuraram a variável de ambiente.
+  - **Suporte a query string e persistência (`src/routes/__root.tsx`):**
+    - Implementado hook `useShowMockPanel()` na casca global que detecta parâmetros na URL: `?panel=true`, `?cenarios=true` ou `?mock=true`.
+    - Ao acessar com um desses parâmetros, o estado é gravado no `localStorage` do navegador para manter o botão **Cenários** visível durante a navegação entre rotas (`?panel=false` ou `?cenarios=false` desativa e limpa a persistência).
+    - Preservada a compatibilidade com a variável de ambiente `VITE_SHOW_MOCK_PANEL` e segurança SSR sem acesso prematuro a `window`.
+  - **Documentação:** atualizado `README.md` orientando o acesso direto via URL na Vercel (`https://frontend-challenge-junglegamig.vercel.app/?panel=true`).
+
 - **Integração do menu "Meu perfil" (AccountNav) na tela de Favoritos (`src/routes/favoritos.tsx`, `src/components/layout/Header.tsx`, FD-44):**
   - **Identificação da necessidade:** ao acessar a rota de favoritos (`/favoritos`), a página era renderizada em largura total sem a barra lateral de navegação da conta (`AccountNav` / "Meu perfil"), impossibilitando a alternância direta entre "Dados do perfil", "Carteiras" e "Lista de interesse" no desktop e mobile, quebrando a consistência com as demais páginas da conta.
   - **Layout integrado da conta:**
