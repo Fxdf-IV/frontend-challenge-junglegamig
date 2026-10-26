@@ -123,10 +123,16 @@ $env:VITE_SHOW_MOCK_PANEL="true"; bun run dev
 
 ## 4. Seleção e reset de cenários determinísticos
 
+> [!TIP]
+> **Acesso interativo na demonstração (Vercel):**
+> Para abrir o painel visual flutuante no site publicado sem precisar configurar nada localmente, acesse:
+> 👉 **[https://frontend-challenge-junglegamig.vercel.app/?panel=true](https://frontend-challenge-junglegamig.vercel.app/?panel=true)**
+> Um botão flutuante **Cenários** (com ícone de laboratório) surgirá no canto inferior esquerdo da tela permitindo alternar cenários em 1 clique e disparar eventos de tempo real.
+
 Os cenários de rede e de negócio podem ser selecionados de três formas:
 
-1. **Pela URL (`?scenario=<id>`):** adicione `?scenario=<id>` ao abrir qualquer rota (ex.: `/?scenario=slow`, `/?scenario=empty`, `/login?scenario=price-change`). O inicializador do MSW aplica o cenário e reseta os contadores antes de atender a primeira requisição da página.
-2. **Pelo painel de simulação (`Cenários`):** acesse qualquer rota com `?panel=true` ou `?cenarios=true` (ex.: `https://frontend-challenge-junglegamig.vercel.app/?panel=true`) ou inicie localmente com `VITE_SHOW_MOCK_PANEL=true`. Um botão flutuante **Cenários** surgirá no canto inferior esquerdo para alternar cenários em tempo real, disparar eventos Socket.IO ou clicar em **Restaurar dados iniciais**. A preferência fica gravada no navegador (`?panel=false` para ocultar).
+1. **Pelo painel de simulação (`Cenários` — Recomendado):** acesse qualquer rota com `?panel=true` ou `?cenarios=true` (ex.: `https://frontend-challenge-junglegamig.vercel.app/?panel=true`) ou inicie localmente com `VITE_SHOW_MOCK_PANEL=true`. Um botão flutuante **Cenários** surgirá no canto inferior esquerdo para alternar cenários em tempo real, disparar eventos Socket.IO ou clicar em **Restaurar dados iniciais**. A preferência fica gravada no navegador (`?panel=false` para ocultar).
+2. **Pela URL direta (`?scenario=<id>`):** adicione `?scenario=<id>` ao abrir qualquer rota (ex.: `/?scenario=slow`, `/?scenario=empty`, `/login?scenario=price-change`). O inicializador do MSW aplica o cenário e reseta os contadores antes de atender a primeira requisição da página.
 3. **Por endpoint de controle (testes):** `POST /api/__mock/reset` (opcionalmente com `{ "scenario": "<id>" }`) restaura o banco determinístico no `localStorage`, e `POST /api/__mock/scenario` altera apenas o cenário ativo sem apagar sessão ou carrinho.
 
 ### Como reproduzir cada cenário e falha
@@ -195,6 +201,8 @@ estático nem reescreva todas as rotas para `/`: isso remove o servidor SSR do d
 acesso direto a páginas como `/nft/emerald-ape-042`.
 
 Produção: [https://frontend-challenge-junglegamig.vercel.app/](https://frontend-challenge-junglegamig.vercel.app/).
+
+Demonstração com painel de cenários ativo: [https://frontend-challenge-junglegamig.vercel.app/?panel=true](https://frontend-challenge-junglegamig.vercel.app/?panel=true).
 
 Os mocks MSW e o transporte de tempo real operam no cliente também na versão publicada. Em hosts
 estáticos, `public/_redirects` contém uma regra SPA, mas o build padrão deste projeto é SSR; use
