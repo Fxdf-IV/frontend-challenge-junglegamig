@@ -161,7 +161,7 @@ function CartPage() {
 
   const q = quote.data;
   return (
-    <div className={cn("container-page pt-4 md:py-8", items.length > 0 && "pb-[26rem] md:pb-0")}>
+    <div className="container-page pt-4 pb-32 md:py-8">
       {/* Cabeçalho mobile com botão de retorno */}
       <div className="mb-5 flex items-center gap-3 md:hidden">
         <Button variant="ghost" size="icon" aria-label="Voltar ao mercado" asChild>
@@ -321,17 +321,10 @@ function CartPage() {
           )}
         </section>
 
-        {/* Resumo da carteira: fluido no desktop e fixo no mobile */}
+        {/* Resumo da carteira: integrado no fluxo em mobile e adaptado ao grid no desktop */}
         <aside
           aria-labelledby="summary-title"
-          className={cn(
-            "h-fit",
-            // Mobile: folha fixa no rodapé
-            items.length > 0 &&
-              "max-md:fixed max-md:inset-x-0 max-md:bottom-0 max-md:z-30 max-md:max-h-[60vh] max-md:overflow-y-auto max-md:rounded-t-3xl max-md:border-t max-md:border-border max-md:pb-[max(1.5rem,env(safe-area-inset-bottom))] max-md:shadow-[0_-8px_30px_rgba(0,0,0,0.6)] max-md:bg-card max-md:p-5",
-            // Desktop: integrado ao canvas sem caixa de cartão
-            "md:static md:bg-transparent md:border-0 md:p-0 md:rounded-none md:shadow-none",
-          )}
+          className="h-fit rounded-2xl bg-card border border-border/40 p-5 shadow-lg md:static md:bg-transparent md:border-0 md:p-0 md:rounded-none md:shadow-none"
         >
           {/* Cabeçalho do resumo alinhado na mesma altura do cabeçalho da tabela */}
           <div className="pb-2 border-b border-[#3d2c20]">
