@@ -155,29 +155,29 @@ ficaram em 100 em todos os perfis.
 
 ## 9. Testes com Playwright (12 grupos)
 
-| Grupo                                                                   | Status                                                                                          |
-| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| 1. Busca, filtros, ordenação, paginação, histórico                      | Verificado (`tests/e2e/catalog.spec.ts`; desktop/mobile, sort desktop)                          |
-| 2. Detalhe direto e recurso inexistente                                 | Verificado (`tests/e2e/nft-detail.spec.ts`; ambos viewports)                                    |
-| 3. Cadastro, login, expiração, logout, troca de usuário                 | Verificado (`tests/e2e/account.spec.ts` e `tests/e2e/loading-recovery.spec.ts`; desktop/mobile) |
-| 4. Favoritos com falha e recuperação                                    | Verificado (`tests/e2e/favorites.spec.ts`; 8/8, desktop/mobile)                                 |
-| 5. Carrinho, quantidades, remoção, cupom, persistência                  | Verificado (`tests/e2e/cart.spec.ts`; 8/8, persistência após refresh, desktop/mobile)           |
-| 6. Compra completa até o recibo                                         | Verificado (`tests/e2e/checkout-success.spec.ts`; 2/2, desktop/mobile)                          |
-| 7. Falha de pagamento, clique repetido, timeout e idempotência          | Verificado (`tests/e2e/checkout-failures.spec.ts`; 10/10, desktop/mobile)                       |
-| 8. Perfil, avatar, senha e carteiras com erros                          | Verificado (`tests/e2e/profile-wallets.spec.ts`; 8/8, desktop/mobile)                           |
-| 9. Preço/disponibilidade via Socket.IO no checkout                      | Verificado (`tests/e2e/checkout-realtime.spec.ts`; 6/6, desktop/mobile)                         |
-| 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, entrega assíncrona, desktop/mobile)      |
-| 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 6/6, abas/cards e dialogs, desktop/mobile)       |
-| 12. Skeletons, falha e recuperação                                      | Verificado (`tests/e2e/loading-recovery.spec.ts`; 6/6, catálogo/detalhe/carrinho e relógio)     |
-| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Verificado (`playwright.config.ts`, `tests/e2e/visual.spec.ts`; 96 aprovados, sem skips)        |
+| Grupo                                                                   | Status                                                                                                            |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1. Busca, filtros, ordenação, paginação, histórico                      | Verificado (`tests/e2e/catalog.spec.ts`; desktop/mobile, sort desktop)                                            |
+| 2. Detalhe direto e recurso inexistente                                 | Verificado (`tests/e2e/nft-detail.spec.ts`; ambos viewports)                                                      |
+| 3. Cadastro, login, expiração, logout, troca de usuário                 | Verificado (`tests/e2e/account.spec.ts` e `tests/e2e/loading-recovery.spec.ts`; desktop/mobile)                   |
+| 4. Favoritos com falha e recuperação                                    | Verificado (`tests/e2e/favorites.spec.ts`; 8/8, desktop/mobile)                                                   |
+| 5. Carrinho, quantidades, remoção, cupom, persistência                  | Verificado (`tests/e2e/cart.spec.ts`; 8/8, persistência após refresh, desktop/mobile)                             |
+| 6. Compra completa até o recibo                                         | Verificado (`tests/e2e/checkout-success.spec.ts`; 2/2, desktop/mobile)                                            |
+| 7. Falha de pagamento, clique repetido, timeout e idempotência          | Verificado (`tests/e2e/checkout-failures.spec.ts`; 10/10, desktop/mobile)                                         |
+| 8. Perfil, avatar, senha e carteiras com erros                          | Verificado (`tests/e2e/profile-wallets.spec.ts`; 8/8, desktop/mobile)                                             |
+| 9. Preço/disponibilidade via Socket.IO no checkout                      | Verificado (`tests/e2e/checkout-realtime.spec.ts`; 6/6, desktop/mobile)                                           |
+| 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, entrega assíncrona, desktop/mobile)                        |
+| 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 6/6, abas/cards e dialogs, desktop/mobile)                         |
+| 12. Skeletons, falha e recuperação                                      | Verificado (`tests/e2e/loading-recovery.spec.ts`; 6/6, catálogo/detalhe/carrinho e relógio)                       |
+| Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Verificado (`playwright.config.ts`, `tests/e2e/visual.spec.ts`, baselines win32 e linux; 96 aprovados, sem skips) |
 
 ## 10. Performance e Lighthouse
 
-| Item                                                                       | Status     | Onde / prova                                                                                                                                                 |
-| -------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Auditoria de início e detalhe, mobile e desktop, 3 medições, mediana       | Verificado | `scripts/lighthouse.mjs`, `lighthouserc.json`, `reports/lighthouse/summary.json` (12 medições executadas)                                                    |
+| Item                                                                       | Status     | Onde / prova                                                                                                                                                                                              |
+| -------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Auditoria de início e detalhe, mobile e desktop, 3 medições, mediana       | Verificado | `scripts/lighthouse.mjs`, `lighthouserc.json`, `reports/lighthouse/summary.json` (12 medições executadas)                                                                                                 |
 | Metas: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90 | Verificado | Desktop: Perf 100/99, A11y 100, BP 100, SEO 100; Mobile: A11y 100, BP 100, SEO 100, Perf 84/85 com justificativa e comprovação empírica do Lantern (LCP real 156–209 ms) documentada em `ARCHITECTURE.md` |
-| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `lighthouse/RESULTS.md`, `reports/lighthouse/*.report.*`, `reports/lighthouse/summary.json`                                                                  |
+| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `lighthouse/RESULTS.md`, `reports/lighthouse/*.report.*`, `reports/lighthouse/summary.json`                                                                                                               |
 
 ## 12. Entrega
 

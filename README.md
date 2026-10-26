@@ -123,6 +123,9 @@ bun run preview
 bun run test:e2e
 bun run test:e2e:ui
 
+# Executar testes E2E sobre o build compilado de produção (preview)
+PLAYWRIGHT_PREVIEW=1 bun run test:e2e
+
 # Auditoria de performance, acessibilidade, boas práticas e SEO (Lighthouse)
 bun run lighthouse
 ```

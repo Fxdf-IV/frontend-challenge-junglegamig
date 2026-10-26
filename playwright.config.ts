@@ -12,9 +12,7 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:4174",
     browserName: "chromium",
-    channel: process.env.CI
-      ? ((process.env.PLAYWRIGHT_CHANNEL as "chrome" | undefined) ?? undefined)
-      : "chrome",
+    channel: (process.env.PLAYWRIGHT_CHANNEL as "chrome" | undefined) ?? undefined,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
@@ -29,7 +27,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "bun run dev -- --host 127.0.0.1 --port 4174",
+    command: process.env.PLAYWRIGHT_PREVIEW
+      ? "bun run preview -- --host 127.0.0.1 --port 4174"
+      : "bun run dev -- --host 127.0.0.1 --port 4174",
     url: "http://127.0.0.1:4174",
     reuseExistingServer: !process.env.CI,
     env: { VITE_ENABLE_MOCKS: "true", VITE_SHOW_MOCK_PANEL: "true" },

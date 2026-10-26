@@ -14,6 +14,10 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (26/10/2026)
 
+- **Portabilidade total do Playwright com Chromium nativo, suporte a preview e baselines Linux:**
+  - **Canal desacoplado e suporte a preview (`playwright.config.ts`):** removida a obrigatoriedade do canal proprietário `"chrome"`, permitindo que o Playwright utilize o Chromium padrão headless empacotado pelo próprio runner. Adicionado suporte opcional à variável `PLAYWRIGHT_PREVIEW=1` para executar a suíte E2E sobre o servidor de preview do build de produção.
+  - **Baselines visuais cross-platform (`tests/e2e/visual.spec.ts-snapshots/`):** incluídas as baselines `-linux.png` para todos os 8 snapshots de regressão visual (desktop e mobile para Início, Detalhe, Carrinho e Pagamento), assegurando aprovação imediata em ambientes Linux, Docker e pipelines de CI sem erro de snapshot ausente.
+
 - **Otimizações de performance mobile no Lighthouse, acessibilidade 100 e comprovação empírica do Lantern:**
   - **Pré-carregamento imediato no `<head>` (`src/routes/index.tsx`, `src/routes/nft.$id.tsx`):** adicionada tag `<link rel="preload" as="image" href="/nft/emerald.webp" fetchPriority="high">` no SSR da rota inicial, permitindo download concorrente da arte principal junto ao HTML e CSS.
   - **Prioridade e carregamento ávido no catálogo (`src/components/nft/Catalog.tsx`):** configurado `priority={i === 0}` para que o primeiro card acima da dobra seja carregado com `loading="eager"` e `fetchPriority="high"`, eliminando o atraso de `loading="lazy"`.
