@@ -29,30 +29,36 @@ Relatório oficial consolidado de auditoria de performance, acessibilidade, melh
 
 | Alvo                                     | Form Factor | Performance | Acessibilidade | Melhores Práticas |   SEO   |   LCP    |  CLS   | TBT  |
 | :--------------------------------------- | :---------- | :---------: | :------------: | :---------------: | :-----: | :------: | :----: | :--: |
-| **Início (`/`)**                         | Desktop     |   **100**   |    **100**     |      **100**      | **100** |  615 ms  | 0.0019 | 0 ms |
-| **Detalhe NFT (`/nft/emerald-ape-042`)** | Desktop     |   **99**    |    **100**     |      **100**      | **100** |  876 ms  | 0.0002 | 0 ms |
-| **Início (`/`)**                         | Mobile      |   **87**    |    **100**     |      **100**      | **100** | 3.961 ms | 0.0005 | 0 ms |
-| **Detalhe NFT (`/nft/emerald-ape-042`)** | Mobile      |   **86**    |    **100**     |      **100**      | **100** | 4.048 ms | 0.0001 | 0 ms |
+| **Início (`/`)**                         | Desktop     |   **100**   |    **100**     |      **100**      | **100** |  625 ms  | 0.0017 | 0 ms |
+| **Detalhe NFT (`/nft/emerald-ape-042`)** | Desktop     |   **99**    |    **100**     |      **100**      | **100** |  914 ms  | 0.0002 | 0 ms |
+| **Início (`/`)**                         | Mobile      |   **84**    |    **100**     |      **100**      | **100** | 4.339 ms | 0.0004 | 3 ms |
+| **Detalhe NFT (`/nft/emerald-ape-042`)** | Mobile      |   **85**    |    **100**     |      **100**      | **100** | 4.304 ms | 0.0001 | 0 ms |
 
 ---
 
-## 4. Análise Técnica e Justificativa (Mobile Performance)
+## 4. Análise Técnica e Comprovação Empírica (Mobile Performance)
 
 Conforme estipulado na **Seção 10 de `REQUISITOS.md`** ("justificar o que ficar abaixo da meta sem simplificar a página só para pontuar"):
 
-1. **Performance Real vs. Simulação Lantern:**
-   - **Medição Real no Dispositivo**: O Largest Contentful Paint (LCP) real observado durante a renderização no navegador ocorre em **249 ms** na Home e em **196 ms** no Detalhe do NFT. O Total Blocking Time (TBT) é nulo (**0 ms**), demonstrando ausência de tarefas longas de JavaScript travando a thread principal. O Cumulative Layout Shift (CLS) é de apenas **0.0001 a 0.0005**, bem abaixo do teto de 0.1 da Google.
-   - **Simulação Matemática Lantern (Mobile Slow 4G + CPU 4× Throttling)**: O Lighthouse aplica matematicamente uma emulação severa de dispositivo móvel de entrada (CPU limitada a 4× de desaceleração e rede com 1.6 Mbps de banda e 150 ms de RTT).
+1. **Comprovação Empírica nos Relatórios: Execução Real (Trace) vs. Modelo Lantern:**
+   - Nos relatórios oficiais (`reports/lighthouse/*.report.json`, chave `audits.metrics.details.items[0]`), o navegador registra as métricas reais observadas durante a renderização (sem desaceleração artificial):
+     - **Início (Mobile) Real**: `observedFirstContentfulPaint` = **72 ms**, `observedLargestContentfulPaint` = **209 ms**, `observedSpeedIndex` = **116 ms**, `observedLoad` = **119 ms**.
+     - **Detalhe NFT (Mobile) Real**: `observedFirstContentfulPaint` = **31 ms**, `observedLargestContentfulPaint` = **156 ms**, `observedSpeedIndex` = **132 ms**, `observedLoad` = **77 ms**.
+     - Em ambos os casos, o LCP real ocorre em **menos de 210 ms** e o TBT é praticamente nulo (**0 a 3 ms**), com CLS excelente (**0.0001 a 0.0004**), mantendo 100/100 em Acessibilidade, Melhores Práticas e SEO.
+   - **Simulação Matemática Lantern (Mobile Slow 4G + CPU 4× Throttling)**: O simulador Lantern extrapola o gráfico de dependências projetando latência de 150 ms e banda de 1.6 Mbps para cada script baixado sequencialmente antes da hidratação do cliente, o que projeta matematicamente o LCP para a faixa de ~4.3s.
 
 2. **Impacto da Arquitetura Obrigatória de Mocks no Cliente:**
    - Em conformidade estrita com os critérios eliminatórios do desafio (**mocking 100% no cliente via Service Worker MSW e `@mswjs/socket.io-binding`, sem respostas fictícias em JSX ou SSR**), todas as consultas de catálogo e detalhe precisam ser capturadas e respondidas dinamicamente pelo Service Worker.
-   - No modelo Lantern, o tempo de inicialização e ativação do Service Worker sob emulação de CPU 4× e latência de 150 ms é extrapolado sequencialmente, projetando o LCP estimado em ~3.9s–4.0s (gerando pontuações entre 86 e 87).
+   - O simulador Lantern calcula sequencialmente o download de todos os pacotes de runtime (`@tanstack/react-router`, `@tanstack/react-query`, `axios`, `msw`) sob Slow 4G antes do disparo da requisição do cliente que renderiza o card/detalhe do NFT.
 
-3. **Decisão de Arquitetura**:
+3. **Otimizações Implementadas no Build e Runtime:**
    - A página **não foi simplificada** artificialmente para burlar o simulador (não foram retirados nós do DOM, não foram usadas respostas embutidas nem removidos os componentes visuais ricos do Figma).
    - O projeto implementou otimizações legítimas de infraestrutura:
+     - Pré-carregamento imediato no `<head>` (`<link rel="preload" as="image" href="/nft/emerald.webp" fetchPriority="high">`) tanto na Home quanto no Detalhe.
+     - Imagens de catálogo visíveis acima da dobra marcadas com `priority={i === 0}` (`loading="eager"` e `fetchPriority="high"`).
+     - Alinhamento de animações do Hero (`hero-copy-reveal` e `hero-stage-reveal`) mantendo opacidade inicial visível e animando translações, eliminando atrasos no LCP.
+     - Indicadores de destaque do Hero mobile implementados como elementos visuais acessíveis (`aria-hidden="true"`), atingindo 100/100 cravado em Acessibilidade em todas as medições mobile e desktop.
      - Compressão Brotli e Gzip em todos os assets públicos e nas respostas HTML do SSR.
-     - Pré-carregamento imediato (`fetchpriority="high"`, `<link rel="preload">`) das imagens LCP locais no `<head>`.
      - Code-splitting rigoroso por rota via `@tanstack/react-router`.
      - Tipografia 100% servida localmente (`@fontsource/roboto-mono`), sem requisições externas a CDN.
 

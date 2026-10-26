@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T16:42:45.201Z",
+  "generatedAt": "2026-10-26T12:25:00.008Z",
   "environment": {
     "node": "v24.16.0",
     "lighthouse": "13.5.0",
@@ -20,67 +20,67 @@
       "path": "/",
       "formFactor": "mobile",
       "medianScores": {
-        "performance": 87,
+        "performance": 84,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
       "medianMetrics": {
-        "lcpMs": 3961,
-        "cls": 0.0005,
-        "tbtMs": 0
+        "lcpMs": 4339,
+        "cls": 0.0004,
+        "tbtMs": 3
       },
       "representativeRun": 3,
       "runs": [
         {
           "run": 1,
           "scores": {
-            "performance": 87,
+            "performance": 83,
             "accessibility": 100,
             "bestPractices": 100,
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 3960,
-            "lcpDisplay": "4.0 s",
-            "cls": 0.0005,
+            "lcpMs": 4347,
+            "lcpDisplay": "4.3 s",
+            "cls": 0.0004,
             "clsDisplay": "0",
-            "tbtMs": 0,
+            "tbtMs": 2,
             "tbtDisplay": "0 ms"
           }
         },
         {
           "run": 2,
           "scores": {
-            "performance": 86,
+            "performance": 84,
             "accessibility": 100,
             "bestPractices": 100,
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 4036,
-            "lcpDisplay": "4.0 s",
-            "cls": 0.0005,
+            "lcpMs": 4334,
+            "lcpDisplay": "4.3 s",
+            "cls": 0.0004,
             "clsDisplay": "0",
-            "tbtMs": 0,
+            "tbtMs": 3,
             "tbtDisplay": "0 ms"
           }
         },
         {
           "run": 3,
           "scores": {
-            "performance": 87,
+            "performance": 84,
             "accessibility": 100,
             "bestPractices": 100,
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 3961,
-            "lcpDisplay": "4.0 s",
-            "cls": 0.0005,
+            "lcpMs": 4339,
+            "lcpDisplay": "4.3 s",
+            "cls": 0.0004,
             "clsDisplay": "0",
-            "tbtMs": 0,
-            "tbtDisplay": "0 ms"
+            "tbtMs": 5,
+            "tbtDisplay": "10 ms"
           }
         }
       ]
@@ -97,8 +97,8 @@
         "seo": 100
       },
       "medianMetrics": {
-        "lcpMs": 615,
-        "cls": 0.0019,
+        "lcpMs": 625,
+        "cls": 0.0017,
         "tbtMs": 0
       },
       "representativeRun": 2,
@@ -112,9 +112,9 @@
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 611,
-            "lcpDisplay": "0.6 s",
-            "cls": 0.0019,
+            "lcpMs": 503,
+            "lcpDisplay": "0.5 s",
+            "cls": 0.0017,
             "clsDisplay": "0.002",
             "tbtMs": 0,
             "tbtDisplay": "0 ms"
@@ -129,9 +129,9 @@
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 615,
+            "lcpMs": 625,
             "lcpDisplay": "0.6 s",
-            "cls": 0.0019,
+            "cls": 0.0017,
             "clsDisplay": "0.002",
             "tbtMs": 0,
             "tbtDisplay": "0 ms"
@@ -146,9 +146,9 @@
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 653,
+            "lcpMs": 670,
             "lcpDisplay": "0.7 s",
-            "cls": 0.0019,
+            "cls": 0.0017,
             "clsDisplay": "0.002",
             "tbtMs": 0,
             "tbtDisplay": "0 ms"
@@ -162,17 +162,17 @@
       "path": "/nft/emerald-ape-042",
       "formFactor": "mobile",
       "medianScores": {
-        "performance": 86,
+        "performance": 85,
         "accessibility": 100,
         "bestPractices": 100,
         "seo": 100
       },
       "medianMetrics": {
-        "lcpMs": 4048,
+        "lcpMs": 4304,
         "cls": 0.0001,
         "tbtMs": 0
       },
-      "representativeRun": 3,
+      "representativeRun": 1,
       "runs": [
         {
           "run": 1,
@@ -183,8 +183,8 @@
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 4048,
-            "lcpDisplay": "4.0 s",
+            "lcpMs": 4304,
+            "lcpDisplay": "4.3 s",
             "cls": 0.0001,
             "clsDisplay": "0",
             "tbtMs": 0,
@@ -194,14 +194,14 @@
         {
           "run": 2,
           "scores": {
-            "performance": 86,
+            "performance": 85,
             "accessibility": 100,
             "bestPractices": 100,
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 4117,
-            "lcpDisplay": "4.1 s",
+            "lcpMs": 4301,
+            "lcpDisplay": "4.3 s",
             "cls": 0.0001,
             "clsDisplay": "0",
             "tbtMs": 0,
@@ -211,14 +211,14 @@
         {
           "run": 3,
           "scores": {
-            "performance": 86,
+            "performance": 85,
             "accessibility": 100,
             "bestPractices": 100,
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 4039,
-            "lcpDisplay": "4.0 s",
+            "lcpMs": 4316,
+            "lcpDisplay": "4.3 s",
             "cls": 0.0001,
             "clsDisplay": "0",
             "tbtMs": 0,
@@ -239,11 +239,11 @@
         "seo": 100
       },
       "medianMetrics": {
-        "lcpMs": 876,
+        "lcpMs": 914,
         "cls": 0.0002,
         "tbtMs": 0
       },
-      "representativeRun": 3,
+      "representativeRun": 1,
       "runs": [
         {
           "run": 1,
@@ -254,7 +254,7 @@
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 886,
+            "lcpMs": 914,
             "lcpDisplay": "0.9 s",
             "cls": 0.0002,
             "clsDisplay": "0",
@@ -271,7 +271,7 @@
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 864,
+            "lcpMs": 911,
             "lcpDisplay": "0.9 s",
             "cls": 0.0002,
             "clsDisplay": "0",
@@ -288,7 +288,7 @@
             "seo": 100
           },
           "metrics": {
-            "lcpMs": 876,
+            "lcpMs": 914,
             "lcpDisplay": "0.9 s",
             "cls": 0.0002,
             "clsDisplay": "0",
