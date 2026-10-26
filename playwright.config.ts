@@ -12,7 +12,9 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:4174",
     browserName: "chromium",
-    channel: "chrome",
+    channel: process.env.CI
+      ? ((process.env.PLAYWRIGHT_CHANNEL as "chrome" | undefined) ?? undefined)
+      : "chrome",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },

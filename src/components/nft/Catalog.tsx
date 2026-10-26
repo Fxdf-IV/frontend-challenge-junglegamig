@@ -11,6 +11,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { ScrollRevealSection } from "@/components/ui/ScrollRevealSection";
 import { NftCard, NftCardSkeleton } from "./NftCard";
 import { SORTS, type CatalogSearch } from "@/lib/catalog-search";
+import { ethCmp } from "@/lib/eth";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -362,26 +363,30 @@ function Filters({
     }
   };
 
-  /** Aplica o filtro de faixa de preço convertendo os inputs para números decimais. */
+  /** Aplica o filtro de faixa de preço validando e comparando via helpers exatos de ETH. */
   const handleApply = () => {
-    const parsedMin = parseFloat(minInput.replace(",", "."));
-    const parsedMax = parseFloat(maxInput.replace(",", "."));
-    let finalLo = !isNaN(parsedMin) && parsedMin >= 0 ? parsedMin : range[0];
-    let finalHi = !isNaN(parsedMax) && parsedMax >= 0 ? parsedMax : range[1];
+    const cleanMin = minInput.trim().replace(",", ".");
+    const cleanMax = maxInput.trim().replace(",", ".");
+    const validMin = /^\d+(\.\d{1,4})?$/.test(cleanMin) ? cleanMin : range[0].toFixed(2);
+    const validMax = /^\d+(\.\d{1,4})?$/.test(cleanMax) ? cleanMax : range[1].toFixed(2);
 
-    if (finalLo > finalHi) {
-      const tmp = finalLo;
-      finalLo = finalHi;
-      finalHi = tmp;
+    let loStr = validMin;
+    let hiStr = validMax;
+    if (ethCmp(loStr, hiStr) > 0) {
+      const tmp = loStr;
+      loStr = hiStr;
+      hiStr = tmp;
     }
 
-    setRange([finalLo, finalHi]);
-    setMinInput(finalLo.toFixed(2));
-    setMaxInput(finalHi.toFixed(2));
+    const numLo = Number(loStr);
+    const numHi = Number(hiStr);
+    setRange([numLo, numHi]);
+    setMinInput(loStr);
+    setMaxInput(hiStr);
 
     set({
-      min: finalLo > 0.02 ? finalLo.toFixed(2) : undefined,
-      max: finalHi < 12.3 ? finalHi.toFixed(2) : undefined,
+      min: ethCmp(loStr, "0.02") > 0 ? loStr : undefined,
+      max: ethCmp(hiStr, "12.30") < 0 ? hiStr : undefined,
       page: undefined,
     });
   };

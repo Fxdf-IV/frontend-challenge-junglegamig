@@ -1,11 +1,28 @@
 // Layout protegido para rotas que exigem autenticação prévia do usuário.
-// Redireciona para /login preservando a URL original em caso de sessão ausente ou expirada.
-import { createFileRoute, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+// Redireciona para /login via beforeLoad do TanStack Router preservando a URL original.
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useSession } from "@/lib/session";
+import { tokenStore } from "@/api/client";
 
-/** Guarda de rotas autenticadas da aplicação. */
+/** Guarda de rotas autenticadas da aplicação via beforeLoad e verificação reativa de sessão. */
 export const Route = createFileRoute("/_authenticated")({
+  beforeLoad: ({ location }) => {
+    // No cliente, impede o carregamento da casca privada quando não há token no storage
+    if (typeof window !== "undefined" && !tokenStore.get()) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+        replace: true,
+      });
+    }
+  },
   component: AuthGuard,
 });
 

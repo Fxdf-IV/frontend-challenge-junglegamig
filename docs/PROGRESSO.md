@@ -14,6 +14,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (26/10/2026)
 
+- **Guarda de rotas autenticadas em beforeLoad, precisão no filtro de preço e flexibilidade de canal E2E:**
+  - **Guarda nativa do TanStack Router (`src/routes/_authenticated.tsx`):** implementado redirecionamento imediato em `beforeLoad` com `throw redirect({ to: "/login", search: { redirect: location.href }, replace: true })` quando não há token na sessão, eliminando flash de tela ou carregamento parcial de rotas privadas antes da renderização.
+  - **Precisão monetária no filtro de preço do catálogo (`src/components/nft/Catalog.tsx`):** integrado o helper `ethCmp` de `src/lib/eth.ts` para validação e ordenação de limites digitados e comparação rigorosa em wei sem deriva de ponto flutuante.
+  - **Desacoplamento de canal do Playwright (`playwright.config.ts`):** configuração condicional de `channel`, permitindo execução em CI / Linux com Chromium padrão sem exigir a instalação do Google Chrome proprietário.
+
 - **Aprofundamento da cobertura E2E, controle determinístico de relógio e acessibilidade via teclado:**
   - **Persistência do carrinho após refresh (`tests/e2e/cart.spec.ts`):** implementado teste comprovando a integridade dos itens, quantidades e cálculos monetários em ETH após recarregamento completo da página (`page.reload()`), exercitando persistência no localStorage e restauração no TanStack Query em desktop e mobile (8/8 testes no grupo do carrinho).
   - **Skeletons sem layout shift em todas as telas obrigatórias (`tests/e2e/loading-recovery.spec.ts`):** ampliada a cobertura para além do catálogo, verificando a exibição e dimensões do skeleton shimmer no detalhe do NFT (`/nft/golden-beat-207?scenario=slow`) e no resumo do carrinho (`/carrinho?scenario=slow`), comprovando a estabilidade de layout e a desativação da animação sob `prefers-reduced-motion: reduce`.
