@@ -85,12 +85,20 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
         </aside>
         <div className="min-w-0">
           {/* Cabeçalho da barra de ferramentas do catálogo: abas, busca e ordenação alinhados ao Figma */}
-          <div className="mb-6 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+          <div
+            className={cn(
+              "mb-6 flex flex-col gap-4",
+              from === "/" && "xl:flex-row xl:items-center xl:justify-between",
+            )}
+          >
             {/* Abas de navegação de seção: sem barra de rolagem cinza nativa e sem quebra de texto */}
             <div
               role="tablist"
               aria-label="Seções do catálogo"
-              className="no-scrollbar flex items-center gap-6 overflow-x-auto border-b border-[#3d2c20]/60 font-mono text-xs md:text-sm"
+              className={cn(
+                "no-scrollbar flex items-center gap-6 overflow-x-auto border-b border-[#3d2c20]/60 font-mono text-xs md:text-sm",
+                from === "/" ? "xl:shrink-0" : "w-full",
+              )}
             >
               {TABS.map(([id, label]) => (
                 <button
@@ -115,7 +123,7 @@ export function Catalog({ search, from }: { search: CatalogSearch; from: "/" | "
               {/* Campo de busca no catálogo exclusivo da rota do mercado */}
               <div
                 className={cn(
-                  "relative min-w-[13rem] max-w-full flex-1 sm:flex-none",
+                  "relative min-w-[14rem] max-w-sm flex-1 sm:max-w-md",
                   from === "/" && "hidden",
                 )}
               >

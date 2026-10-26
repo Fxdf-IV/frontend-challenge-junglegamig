@@ -14,6 +14,11 @@ Diário do que está sendo feito e lista de próximos passos. Atualizado a cada 
 
 ## Concluído recentemente (25/10/2026)
 
+- **Correção da largura e do truncamento das abas do catálogo na rota do mercado (`src/components/nft/Catalog.tsx`, FD-43):**
+  - Identificada a causa do corte da aba "Em alta" ("Em alt") na rota `/mercado`: a barra de ferramentas tentava forçar na mesma linha (`xl:flex-row`) as abas de navegação, o campo de busca de coleções e o seletor de ordenação. Em colunas desktop de 864 px, os três controles somados demandavam ~888 px, forçando o flexbox a esmagar o container das abas para 349 px e ocultando a extremidade direita sob `overflow-x-auto`.
+  - Reestruturado o cabeçalho do catálogo em `Catalog.tsx`: na rota `/mercado`, a barra de abas (`Todos os NFTs`, `Novos lançamentos`, `Em alta`) assume largura total (`w-full`) em linha dedicada com linha divisória de base `border-b border-[#3d2c20]/60`, garantindo 864 px de espaço livre e eliminando definitivamente qualquer truncamento de texto; na linha inferior, o campo de busca (`max-w-sm sm:max-w-md flex-1`) e as ações de ordenação e filtros móveis alinham-se com respiro visual equilibrado. Na Home (`/`), a exibição compacta lado a lado é preservada sem alteração de baseline.
+  - Testado e validado em todos os viewports (360, 390, 480, 768, 1024, 1280, 1366 e 1440 px), aprovando 100% dos testes de regressão visual (Playwright 4/4) e testes de catálogo (12/12).
+
 - **Recorte transparente da navegação móvel e retenção do menu inferior no carrinho (`MobileTabBar.tsx`, `carrinho.tsx`, FD-42):**
   - Identificada a causa da opacidade no entalhe central da barra inferior mobile: o SVG usava preenchimento com a cor estática do fundo (`fill-background`), criando uma mancha marrom escura sólida sobre qualquer conteúdo ou elemento que rolava por trás da barra móvel.
   - Reestruturado `MobileTabBar.tsx` com container vazado (`bg-transparent pointer-events-none`) e camada de fundo particionada em asa esquerda (`rounded-tl-[2.5rem] bg-card`), asa direita (`rounded-tr-[2.5rem] bg-card`) e SVG central de 152 × 88 px com contorno em arco côncavo preenchendo apenas a metade inferior da barra (`fill-card`) e borda superior `stroke-border/40`.
