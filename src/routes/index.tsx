@@ -26,6 +26,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "preload", as: "image", href: "/nft/emerald.webp", fetchPriority: "high" }],
   }),
   component: Home,
 });
@@ -128,22 +129,16 @@ function Home() {
         </div>
         <div
           className="col-span-2 mt-2 flex justify-center items-center gap-2 md:hidden"
-          role="tablist"
-          aria-label="Indicadores de destaque"
+          aria-hidden="true"
         >
           {[0, 1, 2].map((idx) => (
-            <button
+            <span
               key={idx}
-              type="button"
-              role="tab"
-              aria-selected={activeHeroDot === idx}
-              aria-label={`Destaque ${idx + 1}`}
-              onClick={() => setActiveHeroDot(idx)}
               className={cn(
-                "h-2 rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer",
+                "h-2 rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
                 activeHeroDot === idx
                   ? "w-5 bg-primary shadow-[0_0_8px_rgba(210,138,76,0.5)]"
-                  : "w-2 bg-[#55321f] hover:bg-[#77472c]",
+                  : "w-2 bg-[#55321f]",
               )}
             />
           ))}
