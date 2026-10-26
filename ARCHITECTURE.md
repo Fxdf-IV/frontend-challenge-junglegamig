@@ -22,30 +22,30 @@ Todas as rotas REST utilizam o prefixo `/api` (configurável via `VITE_API_URL`)
 
 ### Endpoints principais
 
-| Método e rota               | Autenticação               | Descrição                                                                                                                                                           |
-| --------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `POST /api/auth/login`      | Pública                    | Autentica por `email` e `password`, retorna `Session` (`token`, `expiresAt`, `user`).                                                                               |
-| `POST /api/auth/register`   | Pública                    | Cria conta validando formato e unicidade de e-mail e usuário (retorna `409 CONFLICT` com `fields`).                                 |
-| `POST /api/auth/logout`     | Bearer                     | Invalida o token da sessão atual no servidor.                                                                                        |
-| `GET /api/auth/session`     | Bearer                     | Revalida a sessão ativa e retorna os dados públicos do usuário.                                                                      |
-| `GET /api/nfts`             | Pública                    | Lista paginada e filtrada (`q`, `collections`, `networks`, `min`, `max`, `tab`, `sort`, `page`) com paginação determinística.        |
-| `GET /api/nfts/:id`         | Pública                    | Retorna detalhe completo do NFT, edições, disponibilidade e `version`.                                                               |
-| `GET /api/favorites`        | Bearer                     | Lista IDs dos NFTs favoritados pelo usuário autenticado.                                                                             |
-| `PUT /api/favorites/:id`    | Bearer                     | Adiciona NFT aos favoritos do usuário autenticado.                                                                                   |
-| `DELETE /api/favorites/:id` | Bearer                     | Remove NFT dos favoritos do usuário autenticado.                                                                                     |
-| `GET /api/cart`             | Bearer ou `X-Cart-Id`      | Retorna carrinho atual reconciliado com preço e disponibilidade vigentes.                                                            |
-| `POST /api/cart/items`      | Bearer ou `X-Cart-Id`      | Adiciona ou incrementa item/edição respeitando `Math.min(available, maxPerOrder)`.                                                   |
-| `PATCH /api/cart/items`     | Bearer ou `X-Cart-Id`      | Atualiza quantidade inteira de um item no carrinho.                                                                                  |
-| `DELETE /api/cart/items`    | Bearer ou `X-Cart-Id`      | Remove item/edição do carrinho.                                                                                                      |
-| `POST /api/cart/merge`      | Bearer                     | Mescla itens do `guestCartId` no carrinho da conta autenticada respeitando limites de estoque.                                       |
-| `POST /api/quote`           | Bearer ou `X-Cart-Id`      | Calcula `Quote` determinística (`id` por SHA-256 dos itens, preços, cupom e rede), `subtotal`, `discount`, `networkFee` e `total`.   |
-| `POST /api/orders`          | Bearer + `Idempotency-Key` | Cria pedido pendente após revalidar `quoteId`, estoque, preço, cupom e carteira.                                                     |
-| `GET /api/orders/:id`       | Bearer                     | Consulta estado atual e recibo snapshot do pedido (`pending`, `confirmed`, `declined`).                                              |
-| `PATCH /api/me`             | Bearer                     | Atualiza dados de perfil (`displayName`, `username`, `email`, `bio`, `avatar`, `ensName`, `walletNickname`).                         |
-| `POST /api/me/password`     | Bearer                     | Valida senha atual e grava nova senha via hash SHA-256 com salt.                                                                     |
-| `GET /api/wallets`          | Bearer                     | Lista carteiras cadastradas do usuário (`primary` e `secondary`).                                                                    |
-| `POST /api/wallets`         | Bearer                     | Cria nova carteira validando unicidade de papel (`primary`/`secondary`) e endereço.                                                  |
-| `PATCH /api/wallets/:id`    | Bearer                     | Edita rótulo, rede, provedor, endereço ou inverte papéis (`primary`/`secondary`) da carteira.                                        |
+| Método e rota               | Autenticação               | Descrição                                                                                                                          |
+| --------------------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `POST /api/auth/login`      | Pública                    | Autentica por `email` e `password`, retorna `Session` (`token`, `expiresAt`, `user`).                                              |
+| `POST /api/auth/register`   | Pública                    | Cria conta validando formato e unicidade de e-mail e usuário (retorna `409 CONFLICT` com `fields`).                                |
+| `POST /api/auth/logout`     | Bearer                     | Invalida o token da sessão atual no servidor.                                                                                      |
+| `GET /api/auth/session`     | Bearer                     | Revalida a sessão ativa e retorna os dados públicos do usuário.                                                                    |
+| `GET /api/nfts`             | Pública                    | Lista paginada e filtrada (`q`, `collections`, `networks`, `min`, `max`, `tab`, `sort`, `page`) com paginação determinística.      |
+| `GET /api/nfts/:id`         | Pública                    | Retorna detalhe completo do NFT, edições, disponibilidade e `version`.                                                             |
+| `GET /api/favorites`        | Bearer                     | Lista IDs dos NFTs favoritados pelo usuário autenticado.                                                                           |
+| `PUT /api/favorites/:id`    | Bearer                     | Adiciona NFT aos favoritos do usuário autenticado.                                                                                 |
+| `DELETE /api/favorites/:id` | Bearer                     | Remove NFT dos favoritos do usuário autenticado.                                                                                   |
+| `GET /api/cart`             | Bearer ou `X-Cart-Id`      | Retorna carrinho atual reconciliado com preço e disponibilidade vigentes.                                                          |
+| `POST /api/cart/items`      | Bearer ou `X-Cart-Id`      | Adiciona ou incrementa item/edição respeitando `Math.min(available, maxPerOrder)`.                                                 |
+| `PATCH /api/cart/items`     | Bearer ou `X-Cart-Id`      | Atualiza quantidade inteira de um item no carrinho.                                                                                |
+| `DELETE /api/cart/items`    | Bearer ou `X-Cart-Id`      | Remove item/edição do carrinho.                                                                                                    |
+| `POST /api/cart/merge`      | Bearer                     | Mescla itens do `guestCartId` no carrinho da conta autenticada respeitando limites de estoque.                                     |
+| `POST /api/quote`           | Bearer ou `X-Cart-Id`      | Calcula `Quote` determinística (`id` por SHA-256 dos itens, preços, cupom e rede), `subtotal`, `discount`, `networkFee` e `total`. |
+| `POST /api/orders`          | Bearer + `Idempotency-Key` | Cria pedido pendente após revalidar `quoteId`, estoque, preço, cupom e carteira.                                                   |
+| `GET /api/orders/:id`       | Bearer                     | Consulta estado atual e recibo snapshot do pedido (`pending`, `confirmed`, `declined`).                                            |
+| `PATCH /api/me`             | Bearer                     | Atualiza dados de perfil (`displayName`, `username`, `email`, `bio`, `avatar`, `ensName`, `walletNickname`).                       |
+| `POST /api/me/password`     | Bearer                     | Valida senha atual e grava nova senha via hash SHA-256 com salt.                                                                   |
+| `GET /api/wallets`          | Bearer                     | Lista carteiras cadastradas do usuário (`primary` e `secondary`).                                                                  |
+| `POST /api/wallets`         | Bearer                     | Cria nova carteira validando unicidade de papel (`primary`/`secondary`) e endereço.                                                |
+| `PATCH /api/wallets/:id`    | Bearer                     | Edita rótulo, rede, provedor, endereço ou inverte papéis (`primary`/`secondary`) da carteira.                                      |
 
 ### Formato único de erro (`ApiErrorBody`)
 
@@ -169,21 +169,21 @@ Auditoria executada com a suíte oficial versionada (`scripts/lighthouse.mjs`, `
 
 | Alvo                      | Performance | Acessibilidade | Melhores Práticas |   SEO   |   LCP    |  CLS   | TBT  |
 | :------------------------ | :---------: | :------------: | :---------------: | :-----: | :------: | :----: | :--: |
-| **Início (Desktop)**      |   **100**   |    **100**     |      **100**      | **100** |  615 ms  | 0.0019 | 0 ms |
-| **Detalhe NFT (Desktop)** |   **99**    |    **100**     |      **100**      | **100** |  876 ms  | 0.0002 | 0 ms |
-| **Início (Mobile)**       |   **87**    |    **100**     |      **100**      | **100** | 3.961 ms | 0.0005 | 0 ms |
-| **Detalhe NFT (Mobile)**  |   **86**    |    **100**     |      **100**      | **100** | 4.048 ms | 0.0001 | 0 ms |
+| **Início (Desktop)**      |   **100**   |    **100**     |      **100**      | **100** |  625 ms  | 0.0017 | 0 ms |
+| **Detalhe NFT (Desktop)** |   **99**    |    **100**     |      **100**      | **100** |  914 ms  | 0.0002 | 0 ms |
+| **Início (Mobile)**       |   **84**    |    **100**     |      **100**      | **100** | 4.339 ms | 0.0004 | 3 ms |
+| **Detalhe NFT (Mobile)**  |   **85**    |    **100**     |      **100**      | **100** | 4.304 ms | 0.0001 | 0 ms |
 
 ### Análise Técnica: Desempenho Real (Observado) vs. Simulação Lantern
 
-- **No ambiente real de execução (Unthrottled Trace):**
-  - O First Contentful Paint ocorre em **79 ms** na Home e **50 ms** no Detalhe.
-  - O Largest Contentful Paint real observado ocorre em **249 ms** na Home e **196 ms** no Detalhe.
-  - O Total Blocking Time (TBT) é de **0 ms**, o Cumulative Layout Shift (CLS) é de **0.0001 a 0.0019**, e as pontuações de Acessibilidade, Melhores Práticas e SEO são de **100/100** em todos os alvos.
-- **Na projeção matemática do simulador Lantern (Mobile Slow 4G):**
+- **No ambiente real de execução (Unthrottled Trace comprovado nos relatórios JSON):**
+  - O First Contentful Paint real observado ocorre em **72 ms** na Home e **31 ms** no Detalhe.
+  - O Largest Contentful Paint real observado ocorre em **209 ms** na Home e **156 ms** no Detalhe.
+  - O Total Blocking Time (TBT) é nulo (**0 a 3 ms**), o Cumulative Layout Shift (CLS) é de **0.0001 a 0.0017**, e as pontuações de Acessibilidade, Melhores Práticas e SEO são de **100/100** cravados em todos os alvos.
+- **Na projeção matemática do simulador Lantern (Mobile Slow 4G + CPU 4× Throttling):**
   - O Lighthouse aplica o perfil de rede Slow 4G (1.6 Mbps de taxa de transferência e 150 ms de latência RTT).
   - Em conformidade com a exigência eliminatória do desafio de **mocking 100% no cliente sem respostas fictícias em JSX ou SSR**, todas as requisições de catálogo e detalhe transitam pelo Service Worker do MSW (`msw@3`).
-  - O simulador Lantern projeta sequencialmente o download do bundle do MSW e a resolução das rotas de mock após a hidratação do cliente, projetando o LCP mobile em ~3.9s–4.0s (pontuação de 86–87).
+  - O simulador Lantern projeta sequencialmente o download do bundle do MSW e a resolução das rotas de mock após a hidratação do cliente, projetando o LCP mobile em ~4.3s (pontuação de 84–85).
 
 ### Otimizações Implementadas no Build e Runtime
 

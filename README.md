@@ -51,10 +51,10 @@ $env:VITE_SHOW_MOCK_PANEL="true"; bun run dev
 
 ### Contas pré-cadastradas
 
-| Usuário        | E-mail            | Senha       | Características iniciais                                                                                                                                                  |
-| -------------- | ----------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Ana Sato**   | `ana@kurio.dev`   | `Kurio@123` | Possui favorito inicial (`emerald-ape-042`), metadados ENS (`ana.eth`) e carteira inicial cadastrada (Ethereum MetaMask "Reserva"). |
-| **Bruno Lima** | `bruno@kurio.dev` | `Kurio@123` | Conta limpa (sem favoritos nem carteiras iniciais) para testar estados vazios, primeiro cadastro de carteira e isolamento entre sessões.                                  |
+| Usuário        | E-mail            | Senha       | Características iniciais                                                                                                                 |
+| -------------- | ----------------- | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Ana Sato**   | `ana@kurio.dev`   | `Kurio@123` | Possui favorito inicial (`emerald-ape-042`), metadados ENS (`ana.eth`) e carteira inicial cadastrada (Ethereum MetaMask "Reserva").      |
+| **Bruno Lima** | `bruno@kurio.dev` | `Kurio@123` | Conta limpa (sem favoritos nem carteiras iniciais) para testar estados vazios, primeiro cadastro de carteira e isolamento entre sessões. |
 
 ### Cupons promocionais
 

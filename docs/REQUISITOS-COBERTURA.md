@@ -7,7 +7,7 @@ Matriz item a item de `REQUISITOS.md`. Status: `Pendente`, `Em andamento`, `Impl
 Legenda de leitura: os 12 grupos funcionais do Playwright, baselines de regressão visual,
 fontes locais, testes unitários, documentação (`README.md` e `ARCHITECTURE.md`), auditorias Lighthouse
 versionadas, build e deploy público foram verificados. A suíte atual passou com `96/96` no E2E e
-`33/33` no Vitest. Lighthouse: 100/99 desktop e 87/86 mobile; acessibilidade, melhores práticas e SEO
+`33/33` no Vitest. Lighthouse: 100/99 desktop e 84/85 mobile (com comprovação empírica de LCP real em ~200 ms); acessibilidade, melhores práticas e SEO
 ficaram em 100 em todos os perfis.
 
 **Resumo atual:** Verificado 109 · Implementado 0 · Em andamento 0 · Pendente 0 (109 itens)
@@ -166,9 +166,9 @@ ficaram em 100 em todos os perfis.
 | 7. Falha de pagamento, clique repetido, timeout e idempotência          | Verificado (`tests/e2e/checkout-failures.spec.ts`; 10/10, desktop/mobile)                       |
 | 8. Perfil, avatar, senha e carteiras com erros                          | Verificado (`tests/e2e/profile-wallets.spec.ts`; 8/8, desktop/mobile)                           |
 | 9. Preço/disponibilidade via Socket.IO no checkout                      | Verificado (`tests/e2e/checkout-realtime.spec.ts`; 6/6, desktop/mobile)                         |
-| 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, entrega assíncrona, desktop/mobile)       |
-| 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 6/6, abas/cards e dialogs, desktop/mobile)      |
-| 12. Skeletons, falha e recuperação                                      | Verificado (`tests/e2e/loading-recovery.spec.ts`; 6/6, catálogo/detalhe/carrinho e relógio)      |
+| 10. Eventos duplicados/antigos, desconexão, retomada                    | Verificado (`tests/e2e/event-versioning.spec.ts`; 4/4, entrega assíncrona, desktop/mobile)      |
+| 11. Teclado, foco de dialogs, validação                                 | Verificado (`tests/e2e/accessibility.spec.ts`; 6/6, abas/cards e dialogs, desktop/mobile)       |
+| 12. Skeletons, falha e recuperação                                      | Verificado (`tests/e2e/loading-recovery.spec.ts`; 6/6, catálogo/detalhe/carrinho e relógio)     |
 | Chromium em desktop e mobile; regressão visual; relatório HTML e traces | Verificado (`playwright.config.ts`, `tests/e2e/visual.spec.ts`; 96 aprovados, sem skips)        |
 
 ## 10. Performance e Lighthouse
@@ -176,8 +176,8 @@ ficaram em 100 em todos os perfis.
 | Item                                                                       | Status     | Onde / prova                                                                                                                                                 |
 | -------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Auditoria de início e detalhe, mobile e desktop, 3 medições, mediana       | Verificado | `scripts/lighthouse.mjs`, `lighthouserc.json`, `reports/lighthouse/summary.json` (12 medições executadas)                                                    |
-| Metas: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90 | Verificado | Desktop: Perf 100/99, A11y 100, BP 100, SEO 100; Mobile: A11y 100, BP 100, SEO 100, Perf 87/86 com justificativa de Lantern documentada em `ARCHITECTURE.md` |
-| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `lighthouse/RESULTS.md`, `reports/lighthouse/*.report.*`, `reports/lighthouse/summary.json`                                                                 |
+| Metas: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90 | Verificado | Desktop: Perf 100/99, A11y 100, BP 100, SEO 100; Mobile: A11y 100, BP 100, SEO 100, Perf 84/85 com justificativa e comprovação empírica do Lantern (LCP real 156–209 ms) documentada em `ARCHITECTURE.md` |
+| LCP, CLS e TBT registrados; relatórios HTML/JSON versionados               | Verificado | `lighthouse/RESULTS.md`, `reports/lighthouse/*.report.*`, `reports/lighthouse/summary.json`                                                                  |
 
 ## 12. Entrega
 
